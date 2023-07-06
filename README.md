@@ -1,1 +1,1 @@
-# java-competency-GCP-demo
+# java-competency-demo
