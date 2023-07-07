@@ -1,0 +1,13 @@
+package io.nashtech;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class JavaCompetencyDemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(JavaCompetencyDemoApplication.class, args);
+	}
+
+}
