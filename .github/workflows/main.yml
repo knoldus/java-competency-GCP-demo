@@ -47,7 +47,7 @@ jobs:
 
       - name: Create image pull secret
         run: |
-          kubectl create secret docker-registry ghcr-secret --docker-server=ghcr.io --docker-username=deepak1067 --docker-password="${{ secrets.TOKEN_GITHUB }}" --namespace=${{ env.AKS_NAMESPACE }}
+          kubectl create secret docker-registry ghcr-secret-new --docker-server=ghcr.io --docker-username=deepak1067 --docker-password="${{ secrets.TOKEN_GITHUB }}" --namespace=${{ env.AKS_NAMESPACE }}
 
       - name: List Manifests Directory
         run: ls manifests
