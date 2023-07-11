@@ -1,0 +1,59 @@
+name: Build and Deploy to AKS
+
+on:
+  push:
+    branches:
+      - feature/Integrate-azure-pipeline
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: ghcr.io/deepak1067/myapp
+  AKS_CLUSTER: first-cluster
+  AKS_NAMESPACE: default
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Docker
+        run: |
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
+
+      - name: Log in to GitHub Artifact Registry
+        run: echo "${{ secrets.TOKEN_GITHUB }}" | docker login ghcr.io -u deepak1067 --password-stdin
+
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t "${{ env.IMAGE_NAME }}:${{ github.sha }}" .
+          docker push "${{ env.IMAGE_NAME }}:${{ github.sha }}"
+
+
+
+      - name: Configure Kubernetes environment
+        uses: azure/aks-set-context@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          cluster-name: first-cluster
+          resource-group: first-group
+
+      - name: Create image pull secret
+        run: |
+          kubectl create secret docker-registry ghcr-secret --docker-server=ghcr.io --docker-username=deepak1067 --docker-password="${{ secrets.TOKEN_GITHUB }}" --namespace=${{ env.AKS_NAMESPACE }}
+
+      - name: List Manifests Directory
+        run: ls manifests
+
+      - name: Apply Kubernetes manifest
+        run: |
+          sed -i "s|image:.*|image: ${IMAGE_NAME}:${{ github.sha }}|g" manifests/deployment.yml
+          kubectl apply -f manifests/deployment.yml --namespace ${{ env.AKS_NAMESPACE }}
+          kubectl apply -f manifests/service.yml --namespace ${{ env.AKS_NAMESPACE }}

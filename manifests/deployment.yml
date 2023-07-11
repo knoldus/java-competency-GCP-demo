@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-competency-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-competency-demo
+  template:
+    metadata:
+      labels:
+        app: java-competency-demo
+    spec:
+      containers:
+        - name: java-competency-demo
+          image: ghcr.io/deepak1067/myapp:${{ github.sha }}
+
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: ghcr-secret
