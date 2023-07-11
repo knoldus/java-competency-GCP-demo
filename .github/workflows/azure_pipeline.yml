@@ -3,7 +3,7 @@ name: Build and Deploy to AKS
 on:
   push:
     branches:
-      - feature/Integrate-azure-pipeline
+      - main
   workflow_dispatch:
 
 env:
@@ -30,13 +30,10 @@ jobs:
       - name: Log in to GitHub Artifact Registry
         run: echo "${{ secrets.TOKEN_GITHUB }}" | docker login ghcr.io -u deepak1067 --password-stdin
 
-
       - name: Build and push Docker image
         run: |
           docker build -t "${{ env.IMAGE_NAME }}:${{ github.sha }}" .
           docker push "${{ env.IMAGE_NAME }}:${{ github.sha }}"
-
-
 
       - name: Configure Kubernetes environment
         uses: azure/aks-set-context@v1
