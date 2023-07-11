@@ -16,7 +16,7 @@ RUN mvn clean package
 
 FROM openjdk:19
 
-ARG JAR_NAME="java-competency-demo-0.0.1-SNAPSHOT.jar"
+ARG JAR_NAME="java-competency-demo-0.0.1-SNAPSHOT"
 
 WORKDIR /usr/src/app
 
