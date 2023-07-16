@@ -9,7 +9,7 @@ $accountName = "reactive-database-twenty-$randomIdentifier"
 $databaseName = "sql-db-twenty-six"
 $functionPlan = "functionAppName-plans"
 $skuPlan = "B1"
-$apiKind = "MongoDB"
+$apiKind = "Sql"
 New-AzResourceGroup –Name $resourceGroupName –Location $location
 New-AzEventHubNamespace -ResourceGroupName $resourceGroupName -Name $namespaceName -Location $location
 New-AzEventHub -ResourceGroupName $resourceGroupName -NamespaceName $namespaceName  -PartitionCount 4 -EventHubName $ehubName
@@ -17,10 +17,10 @@ New-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccount
 New-AzFunctionAppPlan -Name $functionPlan -ResourceGroupName $resourceGroupName -Location $location -Sku $skuPlan -WorkerType Linux
 New-AzFunctionApp -Name $functionAppName -StorageAccountName $storageAccountName -PlanName $functionPlan -ResourceGroupName $resourceGroupName -Runtime Java -RuntimeVersion 17 -OSType Linux -FunctionsVersion 4
 New-AzCosmosDBAccount -ResourceGroupName $resourceGroupName -Name $accountName -Location $location -ApiKind $apiKind  -DefaultConsistencyLevel "Session"
-$database = New-AzCosmosDBMongoDBDatabase -AccountName $accountName -ResourceGroupName $resourceGroupName -Name $databaseName
+$database = New-AzCosmosDBSqlDatabase -AccountName $accountName -ResourceGroupName $resourceGroupName -Name $databaseName
 $account = Get-AzCosmosDBAccount -ResourceGroupName $resourceGroupName -Name $accountName
 $connectionString = $account.DocumentEndpoint + ";AccountKey=" + (Get-AzCosmosDBAccountKey -ResourceGroupName $resourceGroupName -Name $accountName).PrimaryMasterKey
-Write-Output "Cosmos DB Connection String: $connectionString"
+Write-Output "CNoSql DB Connection String: $connectionString"
 $endpoint = (Get-AzCosmosDBAccount -Name $accountName -ResourceGroupName $resourceGroupName).DocumentEndpoint
 Write-Host $endpoint
 $key = (Get-AzCosmosDBAccountKey -Name $accountName -ResourceGroupName $resourceGroupName).PrimaryMasterKey
