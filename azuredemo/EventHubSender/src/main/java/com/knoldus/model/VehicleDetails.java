@@ -1,12 +1,13 @@
-package org.example.functions;
+package com.knoldus.model;
 
-import com.microsoft.azure.documentdb.Document;
 
-public class VehicleDetails {
+import com.azure.messaging.eventhubs.EventData;
+
+public class VehicleDetails extends EventData {
     Integer cardId;
     String brand;
     String model;
-    Long year;
+    Integer year;
     String color;
     Double mileage;
     Double price;
@@ -35,11 +36,11 @@ public class VehicleDetails {
         this.model = model;
     }
 
-    public Long getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(final Long year) {
+    public void setYear(final Integer year) {
         this.year = year;
     }
 
@@ -70,7 +71,7 @@ public class VehicleDetails {
     public VehicleDetails() {
     }
 
-    public VehicleDetails(final Integer cardId, final String brand, final String model, final Long year, final String color, final Double mileage, final Double price) {
+    public VehicleDetails(final Integer cardId, final String brand, final String model, final Integer year, final String color, final Double mileage, final Double price) {
         this.cardId = cardId;
         this.brand = brand;
         this.model = model;
@@ -92,4 +93,5 @@ public class VehicleDetails {
                 ", price=" + price +
                 '}';
     }
+
 }

@@ -1,5 +1,7 @@
-package org.example.functions;
+package com.knoldus.function.trigger;
 
+import com.knoldus.function.data.TransformData;
+import com.knoldus.function.model.VehicleDetails;
 import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
 import java.util.*;
@@ -20,7 +22,7 @@ public class EventHubTriggerJava {
                     connection = "connectionString",
                     consumerGroup = "$Default",
                     cardinality = Cardinality.MANY)
-            List<VehicleDetails> message,
+            List<VehicleDetails> vehicleDetails,
             @CosmosDBOutput(
                     name = "updatedCarDetails",
                     databaseName = "CarFactory",
@@ -28,11 +30,11 @@ public class EventHubTriggerJava {
                     connectionStringSetting = "ConnectionStringSetting",
                     createIfNotExists = true
             )
-            OutputBinding<List<VehicleDetails>> updatedCarDetails,
+            OutputBinding<List<VehicleDetails>> updatedVehicleDetails,
             final ExecutionContext context
     ) {
-            List<VehicleDetails> list = new ArrayList<>();
-            for(VehicleDetails details: message){
+            List<VehicleDetails> vehicleDetailsList = new ArrayList<>();
+            for(VehicleDetails details: vehicleDetails){
                 context.getLogger().info("Raw Data : " + details);
                 Double updatedMileage = TransformData.updateMileage(details.getMileage());
                 Double updatedPrice = TransformData.updatePrice(details.getPrice());
@@ -40,9 +42,9 @@ public class EventHubTriggerJava {
                 details.setPrice(updatedPrice);
                 context.getLogger().info("Transformed Data : " + details);
                 details.setCardId(details.getCardId()+1);
-                list.add(details);
+               vehicleDetailsList.add(details);
             }
-        updatedCarDetails.setValue(list);
+        updatedVehicleDetails.setValue(vehicleDetailsList);
 
         }
 

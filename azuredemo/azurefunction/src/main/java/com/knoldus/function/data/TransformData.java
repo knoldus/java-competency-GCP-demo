@@ -1,4 +1,4 @@
-package org.example.functions;
+package com.knoldus.function.data;
 
 public class TransformData {
 

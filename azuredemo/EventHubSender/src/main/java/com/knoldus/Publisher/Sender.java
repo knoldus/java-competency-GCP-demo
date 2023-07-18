@@ -1,9 +1,10 @@
-package org.example;
+package com.knoldus.Publisher;
 
 import com.azure.messaging.eventhubs.EventData;
 import com.azure.messaging.eventhubs.EventDataBatch;
 import com.azure.messaging.eventhubs.EventHubClientBuilder;
 import com.azure.messaging.eventhubs.EventHubProducerClient;
+import com.knoldus.model.VehicleDetails;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Sender {
                 .connectionString(connectionString, eventHubName)
                 .buildProducerClient();
 
-        List<VehicleDetails> allCarData = Arrays.asList(
+        List<VehicleDetails> allVehicleData = Arrays.asList(
                 new VehicleDetails(1, "Toyota", "Camry", 2018, "White", 45.0, 18000.0),
                 new VehicleDetails(2, "Maruti Suzuki", "Swift", 2018, "White", 55.0, 18000.0)
         );
@@ -35,16 +36,16 @@ public class Sender {
          */
         List<EventData> allEvents = new ArrayList<>();
 
-        for (VehicleDetails details : allCarData) {
+        for (VehicleDetails details : allVehicleData) {
             /**
              *Convert UserData to JSON or any other suitable format for sending.
              */
-            JSONObject jsonObject = new JSONObject(details);
+            JSONObject jsonVehicleObject = new JSONObject(details);
 
             /**
              *Create an EventData instance with the serialized user data.
              */
-            EventData eventData = new EventData(String.valueOf(jsonObject));
+            EventData eventData = new EventData(String.valueOf(jsonVehicleObject));
             /**
              *Add the event to the list of events.
              */
