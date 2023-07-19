@@ -1,4 +1,4 @@
 /**
  * This package contains Model class of Vehicle.
  */
-package com.nashtech.vehicleapplication.model;
+package com.nashtech.vehicleapplication.exception;
