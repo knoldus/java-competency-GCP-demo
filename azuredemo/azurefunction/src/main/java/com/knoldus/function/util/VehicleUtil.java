@@ -1,6 +1,6 @@
-package com.knoldus.function.data;
+package com.knoldus.function.util;
 
-public class TransformData {
+public class VehicleUtil {
 
     /**
      * Converts the given mileage value from miles to kilometers per mile.

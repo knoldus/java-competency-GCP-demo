@@ -1,7 +1,7 @@
 package com.knoldus.function.trigger;
 
-import com.knoldus.function.data.TransformData;
-import com.knoldus.function.model.VehicleDetails;
+import com.knoldus.function.util.VehicleUtil;
+import com.knoldus.function.model.VehicleDetail;
 import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
 import java.util.*;
@@ -22,7 +22,7 @@ public class EventHubTriggerJava {
                     connection = "connectionString",
                     consumerGroup = "$Default",
                     cardinality = Cardinality.MANY)
-            List<VehicleDetails> vehicleDetails,
+            List<VehicleDetail> vehicleDetails,
             @CosmosDBOutput(
                     name = "updatedCarDetails",
                     databaseName = "CarFactory",
@@ -30,20 +30,22 @@ public class EventHubTriggerJava {
                     connectionStringSetting = "ConnectionStringSetting",
                     createIfNotExists = true
             )
-            OutputBinding<List<VehicleDetails>> updatedVehicleDetails,
+            OutputBinding<List<VehicleDetail>> updatedVehicleDetails,
             final ExecutionContext context
     ) {
-            List<VehicleDetails> vehicleDetailsList = new ArrayList<>();
-            for(VehicleDetails details: vehicleDetails){
-                context.getLogger().info("Raw Data : " + details);
-                Double updatedMileage = TransformData.updateMileage(details.getMileage());
-                Double updatedPrice = TransformData.updatePrice(details.getPrice());
-                details.setMileage(updatedMileage);
-                details.setPrice(updatedPrice);
-                context.getLogger().info("Transformed Data : " + details);
-                details.setCardId(details.getCardId()+1);
-               vehicleDetailsList.add(details);
-            }
+            List<VehicleDetail> vehicleDetailsList = new ArrayList<>();
+            vehicleDetailsList = vehicleDetails.stream()
+                .map(details -> {
+                    context.getLogger().info("Raw Data: " + details);
+                    Double updatedMileage = VehicleUtil.updateMileage(details.getMileage());
+                    Double updatedPrice = VehicleUtil.updatePrice(details.getPrice());
+                    details.setMileage(updatedMileage);
+                    details.setPrice(updatedPrice);
+                    context.getLogger().info("Transformed Data: " + details);
+                    details.setCardId(details.getCardId() + 1);
+                    return details;
+                }).toList();
+
         updatedVehicleDetails.setValue(vehicleDetailsList);
 
         }

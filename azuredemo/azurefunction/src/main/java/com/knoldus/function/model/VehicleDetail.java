@@ -1,8 +1,8 @@
 package com.knoldus.function.model;
 
-import com.microsoft.azure.documentdb.Document;
 
-public class VehicleDetails {
+
+public class VehicleDetail {
     Integer cardId;
     String brand;
     String model;
@@ -67,10 +67,10 @@ public class VehicleDetails {
         this.price = price;
     }
 
-    public VehicleDetails() {
+    public VehicleDetail() {
     }
 
-    public VehicleDetails(final Integer cardId, final String brand, final String model, final Long year, final String color, final Double mileage, final Double price) {
+    public VehicleDetail(final Integer cardId, final String brand, final String model, final Long year, final String color, final Double mileage, final Double price) {
         this.cardId = cardId;
         this.brand = brand;
         this.model = model;
