@@ -33,21 +33,23 @@ public class EventHubTriggerJava {
             OutputBinding<List<VehicleDetail>> updatedVehicleDetails,
             final ExecutionContext context
     ) {
+        try {
             List<VehicleDetail> vehicleDetailsList = new ArrayList<>();
             vehicleDetailsList = vehicleDetails.stream()
-                .map(details -> {
-                    context.getLogger().info("Raw Data: " + details);
-                    Double updatedMileage = VehicleUtil.updateMileage(details.getMileage());
-                    Double updatedPrice = VehicleUtil.updatePrice(details.getPrice());
-                    details.setMileage(updatedMileage);
-                    details.setPrice(updatedPrice);
-                    context.getLogger().info("Transformed Data: " + details);
-                    details.setCardId(details.getCardId() + 1);
-                    return details;
-                }).toList();
-
-        updatedVehicleDetails.setValue(vehicleDetailsList);
-
+                    .map(details -> {
+                        context.getLogger().info("Raw Data: " + details);
+                        Double updatedMileage = VehicleUtil.updateMileage(details.getMileage());
+                        Double updatedPrice = VehicleUtil.updatePrice(details.getPrice());
+                        details.setMileage(updatedMileage);
+                        details.setPrice(updatedPrice);
+                        context.getLogger().info("Transformed Data: " + details);
+                        details.setCardId(details.getCardId() + 1);
+                        return details;
+                    }).toList();
+            updatedVehicleDetails.setValue(vehicleDetailsList);
+        } catch (Exception exception) {
+            context.getLogger().info(exception.getMessage());
+        }
         }
 
 
