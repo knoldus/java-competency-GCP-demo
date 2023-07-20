@@ -1,11 +1,11 @@
 spring:
   kafka:
-    bootstrap-servers: myNamespace2023125.servicebus.windows.net:9093
+    bootstrap-servers: ${KAFKA_SERVER}
     properties:
-      security.protocol: SASL_SSL
-      sasl.mechanism: PLAIN
-      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://mynamespace2023125.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=waqRW0PFooNb9rTAyA5uoLRiHzc9IPsyH+AEhLQX/wk="
+      security.protocol: ${PROTOCOL}
+      sasl.mechanism: ${MECHANiSM}
+      sasl.jaas.config: ${CONFIG}
     producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: ${KEY_SERIALIZER}
+      value-serializer: ${JSON_SERIALIZER}
 
