@@ -1,4 +1,4 @@
 /**
- * This package contains Model class of Vehicle.
+ * Global exception handler for the application.
  */
-package com.nashtech.vehicleapplication.exception;
+package com.nashtech.exception;

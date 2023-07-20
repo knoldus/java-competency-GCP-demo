@@ -1,5 +1,5 @@
 /**
  * This package contains Controller
- * class for handling vehicle-related API requests
+ * class for handling vehicle-related API requests.
  */
-package com.nashtech.vehicleapplication.controller;
+package com.nashtech.controller;

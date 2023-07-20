@@ -1,4 +1,4 @@
-package com.nashtech.vehicleapplication.model;
+package com.nashtech.model;
 
 import lombok.Data;
 

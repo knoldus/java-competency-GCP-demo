@@ -1,10 +1,14 @@
-package com.nashtech.vehicleapplication.exception;
+package com.nashtech.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
+
 import java.time.LocalDateTime;
 
+/**
+ * Represents an API error response.
+ */
 @Data
 @AllArgsConstructor
 public class ApiError {
