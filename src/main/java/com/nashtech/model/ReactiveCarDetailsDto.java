@@ -2,7 +2,6 @@ package com.nashtech.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Version;
 
 /**
@@ -10,7 +9,6 @@ import org.springframework.data.annotation.Version;
  * details of the Car to the CosmosDB.
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class ReactiveCarDetailsDto {
 

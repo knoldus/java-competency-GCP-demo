@@ -19,16 +19,9 @@ import java.time.LocalDateTime;
 @Slf4j
 public class GlobalExceptionHandling implements Thread.UncaughtExceptionHandler {
 
-    /**
-     * A logger instance for logging messages and events in the class.
-     */
-    private static Logger logger =
-            LoggerFactory.getLogger(GlobalExceptionHandling.class);
-
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
-        System.err.println("Unhandled exception caught: " + throwable.getMessage());
-        logger.info("Data Not found Exception");
+        log.error("Data Not found Exception " + throwable.getMessage());
     }
 
     /**

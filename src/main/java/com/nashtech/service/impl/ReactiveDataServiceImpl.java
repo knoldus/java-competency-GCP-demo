@@ -7,8 +7,6 @@ import com.nashtech.model.ReactiveDataCars;
 import com.nashtech.repository.ReactiveDataRepository;
 import com.nashtech.service.ReactiveDataService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -29,12 +27,6 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
      * Used for performing CRUD operations and reactive data access.
      */
     private final ReactiveDataRepository reactiveDataRepository;
-
-    /**
-     * A logger instance for logging messages and events in the class.
-     */
-    private static Logger logger =
-            LoggerFactory.getLogger(ReactiveDataServiceImpl.class);
 
     /**
      * Constructs a new ReactiveDataServiceImpl with the specified
@@ -62,7 +54,7 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
             Flux<ReactiveCarDetailsDto> allCarsOfBrand =
                     reactiveDataRepository.getAllCars(brand);
         return allCarsOfBrand
-                .doOnComplete(() -> logger.info("Received Data Successfully"))
+                .doOnComplete(() -> log.info("Received Data Successfully"))
                 .switchIfEmpty(Flux.error(new ResourceNotFoundException()));
     }
 
@@ -80,11 +72,11 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
                 reactiveDataRepository.findDistinctBrands();
             return distinctBrandsFlux
                     .doOnNext(brand ->
-                            logger.info("Distinct Brand: " + brand))
+                            log.info("Distinct Brand: " + brand))
                     .doOnError(error ->
-                            logger.error("Error occurred: " + error))
+                            log.error("Error occurred: " + error))
                     .doOnComplete(() ->
-                            logger.info("Data processing completed."))
+                            log.info("Data processing completed."))
                     .switchIfEmpty(Flux.error(new ResourceNotFoundException()));
     }
 
