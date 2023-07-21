@@ -16,17 +16,4 @@ public class DataNotFoundException extends RuntimeException {
     public DataNotFoundException(final String message) {
         super(message);
     }
-
-    /**
-     * Constructs a new DataNotFoundException
-     * with the specified error message and cause.
-     *
-     * @param message The error message describing the reason for the exception.
-     * @param cause   The cause of the exception, which can be
-     *               another throwable that triggered this one.
-     */
-    public DataNotFoundException(
-            final String message, final Throwable cause) {
-        super(message, cause);
-    }
 }

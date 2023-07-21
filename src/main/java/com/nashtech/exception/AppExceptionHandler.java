@@ -1,15 +1,19 @@
 package com.nashtech.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * Global exception handler for the application.
  */
+@Slf4j
 @ControllerAdvice
 public class AppExceptionHandler extends
         ResponseEntityExceptionHandler {
@@ -24,14 +28,19 @@ public class AppExceptionHandler extends
      */
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<Object> handleDataNotFoundException(
-            final DataNotFoundException dataNotFoundException) {
-                ApiError apiError = new ApiError(
+            Exception exception, final DataNotFoundException dataNotFoundException) {
+                String exceptionMessage = dataNotFoundException.getMessage();
+                if(Objects.isNull(dataNotFoundException.getMessage())){
+                exceptionMessage = exception.getMessage();
+        }
+        ApiError errorResponse=new ApiError(
+                new Date(),
+                exceptionMessage,
                 dataNotFoundException.getMessage(),
-                HttpStatus.BAD_REQUEST,
-                LocalDateTime.now()
+                HttpStatus.BAD_REQUEST
         );
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+        log.error(exceptionMessage,exception);
+        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
     }
-
-
 }
+

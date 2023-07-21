@@ -46,5 +46,7 @@ public class Vehicle {
      * The location of the car.
      */
     private String location;
+
 }
+
 
