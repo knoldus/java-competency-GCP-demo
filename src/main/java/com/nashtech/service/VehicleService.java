@@ -1,7 +1,9 @@
 package com.nashtech.service;
 
-import com.nashtech.exception.ResourceNotFound;
-import com.nashtech.model.VehicleDetails;
+import com.nashtech.mockaroodata.model.VehicleDetails;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -9,8 +11,8 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
+import java.time.Duration;
 
 import java.time.Duration;
 
@@ -19,6 +21,7 @@ import java.time.Duration;
  * Service class responsible for fetching and sending vehicle data.
  */
 @Service
+@Slf4j
 public class VehicleService {
 	
     private static Logger logger = LoggerFactory.getLogger(VehicleService.class);
