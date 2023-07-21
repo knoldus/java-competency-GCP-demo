@@ -20,6 +20,8 @@ import java.time.Duration;
  */
 @Service
 public class VehicleService {
+	
+    private static Logger logger = LoggerFactory.getLogger(VehicleService.class);
 
     /**
      * The KafkaTemplate for sending vehicle data to Kafka topics.
@@ -48,21 +50,15 @@ public class VehicleService {
      * @throws RuntimeException if an error occurs during
      * the API request or data retrieval.
      */
-    public Flux<VehicleDetails> fetchData() {
+     public Flux<VehicleDetails> fetchData() {
         String apiUrl = "/vehicle.json?key=e60438e0";
-        try {
-            return webClient.get()
-                    .uri(apiUrl)
-                    .retrieve()
-                    .bodyToFlux(VehicleDetails.class);
-        } catch (ResourceNotFound resourceNotFound){
-            throw new ResourceNotFound("Resource Not Found");
-        } catch (WebClientResponseException webClientResponseException) {
-            throw new  WebClientException("An error occured", webClientResponseException){
-            };
-        }
 
-
+        return webClient.get()
+                .uri(apiUrl)
+                .retrieve()
+                .bodyToFlux(VehicleDetails.class)
+                .switchIfEmpty(Flux.error(new WebClientException("Error Occurred") {
+                }));
     }
 
     /**
@@ -73,15 +69,19 @@ public class VehicleService {
     public void sendData() {
         Flux<VehicleDetails> vehicleDetailsFlux = fetchData()
                 .delayElements(Duration.ofSeconds(1));
-        vehicleDetailsFlux.subscribe(s -> {
+        try {
+            vehicleDetailsFlux.subscribe(s -> {
 
-                    Message<VehicleDetails> message = MessageBuilder
-                            .withPayload(s)
-                            .setHeader(KafkaHeaders.TOPIC, "myeventhub")
-                            .build();
+                Message<VehicleDetails> message = MessageBuilder
+                        .withPayload(s)
+                        .setHeader(KafkaHeaders.TOPIC, "myeventhub")
+                        .build();
 
-                    kafkaTemplate.send(message);
+                kafkaTemplate.send(message);
 
-                });
+            });
+        } catch (KafkaException kafkaException) {
+            logger.info(kafkaException.getMessage());
+        }
     }
 }
