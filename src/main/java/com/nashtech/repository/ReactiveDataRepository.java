@@ -24,7 +24,7 @@ public interface ReactiveDataRepository extends ReactiveCosmosRepository
     /**
      * Custom query to get the brands from CosmosDB.
      * document from database which
-     * @return the ReactiveDataCars with brands.
+     * @return the ReactiveDataBrands with brands.
      */
     @Query(value = "SELECT DISTINCT c.brand FROM c")
     Flux<ReactiveDataBrands> findDistinctBrands();

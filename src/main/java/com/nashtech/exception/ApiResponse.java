@@ -2,10 +2,10 @@ package com.nashtech.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.Builder;
 import org.springframework.http.HttpStatus;
+
+import java.time.LocalDateTime;
 
 /**
  The ApiResponse class represents a generic response object that is
@@ -13,8 +13,6 @@ import org.springframework.http.HttpStatus;
  and metadata returned by an API.
  */
 @Data
-@ToString
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ApiResponse {
@@ -25,12 +23,13 @@ public class ApiResponse {
     private String message;
 
     /**
-     * A boolean value indicating whether the operation was successful.
-     */
-    private boolean success;
-
-    /**
      * An HTTP status code that describes the result of the operation.
      */
     private HttpStatus status;
+
+    /**
+     * Represents a date and time without time zone information.
+     */
+    private LocalDateTime localDateTime;
+
 }

@@ -1,0 +1,3 @@
+cosmosdb:
+    key: ${CosmosKey}
+    uri: ${CosmosURI}

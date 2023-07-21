@@ -54,7 +54,7 @@ public class ReactiveDataControllerImpl implements ReactiveDataController {
      * are filtered out.
      *
      * @param brand The brand of cars to filter by.
-     * @return A Flux of ReactiveDataCars representing cars with the
+     * @return A Flux of ReactiveCarDetailsDto representing cars with the
      * specified brand.
      */
     public Flux<ReactiveCarDetailsDto> getCarsByBrand(
@@ -68,7 +68,7 @@ public class ReactiveDataControllerImpl implements ReactiveDataController {
      * The data is obtained using the reactive service and duplicates are
      * filtered out.
      *
-     * @return A Flux of String representing distinct car brands.
+     * @return A Flux of ReactiveDataBrands representing distinct car brands.
      */
     public Flux<ReactiveDataBrands> getDistinctBrand() {
         return reactiveDataService.getDistinctBrands();

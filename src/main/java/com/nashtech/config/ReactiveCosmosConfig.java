@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration class for setting up the connection to the Azure C
- * osmos DB for reactive data access.
+ * Configuration class for setting up the connection to the Azure
+ * Cosmos DB for reactive data access.
  * Extends the {@link AbstractCosmosConfiguration} class to provide
  * necessary Cosmos DB configurations.
  */

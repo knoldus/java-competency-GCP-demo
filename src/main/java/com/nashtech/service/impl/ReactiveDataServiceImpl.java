@@ -55,19 +55,15 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
      * continuous updates.
      *
      * @param brand The brand of cars to filter by.
-     * @return A Flux of ReactiveDataCars representing cars with the
+     * @return A Flux of ReactiveCarDetailsDto representing cars with the
      * specified brand.
      */
     public Flux<ReactiveCarDetailsDto> getCarByBrand(final String brand) {
-        try {
             Flux<ReactiveCarDetailsDto> allCarsOfBrand =
                     reactiveDataRepository.getAllCars(brand);
-            allCarsOfBrand.subscribe();
-            return allCarsOfBrand;
-        } catch (Exception NotFoundException) {
-            throw new ResourceNotFoundException("Record not found for Brand : "
-                     + brand, NotFoundException);
-        }
+        return allCarsOfBrand
+                .doOnComplete(() -> logger.info("Received Data Successfully"))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException()));
     }
 
     /**
@@ -77,25 +73,19 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
      * This method also prints the distinct brands to the console for
      * demonstration purposes.
      *
-     * @return A Flux of String representing distinct car brands.
+     * @return A Flux of ReactiveDataBrands representing distinct car brands.
      */
     public Flux<ReactiveDataBrands> getDistinctBrands() {
         Flux<ReactiveDataBrands> distinctBrandsFlux =
                 reactiveDataRepository.findDistinctBrands();
-        try {
-            Flux<ReactiveDataBrands> distinctBrandNamesFlux = distinctBrandsFlux
+            return distinctBrandsFlux
                     .doOnNext(brand ->
                             logger.info("Distinct Brand: " + brand))
                     .doOnError(error ->
                             logger.error("Error occurred: " + error))
                     .doOnComplete(() ->
-                            logger.info("Data processing completed."));
-            distinctBrandNamesFlux.subscribe();
-            return distinctBrandNamesFlux;
-        } catch (Exception NotFoundException) {
-            throw new ResourceNotFoundException("Distinct Elements Not Found",
-                    NotFoundException);
-        }
+                            logger.info("Data processing completed."))
+                    .switchIfEmpty(Flux.error(new ResourceNotFoundException()));
     }
 
 }

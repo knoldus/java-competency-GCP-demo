@@ -1,9 +1,13 @@
 package com.nashtech.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 /**
  The ResourceNotFoundException class is a custom exception
  that is thrown when a requested resource is not found.
  */
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Record not found")
 public class ResourceNotFoundException extends RuntimeException {
 
     /**
@@ -12,18 +16,5 @@ public class ResourceNotFoundException extends RuntimeException {
      */
     public ResourceNotFoundException() {
         super("Record not found");
-    }
-
-    /**
-     * Constructs a ResourceNotFoundException with
-     * the specified detail message.
-     * @param message the message and
-     * @param cause the details
-     * that provides information about
-     * the resource that was not found.
-     */
-    public ResourceNotFoundException(final String message,
-                                     final Throwable cause) {
-        super(message, cause);
     }
 }
