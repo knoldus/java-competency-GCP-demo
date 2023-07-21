@@ -1,6 +1,6 @@
 package com.nashtech.controller;
 
-import com.nashtech.mockaroodata.service.VehicleService;
+import com.nashtech.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

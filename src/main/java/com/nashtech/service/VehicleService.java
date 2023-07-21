@@ -1,7 +1,7 @@
 package com.nashtech.service;
 
-import com.nashtech.mockaroodata.exception.ResourceNotFound;
-import com.nashtech.mockaroodata.model.VehicleDetails;
+import com.nashtech.exception.ResourceNotFound;
+import com.nashtech.model.VehicleDetails;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
