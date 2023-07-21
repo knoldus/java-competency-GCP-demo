@@ -1,11 +1,13 @@
 package com.nashtech.controller;
 
-import com.nashtech.service.VehicleService;
+import com.nashtech.model.VehicleDTO;
+import com.nashtech.service.serviceimpl.VehicleServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import java.time.Duration;
 
 /**
  * This controller class handles the endpoints related to
@@ -17,24 +19,8 @@ public class VehicleController {
     /**
      * The VehicleService instance used to retrieve vehicle information.
      */
-    private static VehicleService vehicleService;
-
-    /**
-     * Constructs a VehicleController
-     * instance with the provided VehicleService.
-     *
-     * @param service the VehicleService to be used
-     *                for retrieving vehicle information
-     */
-    public VehicleController(final VehicleService service) {
-        this.vehicleService = service;
-    }
-
-     /**
-     * The duration of the interval,
-      * in seconds, for retrieving unique brand names of vehicles.
-     */
-    private static final Integer DURATION_OF_INTERVAL = 5;
+    @Autowired
+    private  VehicleServiceImpl vehicleServiceImpl;
 
     /**
      * Retrieves a Flux of unique brand names of vehicles
@@ -46,9 +32,22 @@ public class VehicleController {
     @GetMapping(value = "/brands", produces =
             MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> findAllUniqueBrands() {
-        return Flux.interval(Duration.ofSeconds(DURATION_OF_INTERVAL))
-                .flatMap(ignore -> vehicleService.getAllBrandNames())
-                .distinct();
+        return  vehicleServiceImpl.getBrands();
+    }
+
+    /**
+     * Retrieves vehicle details
+     * for a specific brand name in a streaming fashion.
+     *
+     * @param brand The brand name of the vehicles to retrieve details for.
+     * @return A Flux of VehicleDTO
+     * representing the details of vehicles with the given brand name.
+     */
+    @GetMapping(value = "/brands/{brand}",
+            produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<VehicleDTO> findDetailsByBrandName(
+            @PathVariable final String brand) {
+        return vehicleServiceImpl.findCarInformation(brand);
     }
 
 }

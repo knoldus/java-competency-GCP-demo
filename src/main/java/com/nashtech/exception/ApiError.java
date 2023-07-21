@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ApiError {
     /**
-     * The error code associated with the API error.
+     * The message associated with the API error.
      */
-    private final String errorCode;
+    private final String message;
 
     /**
      * The HTTP status associated with the API error.

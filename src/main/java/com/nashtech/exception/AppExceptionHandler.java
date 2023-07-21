@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Global exception handler for the application.
@@ -26,11 +27,15 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<Object> handleDataNotFoundException(
-            final DataNotFoundException dataNotFoundException) {
-        return new ResponseEntity<>(new ApiError(
-                dataNotFoundException.getMessage(),
+            Exception exception,final DataNotFoundException dataNotFoundException) {
+            String message= dataNotFoundException.getMessage();
+        if(Objects.isNull(dataNotFoundException.getMessage())){
+            message = exception.getMessage();
+        }
+        ApiError errorResponse=new ApiError(
+                message,
                 HttpStatus.BAD_REQUEST,
-                LocalDateTime.now()),
-                HttpStatus.BAD_REQUEST);
+                LocalDateTime.now());
+        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
     }
 }
