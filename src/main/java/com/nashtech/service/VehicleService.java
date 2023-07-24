@@ -1,8 +1,7 @@
 package com.nashtech.service;
 
-import com.nashtech.mockaroodata.model.VehicleDetails;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.nashtech.model.VehicleDetails;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -12,9 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
 import reactor.core.publisher.Flux;
-import java.time.Duration;
 
-import java.time.Duration;
 
 
 /**
@@ -23,8 +20,7 @@ import java.time.Duration;
 @Service
 @Slf4j
 public class VehicleService {
-	
-    private static Logger logger = LoggerFactory.getLogger(VehicleService.class);
+
 
     /**
      * The KafkaTemplate for sending vehicle data to Kafka topics.
@@ -52,39 +48,35 @@ public class VehicleService {
      * @return A Flux of VehicleDetails representing the fetched data.
      * @throws RuntimeException if an error occurs during
      * the API request or data retrieval.
-     */
-     public Flux<VehicleDetails> fetchData() {
-        String apiUrl = "/vehicle.json?key=e60438e0";
-
-        return webClient.get()
-                .uri(apiUrl)
-                .retrieve()
-                .bodyToFlux(VehicleDetails.class)
-                .switchIfEmpty(Flux.error(new WebClientException("Error Occurred") {
-                }));
-    }
-
-    /**
      * Fetches vehicle data and sends it to the Kafka topic.
      * The data is sent with a delay of one second between
      * each element to simulate real-time behavior.
      */
-    public void sendData() {
-        Flux<VehicleDetails> vehicleDetailsFlux = fetchData()
-                .delayElements(Duration.ofSeconds(1));
-        try {
-            vehicleDetailsFlux.subscribe(s -> {
+    public void fetchAndSendData() {
+        String apiUrl = "/vehicle.json?key=e60438e0";
 
-                Message<VehicleDetails> message = MessageBuilder
-                        .withPayload(s)
-                        .setHeader(KafkaHeaders.TOPIC, "myeventhub")
-                        .build();
+        webClient.get()
+                .uri(apiUrl)
+                .retrieve()
+                .bodyToFlux(VehicleDetails.class)
+                .switchIfEmpty(Flux.error(new WebClientException("Error Occurred") {
+                }))
+                .subscribe(
+                        s -> {
+                            try {
+                                Message<VehicleDetails> message = MessageBuilder
+                                        .withPayload(s)
+                                        .setHeader(KafkaHeaders.TOPIC, "myeventhub")
+                                        .build();
 
-                kafkaTemplate.send(message);
+                                kafkaTemplate.send(message);
+                            } catch (KafkaException kafkaException) {
+                                log.info("Exception occurred while sending data to topic");
+                            }
 
-            });
-        } catch (KafkaException kafkaException) {
-            logger.info(kafkaException.getMessage());
-        }
+
+                        }
+                );
     }
 }
+

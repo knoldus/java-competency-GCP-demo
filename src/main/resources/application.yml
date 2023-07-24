@@ -3,7 +3,7 @@ spring:
     bootstrap-servers: ${KAFKA_SERVER}
     properties:
       security.protocol: ${PROTOCOL}
-      sasl.mechanism: ${MECHANiSM}
+      sasl.mechanism: ${MECHANISM}
       sasl.jaas.config: ${CONFIG}
     producer:
       key-serializer: ${KEY_SERIALIZER}

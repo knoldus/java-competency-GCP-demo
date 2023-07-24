@@ -42,3 +42,4 @@ public class VehicleDetails {
      */
     private Double price;
 }
+

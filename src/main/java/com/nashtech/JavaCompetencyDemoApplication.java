@@ -14,7 +14,6 @@ public class JavaCompetencyDemoApplication {
  *                the application
  */
 public static void main(final String[] args) {
-Thread.setDefaultUncaughtExceptionHandler(new GlobalExceptionHandler());
 SpringApplication.run(JavaCompetencyDemoApplication.class, args);
 }
 

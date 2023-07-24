@@ -33,9 +33,9 @@ public class VehicleController {
      */
     @PostMapping(value = "/data")
     public ResponseEntity<String> sendDataToEventHub() {
-        dataService.fetchData();
-        dataService.sendData();
+        dataService.fetchAndSendData();
         return ResponseEntity.ok("Json Message sent to the topic!");
 
     }
 }
+

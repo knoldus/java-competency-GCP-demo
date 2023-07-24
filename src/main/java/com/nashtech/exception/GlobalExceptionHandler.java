@@ -3,6 +3,7 @@ package com.nashtech.mockaroodata.exception;
 /**
  * Global exception handler for the application.
  */
+@ControllerAdvice
 public class GlobalExceptionHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread t, Throwable e) {
@@ -10,3 +11,4 @@ public class GlobalExceptionHandler implements Thread.UncaughtExceptionHandler {
         // Perform any necessary cleanup or logging here
     }
 }
+
