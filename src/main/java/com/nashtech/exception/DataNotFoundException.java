@@ -10,10 +10,8 @@ public class DataNotFoundException extends RuntimeException {
 
     /**
      * Constructs a new DataNotFoundException with the specified error message.
-     *
-     * @param message The error message describing the reason for the exception.
      */
-    public DataNotFoundException(final String message) {
-        super(message);
+    public DataNotFoundException() {
+        super("Data Not Found Exception");
     }
 }

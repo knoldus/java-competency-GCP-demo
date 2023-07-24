@@ -1,6 +1,6 @@
 package com.nashtech.service;
 
-import com.nashtech.model.Vehicle;
+import com.nashtech.model.ReactiveDataCars;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Service interface for publishing vehicle data to the pub/sub topic.
  */
-public interface VehiclePublisherService {
+public interface ReactivePublisherService {
 
     /**
      * Publishes vehicle data to the pub/sub topic.
@@ -18,6 +18,6 @@ public interface VehiclePublisherService {
      * @return A Mono representing the completion of the publishing process.
      * @throws IOException If an I/O error occurs during the publishing process.
      */
-    Mono<Void> publishVehicleData(
-            Flux<Vehicle> vehicles) throws IOException;
+    Mono<Void> publishCarData(
+            Flux<ReactiveDataCars> vehicles) throws IOException;
 }

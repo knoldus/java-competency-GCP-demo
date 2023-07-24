@@ -1,0 +1,11 @@
+apiUrl: /vehicle.json?key=0090e7f0
+google:
+  pubSub:
+    topic: vehicle
+mockaroo:
+  api:
+    url: https://my.api.mockaroo.com
+spring:
+  cloud:
+    gcp:
+      project-id: nodal-descent-389716

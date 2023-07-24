@@ -1,8 +1,8 @@
 package com.nashtech.service.impl;
 
 import com.nashtech.exception.DataNotFoundException;
-import com.nashtech.model.Vehicle;
-import com.nashtech.service.VehicleService;
+import com.nashtech.model.ReactiveDataCars;
+import com.nashtech.service.ReactiveDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,17 @@ import reactor.core.publisher.Flux;
  * Service class for handling vehicle-related operations.
  */
 @Service
-public class VehicleServiceImpl implements VehicleService {
+public class ReactiveDataServiceImpl implements ReactiveDataService {
 
+    /**
+     * WebClient instance for making HTTP requests to the external API.
+     */
     @Autowired
     private WebClient webClient;
 
+    /**
+     * URL of the external API for retrieving vehicle data.
+     */
     @Value("${apiUrl}")
     private String apiUrl;
 
@@ -32,20 +38,21 @@ public class VehicleServiceImpl implements VehicleService {
      * @throws WebClientException If an error occurs during
      * data retrieval from the external API.
      */
-    public Flux<Vehicle> getVehicleData(
+    public Flux<ReactiveDataCars> getCarData(
             final Integer dataCount) throws WebClientException {
         try {
             return webClient.get()
                     .uri(apiUrl)
                     .retrieve()
-                    .bodyToFlux(Vehicle.class)
+                    .bodyToFlux(ReactiveDataCars.class)
                     .take(dataCount);
         } catch (DataNotFoundException dataNotFoundException) {
-            throw new DataNotFoundException("Data not found");
+            throw new DataNotFoundException();
         } catch (WebClientResponseException webClientResponseException) {
             throw new WebClientException(webClientResponseException.getMessage(),
                     webClientResponseException) {
             };
         }
     }
+
 }

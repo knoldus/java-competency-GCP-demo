@@ -6,7 +6,7 @@ import lombok.Data;
  * Represents a Vehicle.
  */
 @Data
-public class Vehicle {
+public class ReactiveDataCars {
     /**
      * The unique identifier of the car.
      */

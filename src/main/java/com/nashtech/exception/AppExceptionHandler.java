@@ -6,7 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
-import java.time.LocalDateTime;
+
+import java.io.IOException;
 import java.util.Date;
 import java.util.Objects;
 
@@ -28,19 +29,47 @@ public class AppExceptionHandler extends
      */
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<Object> handleDataNotFoundException(
-            Exception exception, final DataNotFoundException dataNotFoundException) {
+            final DataNotFoundException dataNotFoundException) {
                 String exceptionMessage = dataNotFoundException.getMessage();
-                if(Objects.isNull(dataNotFoundException.getMessage())){
-                exceptionMessage = exception.getMessage();
-        }
+
         ApiError errorResponse=new ApiError(
                 new Date(),
                 exceptionMessage,
-                dataNotFoundException.getMessage(),
                 HttpStatus.BAD_REQUEST
         );
-        log.error(exceptionMessage,exception);
+        log.error(exceptionMessage);
         return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<Object> handleIOException(IOException ioException) {
+        String exceptionMessage = ioException.getMessage();
+
+        if(Objects.isNull(ioException.getMessage())){
+            exceptionMessage = "IO Exception Occurred";
+        }
+        ApiError errorResponse = new ApiError(
+                new Date(),
+                exceptionMessage,
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+        log.error(exceptionMessage);
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(InterruptedException.class)
+    public ResponseEntity<Object> handleInterruptedDataException(InterruptedException interruptedException) {
+        String exceptionMessage = interruptedException.getMessage();
+        if(Objects.isNull(interruptedException.getMessage())){
+            exceptionMessage = "Interrupted Exception Occurred";
+        }
+        ApiError errorResponse = new ApiError(
+                new Date(),
+                exceptionMessage,
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+        log.error(exceptionMessage);
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
 
