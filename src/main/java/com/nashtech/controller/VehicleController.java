@@ -32,7 +32,7 @@ public class VehicleController {
     @GetMapping(value = "/brands", produces =
             MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> findAllUniqueBrands() {
-        return  vehicleServiceImpl.getBrands();
+        return  vehicleServiceImpl.getAllBrandNames()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ;
     }
 
     /**
@@ -47,7 +47,7 @@ public class VehicleController {
             produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<VehicleDTO> findDetailsByBrandName(
             @PathVariable final String brand) {
-        return vehicleServiceImpl.findCarInformation(brand);
+        return vehicleServiceImpl.getDetailsByBrandName(brand);
     }
 
 }

@@ -23,23 +23,10 @@ public class VehicleServiceImpl implements VehicleService {
      * The duration of the interval,
      * in seconds, for retrieving unique brand names of vehicles.
      */
-    private static final Integer DURATION_OF_INTERVAL = 5;
+    private static final Integer DELAY_TIME = 1;
     @Autowired
     private VehicleRepository vehicleRepository;
 
-    /**
-     * Retrieves a flux of distinct brand names of vehicles.
-     *
-     * @return a Flux of String representing the distinct
-     * brand names of vehicles
-     */
-
-    @Override
-    public Flux<String> getBrands() {
-        return Flux.interval(Duration.ofSeconds(DURATION_OF_INTERVAL))
-                .flatMap(ignore -> getAllBrandNames())
-                .distinct();
-    }
     /**
      * Retrieves a Flux of unique brand names from the vehicle repository.
      *
@@ -49,12 +36,15 @@ public class VehicleServiceImpl implements VehicleService {
      * @throws FirestoreDataException
      * If there is an error while fetching data from the repository.
      */
+
+    @Override
     public Flux<String> getAllBrandNames() {
         try {
             return vehicleRepository.findAll()
                     .filter(vehicle -> vehicle.getBrand() != null)
                     .map(Vehicle::getBrand)
-                    .distinct();
+                    .distinct()
+                    .delayElements(Duration.ofSeconds(DELAY_TIME));
 
         } catch (DataNotFoundException dataNotFoundException) {
             throw  new DataNotFoundException(
@@ -68,12 +58,6 @@ public class VehicleServiceImpl implements VehicleService {
 
     }
 
-    @Override
-    public Flux<VehicleDTO>findCarInformation(final String brand){
-       return Flux.interval(Duration.ofSeconds(DURATION_OF_INTERVAL))
-                .flatMap(ignore -> getDetailsByBrandName(brand)).distinct();
-    }
-
     /**
      * Retrieves vehicle details by the specified brand name.
      *
@@ -85,6 +69,7 @@ public class VehicleServiceImpl implements VehicleService {
      * @throws FirestoreDataException
      * If there is an error while fetching data from the repository.
      */
+    @Override
     public Flux<VehicleDTO> getDetailsByBrandName(final String brand)  {
         try
         {
@@ -98,7 +83,8 @@ public class VehicleServiceImpl implements VehicleService {
                     vehicle.getColor(),
                     vehicle.getMileage(),
                     vehicle.getPrice()))
-                 .distinct();
+                 .distinct()
+                 .delayElements(Duration.ofSeconds(DELAY_TIME));
         }
         catch (DataNotFoundException dataNotFoundException){
             throw  new DataNotFoundException("Data not found");
