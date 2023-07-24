@@ -58,12 +58,14 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
                 .subscribe(
                         s -> {
 
-                            Message<ReactiveDataCars> message = MessageBuilder
-                                    .withPayload(s)
-                                    .setHeader(KafkaHeaders.TOPIC, "myeventhub")
-                                    .build();
-                            kafkaTemplate.send(message);
-                        }
+                                Message<VehicleDetails> message = MessageBuilder
+                                        .withPayload(s)
+                                        .setHeader(KafkaHeaders.TOPIC, "myeventhub")
+                                        .build();
+
+                                kafkaTemplate.send(message);
+                            } 
+
                 );
     }
 }
