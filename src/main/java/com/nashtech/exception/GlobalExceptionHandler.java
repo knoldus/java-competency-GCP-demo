@@ -1,4 +1,4 @@
-package com.nashtech.mockaroodata.exception;
+package com.nashtech.exception;
 
 /**
  * Global exception handler for the application.
