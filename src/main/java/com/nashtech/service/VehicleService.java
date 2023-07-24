@@ -2,7 +2,6 @@ package com.nashtech.service;
 
 import com.nashtech.model.VehicleDetails;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -63,19 +62,13 @@ public class VehicleService {
                 }))
                 .subscribe(
                         s -> {
-                            try {
                                 Message<VehicleDetails> message = MessageBuilder
                                         .withPayload(s)
                                         .setHeader(KafkaHeaders.TOPIC, "myeventhub")
                                         .build();
 
                                 kafkaTemplate.send(message);
-                            } catch (KafkaException kafkaException) {
-                                log.info("Exception occurred while sending data to topic");
-                            }
-
-
-                        }
+                            } 
                 );
     }
 }
