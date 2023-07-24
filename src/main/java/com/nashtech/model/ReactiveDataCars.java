@@ -12,7 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class VehicleDetails {
+public class ReactiveDataCars {
     /**
      * The unique identifier of the vehicle.
      */
@@ -42,4 +42,3 @@ public class VehicleDetails {
      */
     private Double price;
 }
-

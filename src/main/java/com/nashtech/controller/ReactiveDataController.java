@@ -1,6 +1,6 @@
 package com.nashtech.controller;
 
-import com.nashtech.service.VehicleService;
+import com.nashtech.service.ReactiveDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,18 +10,19 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/vehicle")
-public class VehicleController {
+public class ReactiveDataController {
     /**
      * Service responsible for handling vehicle data operations.
      */
-    private final VehicleService dataService;
+    private final ReactiveDataService dataService;
     /**
      * Constructor to inject the DataService dependency.
      *
      * @param dataService The DataService to be injected.
      */
+
     @Autowired
-    public VehicleController(final VehicleService dataService) {
+    public ReactiveDataController(final ReactiveDataService dataService) {
         this.dataService = dataService;
     }
 
@@ -38,4 +39,3 @@ public class VehicleController {
 
     }
 }
-
