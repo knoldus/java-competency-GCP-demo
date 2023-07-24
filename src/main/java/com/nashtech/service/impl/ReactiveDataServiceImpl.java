@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 /**
  * Implementation of Service class responsible for fetching and sending vehicle data.
  */
+@Service
 @Slf4j
 public class ReactiveDataServiceImpl implements ReactiveDataService {
 
