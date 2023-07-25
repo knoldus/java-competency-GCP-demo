@@ -15,15 +15,16 @@ import org.springframework.web.reactive.function.client.WebClientException;
 @ControllerAdvice
 public class GlobalExceptionHandler extends RuntimeException {
 
+	
+	/**
+ 	  * Exception handler method to handle {@link KafkaException}.
+ 	  * This method handles any exceptions of type {@link KafkaException} that might occur
+ 	  * during message sending to Kafka and returns an HTTP response with status code 400 (Bad Request).
+ 	  *
+          * @param kafkaException The {@link KafkaException} that occurred during message sending.
+	  * @return An HTTP response entity with status code 400 (Bad Request).
+ 	*/
 
-    /**
-     * Exception handler method to handle {@link KafkaException}.
-     * This method handles any exceptions of type {@link KafkaException} that might occur
-     * during message sending to Kafka and returns an HTTP response with status code 400 (Bad Request).
-     *
-     * @param kafkaException The {@link KafkaException} that occurred during message sending.
-     * @return An HTTP response entity with status code 400 (Bad Request).
-     */
         @ExceptionHandler(value = KafkaException.class)
         public ResponseEntity<String> KafkaExceptionHandler(KafkaException kafkaException)  {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An exception occurred while pushing data to cloud");
