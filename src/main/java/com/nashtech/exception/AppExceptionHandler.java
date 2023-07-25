@@ -5,9 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.reactive.function.client.WebClientException;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
-
-import java.io.IOException;
 import java.util.Date;
 import java.util.Objects;
 
@@ -20,33 +19,20 @@ public class AppExceptionHandler extends
         ResponseEntityExceptionHandler {
 
     /**
-     * Global exception handler for handling {@link DataNotFoundException}.
+     * Exception handler for handling WebClientExceptions that
+     * may occur during communication with external web services.
      *
-     * @param dataNotFoundException
-     * The {@link DataNotFoundException} to be handled.
-     * @return A ResponseEntity
-     * containing an {@link ApiError} object with the error details.
+     * @param webClientException The WebClientException that was thrown.
+     * @return A ResponseEntity with an error response and HTTP
+     * status code 500 (Internal Server Error).
      */
-    @ExceptionHandler(DataNotFoundException.class)
-    public ResponseEntity<Object> handleDataNotFoundException(
-            final DataNotFoundException dataNotFoundException) {
-                String exceptionMessage = dataNotFoundException.getMessage();
+    @ExceptionHandler(WebClientException.class)
+    public ResponseEntity<Object> handleIOException(
+            WebClientException webClientException) {
+        String exceptionMessage = webClientException.getMessage();
 
-        ApiError errorResponse=new ApiError(
-                new Date(),
-                exceptionMessage,
-                HttpStatus.BAD_REQUEST
-        );
-        log.error(exceptionMessage);
-        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(IOException.class)
-    public ResponseEntity<Object> handleIOException(IOException ioException) {
-        String exceptionMessage = ioException.getMessage();
-
-        if(Objects.isNull(ioException.getMessage())){
-            exceptionMessage = "IO Exception Occurred";
+        if(Objects.isNull(webClientException.getMessage())){
+            exceptionMessage = "WebClient Exception Occurred";
         }
         ApiError errorResponse = new ApiError(
                 new Date(),
@@ -54,13 +40,23 @@ public class AppExceptionHandler extends
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
         log.error(exceptionMessage);
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponse,
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * Exception handler for handling InterruptedExceptions
+     * that may occur during data processing.
+     *
+     * @param interruptedException The InterruptedException that was thrown.
+     * @return A ResponseEntity with an error response
+     * and HTTP status code 500 (Internal Server Error).
+     */
     @ExceptionHandler(InterruptedException.class)
-    public ResponseEntity<Object> handleInterruptedDataException(InterruptedException interruptedException) {
+    public ResponseEntity<Object> handleInterruptedDataException(
+            InterruptedException interruptedException) {
         String exceptionMessage = interruptedException.getMessage();
-        if(Objects.isNull(interruptedException.getMessage())){
+        if (Objects.isNull(interruptedException.getMessage())) {
             exceptionMessage = "Interrupted Exception Occurred";
         }
         ApiError errorResponse = new ApiError(
@@ -69,7 +65,9 @@ public class AppExceptionHandler extends
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
         log.error(exceptionMessage);
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponse,
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }
 

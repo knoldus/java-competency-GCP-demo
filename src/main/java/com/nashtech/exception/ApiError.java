@@ -12,7 +12,18 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 public class ApiError {
-    Date timestamp;
-    String message;
-    HttpStatusCode responseCode;
+    /**
+     * The timestamp when the response was generated.
+     */
+    private Date timestamp;
+
+    /**
+     * The message associated with the API response.
+     */
+    private String message;
+
+    /**
+     * The HTTP status code of the API response.
+     */
+    private HttpStatusCode responseCode;
 }
