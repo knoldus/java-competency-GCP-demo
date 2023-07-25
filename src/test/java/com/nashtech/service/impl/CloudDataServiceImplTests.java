@@ -1,6 +1,6 @@
 package com.nashtech.service.impl;
 
-import com.nashtech.model.ReactiveDataCar;
+import com.nashtech.model.DataCar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 public class CloudDataServiceImplTests {
 
     @Mock
-    private KafkaTemplate<String, ReactiveDataCar> kafkaTemplate;
+    private KafkaTemplate<String, DataCar> kafkaTemplate;
 
 
     @BeforeEach
@@ -30,19 +30,19 @@ public class CloudDataServiceImplTests {
     @Test
     void testSendData() {
         // Create a sample test data
-        ReactiveDataCar testData = new ReactiveDataCar(0, "brand", "model", 2020L, "color", 0.0, 0.0);
+        DataCar testData = new DataCar(0, "brand", "model", 2020L, "color", 0.0, 0.0);
 
         // Create the service with the mocked KafkaTemplate
-        CloudDataServiceImpl cloudDataService = new CloudDataServiceImpl(kafkaTemplate);
+        CosmosDbService cloudDataService = new CosmosDbService(kafkaTemplate);
 
         // Call the method under test
         cloudDataService.sendData(testData);
 
         // Verify that kafkaTemplate.send() was called exactly once with the correct arguments
-        ArgumentCaptor<Message<ReactiveDataCar>> messageCaptor = ArgumentCaptor.forClass(Message.class);
+        ArgumentCaptor<Message<DataCar>> messageCaptor = ArgumentCaptor.forClass(Message.class);
         verify(kafkaTemplate, times(1)).send(messageCaptor.capture());
 
-        Message<ReactiveDataCar> capturedMessage = messageCaptor.getValue();
+        Message<DataCar> capturedMessage = messageCaptor.getValue();
         assertEquals(testData, capturedMessage.getPayload());
         assertEquals("myeventhub", capturedMessage.getHeaders().get(KafkaHeaders.TOPIC));
     }

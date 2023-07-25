@@ -1,6 +1,6 @@
 package com.nashtech.service.impl;
 
-import com.nashtech.model.ReactiveDataCar;
+import com.nashtech.model.DataCar;
 import com.nashtech.service.CloudDataService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,11 +47,11 @@ public class ReactiveDataServiceImplTests {
     void testFetchAndSendData_Success() {
         WebClient.ResponseSpec responseSpec = Mockito.mock(WebClient.ResponseSpec.class);
         // Create a sample test data
-        ReactiveDataCar testData = new ReactiveDataCar(0, "brand", "model", 2020L, "color", 0.0, 0.0);
+        DataCar testData = new DataCar(0, "brand", "model", 2020L, "color", 0.0, 0.0);
 
         // Mock the WebClient response with the sample data
         when(webClient.get().uri(anyString()).retrieve()).thenReturn(responseSpec);
-        when(responseSpec.bodyToFlux(ReactiveDataCar.class)).thenReturn(Flux.just(testData));
+        when(responseSpec.bodyToFlux(DataCar.class)).thenReturn(Flux.just(testData));
 
         // Call the method under test
         reactiveDataService.fetchAndSendData();

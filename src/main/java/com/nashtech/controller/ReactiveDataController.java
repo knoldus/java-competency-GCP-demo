@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
  * Controller class for handling vehicle data operations.
  */
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/v1/data")
 public class ReactiveDataController {
     /**
      * Service responsible for handling vehicle data operations.
@@ -33,10 +33,10 @@ public class ReactiveDataController {
      *
      * @return ResponseEntity with a success message if data is sent successfully.
      */
-    @PostMapping("/data")
-    public ResponseEntity<String> sendDataToEventHub() {
+    @PostMapping
+    public ResponseEntity<Object> sendDataToEventHub() {
         dataService.fetchAndSendData();
-        return ResponseEntity.status(HttpStatus.CREATED).body("Json Message sent to the topic!");
+        return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 }
