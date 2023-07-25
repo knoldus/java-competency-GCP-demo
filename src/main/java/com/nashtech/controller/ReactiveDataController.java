@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
+
 /**
  * Rest Controller class
  * which handles reactive data access for cars.
@@ -55,8 +57,8 @@ public class ReactiveDataController {
      */
     @GetMapping(value = "/brands", produces =
             MediaType.APPLICATION_JSON_VALUE)
-    public Flux<CarBrand> getDistinctBrand() {
-        return reactiveDataService.getAllBrand();
+    public Flux<CarBrand> getAllBrands() {
+        return reactiveDataService.getAllBrands();
     }
 
 }

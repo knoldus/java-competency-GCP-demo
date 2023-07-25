@@ -12,7 +12,7 @@ public interface CloudDataService {
      * continuous updates.
      *
      * @param brand The brand of cars to filter by.
-     * @return A Flux of ReactiveDataCars representing cars with the
+     * @return A Flux of CarEntity representing cars with the
      * specified brand.
      */
     Flux<Car> getCarsByBrand(String brand);
@@ -24,5 +24,5 @@ public interface CloudDataService {
      *
      * @return A Flux of String representing distinct car brands.
      */
-    Flux<CarBrand> getAllBrand();
+    Flux<CarBrand> getAllBrands();
 }

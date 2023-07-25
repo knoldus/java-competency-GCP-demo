@@ -1,14 +1,16 @@
 package com.nashtech.service;
 
-import com.nashtech.exception.ResourceNotFoundException;
+import com.azure.cosmos.CosmosException;
+import com.nashtech.exception.DataNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
-import com.nashtech.model.ReactiveDataCars;
 import com.nashtech.repository.CosmosDbRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+
+import java.time.Duration;
 
 @Service
 @Slf4j
@@ -16,7 +18,7 @@ public class CosmosDbService implements CloudDataService {
 
 
     /**
-     * The reactive repository for {@link ReactiveDataCars} entities
+     * The reactive repository for {@link Car} entities
      * in Cosmos DB.
      * Used for performing CRUD operations and reactive data access.
      */
@@ -36,8 +38,10 @@ public class CosmosDbService implements CloudDataService {
         Flux<Car> allCarsOfBrand =
                 cosmosDbRepository.getAllCarsByBrand(brand);
         return allCarsOfBrand
-                .doOnComplete(() -> log.info("Received Data Successfully--"+allCarsOfBrand.getClass()))
-                .switchIfEmpty(Flux.error(new ResourceNotFoundException()));
+                .doOnError(error ->
+                        log.error("Request Timeout"))
+                .doOnComplete(() -> log.info("Received Data Successfully"))
+                .switchIfEmpty(Flux.error(new DataNotFoundException()));
     }
 
     /**
@@ -49,16 +53,15 @@ public class CosmosDbService implements CloudDataService {
      *
      * @return A Flux of CarBrand representing distinct car brands.
      */
-    public Flux<CarBrand> getAllBrand() {
-        Flux<CarBrand> distinctBrandsFlux =
+    public Flux<CarBrand> getAllBrands() {
+        Flux<CarBrand> BrandsFlux =
                 cosmosDbRepository.findDistinctBrands();
-        return distinctBrandsFlux
-                .doOnNext(brand ->
-                        log.info("Distinct Brand: " + brand))
+        return BrandsFlux
+                .delayElements(Duration.ofMillis(500))
                 .doOnError(error ->
-                        log.error("Error occurred: " + error))
+                        log.error("Request Timeout"))
                 .doOnComplete(() ->
                         log.info("Data processing completed."))
-                .switchIfEmpty(Flux.error(new ResourceNotFoundException()));
+                .switchIfEmpty(Flux.error(new DataNotFoundException()));
     }
 }

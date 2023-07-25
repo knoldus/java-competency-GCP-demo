@@ -8,14 +8,14 @@ import org.springframework.http.HttpStatus;
 import java.time.LocalDateTime;
 
 /**
- The ApiResponse class represents a generic response object that is
+ The ErrorResponse class represents a generic response object that is
  used to encapsulate the response data
  and metadata returned by an API.
  */
 @Data
 @AllArgsConstructor
 @Builder
-public class ApiResponse {
+public class ErrorResponse {
 
     /**
      * A message that describes the response.

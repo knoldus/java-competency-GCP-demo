@@ -27,7 +27,6 @@ public class Car {
     /**
      * The model of the car.
      */
-    @Version
     private String model;
 
     /**

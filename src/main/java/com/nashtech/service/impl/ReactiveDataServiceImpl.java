@@ -1,10 +1,7 @@
 package com.nashtech.service.impl;
 
-import com.nashtech.exception.ResourceNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
-import com.nashtech.model.ReactiveDataCars;
-import com.nashtech.repository.CosmosDbRepository;
 import com.nashtech.service.CloudDataService;
 import com.nashtech.service.ReactiveDataService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +12,7 @@ import reactor.core.publisher.Flux;
 /**
  * Service implementation class for performing reactive data access
  * operations on cars.
- * This service interacts with the {@link CosmosDbRepository}
+ * This service interacts with the {@link CloudDataService}
  * to retrieve car data in a reactive manner.
  */
 @Service
@@ -23,7 +20,7 @@ import reactor.core.publisher.Flux;
 public class ReactiveDataServiceImpl implements ReactiveDataService {
 
     /**
-     * The reactive Service for {@link ReactiveDataCars} entities
+     * The reactive Service for {@link Car} entities
      * in Cosmos DB.
      * Used for performing CRUD operations and reactive data access.
      */
@@ -52,8 +49,8 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
      *
      * @return A Flux of CarBrand representing distinct car brands.
      */
-    public Flux<CarBrand> getAllBrand() {
-        return cloudDataService.getAllBrand();
+    public Flux<CarBrand> getAllBrands() {
+        return cloudDataService.getAllBrands();
     }
 
 }

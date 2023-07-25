@@ -1,6 +1,6 @@
 package com.nashtech.service.impl;
 
-import com.nashtech.exception.ResourceNotFoundException;
+import com.nashtech.exception.DataNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.repository.CosmosDbRepository;
@@ -28,10 +28,10 @@ public class CloudDataServiceTest {
 
     @Test
     void testGetCarsByBrand() {
-        final Flux<Car> reactiveCarDetailsDtoFlux = Flux.just(
+        final Flux<Car> carFlux = Flux.just(
                 new Car(0, "brand", "model", 2020L, "color", 0.0, 0.0));
 
-        Mockito.when(cosmosDbRepository.getAllCarsByBrand(ArgumentMatchers.anyString())).thenReturn(reactiveCarDetailsDtoFlux);
+        Mockito.when(cosmosDbRepository.getAllCarsByBrand(ArgumentMatchers.anyString())).thenReturn(carFlux);
         // Run the test
         final Flux<Car> result = cosmosDbService.getCarsByBrand("brand");
         StepVerifier.create(result)
@@ -43,16 +43,14 @@ public class CloudDataServiceTest {
     @Test
     void testGetCarsByBrand_ReactiveDataRepositoryReturnsError() {
         // Setup
-        // Configure CosmosDbRepository.getAllCars(...).
-        final Flux<Car> reactiveCarDetailsDtoFlux = Flux.error(new Exception("message"));
-        Mockito.when(cosmosDbRepository.getAllCarsByBrand("brand")).thenReturn(Flux.error(new ResourceNotFoundException()));
+        Mockito.when(cosmosDbRepository.getAllCarsByBrand("brand")).thenReturn(Flux.error(new DataNotFoundException()));
 
         // Run the test
         final Flux<Car> result = cosmosDbService.getCarsByBrand("brand");
 
         // Assert the error
         StepVerifier.create(result)
-                .expectError(ResourceNotFoundException.class)
+                .expectError(DataNotFoundException.class)
                 .verify();
     }
 
@@ -66,20 +64,20 @@ public class CloudDataServiceTest {
 
         // Assert the error
         StepVerifier.create(result)
-                .expectError(ResourceNotFoundException.class)
+                .expectError(DataNotFoundException.class)
                 .verify();
     }
 
 
     @Test
-    void testGetAllBrand() {
+    void testGetAllBrands() {
         // Setup
         final List<CarBrand> expectedBrands = Arrays.asList(new CarBrand("brand1"), new CarBrand("brand2"));
-        final Flux<CarBrand> reactiveDataBrandsFlux = Flux.fromIterable(expectedBrands);
-        Mockito.when(cosmosDbRepository.findDistinctBrands()).thenReturn(reactiveDataBrandsFlux);
+        final Flux<CarBrand> BrandsFlux = Flux.fromIterable(expectedBrands);
+        Mockito.when(cosmosDbRepository.findDistinctBrands()).thenReturn(BrandsFlux);
 
         // Run the test
-        final Flux<CarBrand> result = cosmosDbService.getAllBrand();
+        final Flux<CarBrand> result = cosmosDbService.getAllBrands();
 
         // Verify the results
         StepVerifier.create(result)
@@ -88,33 +86,33 @@ public class CloudDataServiceTest {
     }
 
     @Test
-    void testGetAllBrand_ReactiveDataRepositoryReturnsError() {
+    void testGetAllBrands_ReactiveDataRepositoryReturnsError() {
         // Setup
-        // Configure CosmosDbRepository.findDistinctBrands(...).
-        final Flux<CarBrand> reactiveDataBrandsFlux = Flux.error(new ResourceNotFoundException());
-        Mockito.when(cosmosDbRepository.findDistinctBrands()).thenReturn(reactiveDataBrandsFlux);
+        final Flux<CarBrand> BrandsFlux = Flux.error(new DataNotFoundException());
+        Mockito.when(cosmosDbRepository.findDistinctBrands()).thenReturn(BrandsFlux);
 
         // Run the test
-        final Flux<CarBrand> result = cosmosDbService.getAllBrand();
+        final Flux<CarBrand> result = cosmosDbService.getAllBrands();
 
         // Verify the results
         StepVerifier.create(result)
-                .expectError(ResourceNotFoundException.class) // Verify if the expected error is thrown
+                .expectError(DataNotFoundException.class) // Verify if the expected error is thrown
                 .verify();
     }
 
     @Test
-    void testGetAllBrand_ReactiveDataRepositoryReturnsNoItem() {
+    void testGetAllBrands_ReactiveDataRepositoryReturnsNoItem() {
         // Setup
         Mockito.when(cosmosDbRepository.findDistinctBrands()).thenReturn(Flux.empty());
 
         // Run the test
-        final Flux<CarBrand> result = cosmosDbService.getAllBrand();
+        final Flux<CarBrand> result = cosmosDbService.getAllBrands();
 
         // Verify the results
         StepVerifier.create(result)
-                .expectError(ResourceNotFoundException.class)
+                .expectError(DataNotFoundException.class)
                 .verify();
     }
 
 }
+

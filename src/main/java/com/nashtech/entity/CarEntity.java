@@ -1,11 +1,10 @@
-package com.nashtech.model;
+package com.nashtech.entity;
 
 import com.azure.spring.data.cosmos.core.mapping.Container;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Version;
 
 /**
  * Represents a reactive data model for storing information about
@@ -17,7 +16,7 @@ import org.springframework.data.annotation.Version;
 @Container(containerName = "DbContainer")
 @Builder
 @AllArgsConstructor
-public class ReactiveDataCars {
+public class CarEntity {
 
     /**
      * The unique identifier of the car.
@@ -38,7 +37,6 @@ public class ReactiveDataCars {
     /**
      * The model of the car.
      */
-    @Version
     private String model;
 
     /**
