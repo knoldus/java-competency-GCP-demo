@@ -2,6 +2,7 @@ package com.nashtech.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Version;
 
 /**
@@ -10,7 +11,8 @@ import org.springframework.data.annotation.Version;
  */
 @Data
 @AllArgsConstructor
-public class ReactiveCarDetailsDto {
+@NoArgsConstructor
+public class Car {
 
     /**
      * The card ID of the car.

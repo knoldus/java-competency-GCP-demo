@@ -4,13 +4,7 @@ import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import reactor.core.publisher.Flux;
 
-/**
- * Interface representing a service for performing reactive data access
- * operations on cars.
- * It provides methods for obtaining cars with a specific brand and getting
- * distinct car brands in a reactive manner.
- */
-public interface ReactiveDataService {
+public interface CloudDataService {
 
     /**
      * Retrieves a Flux of cars with the specified brand in a reactive manner.
@@ -32,5 +26,3 @@ public interface ReactiveDataService {
      */
     Flux<CarBrand> getAllBrand();
 }
-
-

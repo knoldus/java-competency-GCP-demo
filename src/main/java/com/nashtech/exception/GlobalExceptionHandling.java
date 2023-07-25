@@ -36,7 +36,7 @@ public class GlobalExceptionHandling implements Thread.UncaughtExceptionHandler 
         String message = resourceNotFoundException.getMessage();
         ApiResponse response = ApiResponse.builder()
                 .message(message)
-                .status(HttpStatus.NOT_FOUND)
+                .statusCode(HttpStatus.NOT_FOUND)
                 .localDateTime(LocalDateTime.now())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);

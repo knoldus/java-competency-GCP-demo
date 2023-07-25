@@ -2,6 +2,7 @@ package com.nashtech.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Represents a reactive data model for sending
@@ -9,7 +10,8 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class ReactiveDataBrands {
+@NoArgsConstructor
+public class CarBrand {
 
     /**
      * The brand of the car.

@@ -25,7 +25,7 @@ public class ApiResponse {
     /**
      * An HTTP status code that describes the result of the operation.
      */
-    private HttpStatus status;
+    private HttpStatus statusCode;
 
     /**
      * Represents a date and time without time zone information.

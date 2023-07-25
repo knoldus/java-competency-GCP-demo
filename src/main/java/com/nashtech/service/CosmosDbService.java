@@ -1,34 +1,27 @@
-package com.nashtech.service.impl;
+package com.nashtech.service;
 
 import com.nashtech.exception.ResourceNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.model.ReactiveDataCars;
 import com.nashtech.repository.CosmosDbRepository;
-import com.nashtech.service.CloudDataService;
-import com.nashtech.service.ReactiveDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
-/**
- * Service implementation class for performing reactive data access
- * operations on cars.
- * This service interacts with the {@link CosmosDbRepository}
- * to retrieve car data in a reactive manner.
- */
 @Service
 @Slf4j
-public class ReactiveDataServiceImpl implements ReactiveDataService {
+public class CosmosDbService implements CloudDataService {
+
 
     /**
-     * The reactive Service for {@link ReactiveDataCars} entities
+     * The reactive repository for {@link ReactiveDataCars} entities
      * in Cosmos DB.
      * Used for performing CRUD operations and reactive data access.
      */
     @Autowired
-    private CloudDataService cloudDataService;
+    private CosmosDbRepository cosmosDbRepository;
 
     /**
      * Retrieves a Flux of cars with specified brand in reactive manner.
@@ -40,7 +33,11 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
      * specified brand.
      */
     public Flux<Car> getCarsByBrand(final String brand) {
-            return cloudDataService.getCarsByBrand(brand);
+        Flux<Car> allCarsOfBrand =
+                cosmosDbRepository.getAllCarsByBrand(brand);
+        return allCarsOfBrand
+                .doOnComplete(() -> log.info("Received Data Successfully--"+allCarsOfBrand.getClass()))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException()));
     }
 
     /**
@@ -53,7 +50,15 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
      * @return A Flux of CarBrand representing distinct car brands.
      */
     public Flux<CarBrand> getAllBrand() {
-        return cloudDataService.getAllBrand();
+        Flux<CarBrand> distinctBrandsFlux =
+                cosmosDbRepository.findDistinctBrands();
+        return distinctBrandsFlux
+                .doOnNext(brand ->
+                        log.info("Distinct Brand: " + brand))
+                .doOnError(error ->
+                        log.error("Error occurred: " + error))
+                .doOnComplete(() ->
+                        log.info("Data processing completed."))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException()));
     }
-
 }

@@ -1,7 +1,9 @@
 package com.nashtech.controller;
 
-import com.nashtech.model.ReactiveCarDetailsDto;
-import com.nashtech.model.ReactiveDataBrands;
+import com.nashtech.model.Car;
+import com.nashtech.model.CarBrand;
+import com.nashtech.service.ReactiveDataService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,37 +11,53 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 /**
- * Interface representing a reactive data controller for handling car
- * data retrieval.
- * It provides endpoints for obtaining distinct car brands and cars with
- * a specific brand in a reactive manner.
+ * Rest Controller class
+ * which handles reactive data access for cars.
+ * This controller provides endpoints for retrieving car data based on
+ * the brand and getting distinct car brands.
  */
 @RestController
-public interface ReactiveDataController {
+public class ReactiveDataController {
 
     /**
-     * Retrieves a stream of distinct car brands in a reactive manner.
-     * The response will be in Server-Sent Events (SSE) format to allow
-     * continuous data updates.
-     *
-     * @return A Flux of ReactiveDataBrands representing distinct
-     * car brands.
+     * The service implementation for reactive data access.
+     * This service provides methods for retrieving and processing car data
+     * in a reactive manner.
+     * It is marked as 'final' to ensure immutability after initialization.
      */
-    @GetMapping(value = "/distinctBrand", produces =
-            MediaType.APPLICATION_JSON_VALUE)
-    Flux<ReactiveDataBrands> getDistinctBrand();
+    @Autowired
+    private ReactiveDataService reactiveDataService;
 
     /**
-     * Retrieves a stream of cars with the specified brand in a
-     * reactive manner.
-     * The response will be in Server-Sent Events (SSE) format to allow
-     * continuous data updates.
+     * Retrieves a stream of cars with the given brand at regular
+     * intervals of 5 seconds.
+     * The data is obtained using the reactive service and duplicates
+     * are filtered out.
      *
      * @param brand The brand of cars to filter by.
-     * @return A Flux of ReactiveCarDetailsDto representing cars with the
+     * @return A Flux of Car representing cars with the
      * specified brand.
      */
-    @GetMapping(value = "/carsByBrand/{brand}", produces =
+    @GetMapping(value = "/cars/{brand}", produces =
             MediaType.APPLICATION_JSON_VALUE)
-    Flux<ReactiveCarDetailsDto> getCarsByBrand(@PathVariable String brand);
+    public Flux<Car> getCarsByBrand(
+            @PathVariable final String brand) {
+        return reactiveDataService.getCarsByBrand(brand);
+    }
+
+    /**
+     * Retrieves a stream of distinct car brands at regular intervals of
+     * 5 seconds.
+     * The data is obtained using the reactive service and duplicates are
+     * filtered out.
+     *
+     * @return A Flux of CarBrand representing distinct car brands.
+     */
+    @GetMapping(value = "/brands", produces =
+            MediaType.APPLICATION_JSON_VALUE)
+    public Flux<CarBrand> getDistinctBrand() {
+        return reactiveDataService.getAllBrand();
+    }
+
 }
+
