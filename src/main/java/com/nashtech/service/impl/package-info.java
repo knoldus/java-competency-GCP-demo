@@ -1,1 +1,1 @@
-package com.nashtech.mockaroodata.service.impl;
+package com.nashtech.service.impl;

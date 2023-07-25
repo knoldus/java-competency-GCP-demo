@@ -1,12 +1,11 @@
 package com.nashtech.service.impl;
 
-import com.nashtech.model.ReactiveDataCars;
+import com.nashtech.model.ReactiveDataCar;
+import com.nashtech.service.CloudDataService;
 import com.nashtech.service.ReactiveDataService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
 import reactor.core.publisher.Flux;
@@ -14,27 +13,23 @@ import reactor.core.publisher.Flux;
 /**
  * Implementation of Service class responsible for fetching and sending vehicle data.
  */
+@Service
 @Slf4j
 public class ReactiveDataServiceImpl implements ReactiveDataService {
-
-
-    /**
-     * The KafkaTemplate for sending vehicle data to Kafka topics.
-     */
-    private final KafkaTemplate<String, ReactiveDataCars> kafkaTemplate;
 
     /**
      * The WebClient for making HTTP requests to the external API.
      */
     private WebClient webClient;
 
+    @Autowired
+    private CloudDataService cloudDataService;
+
     /**
      * Constructor to initialize the DataService
      * with KafkaTemplate and WebClient.
      */
-    public ReactiveDataServiceImpl(final KafkaTemplate<String,
-            ReactiveDataCars> kafkaSender) {
-        this.kafkaTemplate = kafkaSender;
+    public ReactiveDataServiceImpl() {
         this.webClient = WebClient.create("https://my.api.mockaroo.com/");
     }
 
@@ -52,20 +47,13 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
         webClient.get()
                 .uri(apiUrl)
                 .retrieve()
-                .bodyToFlux(ReactiveDataCars.class)
+                .bodyToFlux(ReactiveDataCar.class)
                 .switchIfEmpty(Flux.error(new WebClientException("Error Occurred") {
                 }))
                 .subscribe(
                         s -> {
-
-                                Message<VehicleDetails> message = MessageBuilder
-                                        .withPayload(s)
-                                        .setHeader(KafkaHeaders.TOPIC, "myeventhub")
-                                        .build();
-
-                                kafkaTemplate.send(message);
-                            } 
-
+                            cloudDataService.sendData(s);
+                        }
                 );
     }
 }
