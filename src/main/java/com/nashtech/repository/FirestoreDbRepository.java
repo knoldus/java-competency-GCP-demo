@@ -10,14 +10,15 @@ import reactor.core.publisher.Flux;
  * performing CRUD operations on vehicles in Firestore.
  */
 @Repository
-public interface VehicleRepository extends
+public interface FirestoreDbRepository extends
         FirestoreReactiveRepository<Vehicle> {
 
         /**
          * Retrieves a Flux of Vehicle objects
          * filtered by the specified brand name.
          * @param brand The brand name of the vehicles to retrieve.
-         *
+         * @return A Flux emitting Vehicle objects
+         * matching the specified brand name.
          */
         Flux<Vehicle> findByBrand(String brand);
 }

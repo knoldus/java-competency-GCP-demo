@@ -1,12 +1,12 @@
 package com.nashtech.exception;
 
+import com.google.cloud.spring.data.firestore.FirestoreDataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
-
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -17,25 +17,27 @@ import java.util.Objects;
 public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
-     * Exception handler for DataNotFoundException.
-     * Creates an ApiError object with error details and HTTP status code.
+     * Handles FirestoreDataException
+     * and creates an ApiResponse with error details.
      *
-     * @param dataNotFoundException The exception representing
-     *                             DataNotFoundException.
-     * @return A ResponseEntity with the ApiError and HTTP
-     * status code 400 (BAD_REQUEST).
+     * @param firestoreDataException
+     * The FirestoreDataException to handle.
+     * @return A ResponseEntity containing an ApiResponse with error details
+     * and a HTTP 400 status code.
      */
-    @ExceptionHandler(DataNotFoundException.class)
-    public ResponseEntity<Object> handleDataNotFoundException(
-            Exception exception,final DataNotFoundException dataNotFoundException) {
-            String message= dataNotFoundException.getMessage();
-        if(Objects.isNull(dataNotFoundException.getMessage())){
-            message = exception.getMessage();
+    @ExceptionHandler(FirestoreDataException.class)
+    public ResponseEntity<Object> handleFirestoreDataException(
+            final FirestoreDataException firestoreDataException) {
+        String exceptionMessage = firestoreDataException.getMessage();
+        if (Objects.isNull(firestoreDataException.getMessage())) {
+            exceptionMessage = "Something went wrong "
+                    + ", Unable to retrieve the data";
         }
-        ApiError errorResponse=new ApiError(
-                message,
-                HttpStatus.BAD_REQUEST,
-                LocalDateTime.now());
-        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+        ApiError errorResponse = new ApiError(
+                new Date(),
+                firestoreDataException.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
 }

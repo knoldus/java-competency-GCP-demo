@@ -2,24 +2,28 @@ package com.nashtech.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
-import java.time.LocalDateTime;
+import org.springframework.http.HttpStatusCode;
+import java.util.Date;
 
+/**
+ * Represents an API error response.
+ */
 @Data
 @AllArgsConstructor
 public class ApiError {
     /**
-     * The message associated with the API error.
+     * The timestamp when the response was generated.
      */
-    private final String message;
+    private Date timestamp;
 
     /**
-     * The HTTP status associated with the API error.
+     * The message associated with the API response.
      */
-    private final HttpStatus status;
+    private String message;
 
     /**
-     * The local date and time when the API error occurred.
+     * The HTTP status code of the API response.
      */
-    private final LocalDateTime localDateTime;
+    private HttpStatusCode responseCode;
 }
+
