@@ -2,6 +2,7 @@ package com.nashtech.controller;
 
 import com.nashtech.service.ReactiveDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
  * Controller class for handling vehicle data operations.
  */
 @RestController
-@RequestMapping("/vehicle")
+@RequestMapping("/v1")
 public class ReactiveDataController {
     /**
      * Service responsible for handling vehicle data operations.
@@ -32,10 +33,10 @@ public class ReactiveDataController {
      *
      * @return ResponseEntity with a success message if data is sent successfully.
      */
-    @PostMapping(value = "/data")
+    @PostMapping("/data")
     public ResponseEntity<String> sendDataToEventHub() {
         dataService.fetchAndSendData();
-        return ResponseEntity.ok("Json Message sent to the topic!");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Json Message sent to the topic!");
 
     }
 }

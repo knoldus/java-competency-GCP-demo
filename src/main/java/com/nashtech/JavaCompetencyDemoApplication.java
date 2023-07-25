@@ -1,6 +1,5 @@
 package com.nashtech;
 
-import com.nashtech.exception.GlobalExceptionHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
