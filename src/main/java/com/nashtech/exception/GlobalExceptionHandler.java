@@ -13,32 +13,33 @@ import org.springframework.web.reactive.function.client.WebClientException;
  */
 
 @ControllerAdvice
-public class GlobalExceptionHandler  {
-	
-	
-	/**
- 	  * Exception handler method to handle {@link KafkaException}.
- 	  * This method handles any exceptions of type {@link KafkaException} that might occur
- 	  * during message sending to Kafka and returns an HTTP response with status code 400 (Bad Request).
- 	  *
-          * @param kafkaException The {@link KafkaException} that occurred during message sending.
-	  * @return An HTTP response entity with status code 400 (Bad Request).
- 	*/
+public class GlobalExceptionHandler extends RuntimeException {
+
+
+    /**
+     * Exception handler method to handle {@link KafkaException}.
+     * This method handles any exceptions of type {@link KafkaException} that might occur
+     * during message sending to Kafka and returns an HTTP response with status code 400 (Bad Request).
+     *
+     * @param kafkaException The {@link KafkaException} that occurred during message sending.
+     * @return An HTTP response entity with status code 400 (Bad Request).
+     */
         @ExceptionHandler(value = KafkaException.class)
-        public ResponseEntity<Object> KafkaExceptionHandler(KafkaException kafkaException) {
-            return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
+        public ResponseEntity<String> KafkaExceptionHandler(KafkaException kafkaException)  {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An exception occurred while pushing data to cloud");
         }
-        
-    	/**
-     	  * Exception handler method to handle {@link WebClientException}.
-          * This method handles any exceptions of type {@link WebClientException} that might occur
-          * when making requests using WebClient and returns an HTTP response with status code 400 (Bad Request).
-     	  * @param webClientException The {@link WebClientException} that occurred during a WebClient request.
-          * @return An HTTP response entity with status code 400 (Bad Request).
-        */    
+
+    /**
+     * Exception handler method to handle {@link WebClientException}.
+     * This method handles any exceptions of type {@link WebClientException} that might occur
+     * when making requests using WebClient and returns an HTTP response with status code 400 (Bad Request).
+     *
+     * @param webClientException The {@link WebClientException} that occurred during a WebClient request.
+     * @return An HTTP response entity with status code 400 (Bad Request).
+     */
         @ExceptionHandler(value = WebClientException.class)
-        public ResponseEntity<Object> WebClientExceptionHandler(WebClientException webClientException) {
-            return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
+        public ResponseEntity<String> WebClientExceptionHandler(WebClientException webClientException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An exception occurred while pulling data from mockaroo");
         }
 
 }

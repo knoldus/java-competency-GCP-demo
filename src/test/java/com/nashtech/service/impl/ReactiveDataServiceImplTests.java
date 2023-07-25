@@ -1,6 +1,6 @@
 package com.nashtech.service.impl;
 
-import com.nashtech.model.DataCar;
+import com.nashtech.entity.CarEntity;
 import com.nashtech.service.CloudDataService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,17 +47,17 @@ public class ReactiveDataServiceImplTests {
     void testFetchAndSendData_Success() {
         WebClient.ResponseSpec responseSpec = Mockito.mock(WebClient.ResponseSpec.class);
         // Create a sample test data
-        DataCar testData = new DataCar(0, "brand", "model", 2020L, "color", 0.0, 0.0);
+        CarEntity testData = new CarEntity(0, "brand", "model", 2020L, "color", 0.0, 0.0);
 
         // Mock the WebClient response with the sample data
         when(webClient.get().uri(anyString()).retrieve()).thenReturn(responseSpec);
-        when(responseSpec.bodyToFlux(DataCar.class)).thenReturn(Flux.just(testData));
+        when(responseSpec.bodyToFlux(CarEntity.class)).thenReturn(Flux.just(testData));
 
         // Call the method under test
         reactiveDataService.fetchAndSendData();
 
         // Verify that cloudDataService.sendData() was called exactly once with the testData as an argument
-        verify(cloudDataService, times(1)).sendData(testData);
+        verify(cloudDataService, times(1)).pushData(testData);
     }
 
 }

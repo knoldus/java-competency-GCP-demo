@@ -1,6 +1,6 @@
 package com.nashtech.service.impl;
 
-import com.nashtech.model.ReactiveDataCar;
+import com.nashtech.entity.CarEntity;
 import com.nashtech.service.CloudDataService;
 import com.nashtech.service.ReactiveDataService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,13 +47,11 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
         webClient.get()
                 .uri(apiUrl)
                 .retrieve()
-                .bodyToFlux(ReactiveDataCar.class)
-                .switchIfEmpty(Flux.error(new WebClientException("Error Occurred") {
+                .bodyToFlux(CarEntity.class)
+                .switchIfEmpty(Flux.error(new WebClientException("Data Not Found") {
                 }))
                 .subscribe(
-                        s -> {
-                            cloudDataService.sendData(s);
-                        }
+                        dataCar -> cloudDataService.pushData(dataCar)
                 );
     }
 }

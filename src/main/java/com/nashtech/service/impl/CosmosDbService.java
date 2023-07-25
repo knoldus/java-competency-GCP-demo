@@ -1,7 +1,7 @@
 package com.nashtech.service.impl;
 
 
-import com.nashtech.model.DataCar;
+import com.nashtech.entity.CarEntity;
 import com.nashtech.service.CloudDataService;
 import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -16,28 +16,28 @@ public class CosmosDbService implements CloudDataService {
     /**
      * The KafkaTemplate for sending vehicle data to Kafka topics.
      */
-    private final KafkaTemplate<String, DataCar> kafkaTemplate;
+    private final KafkaTemplate<String, CarEntity> kafkaTemplate;
 
 
     /**
      * Constructor to initialize the DataService
      * with KafkaTemplate.
      */
-    public CosmosDbService(KafkaTemplate<String, DataCar> kafkaTemplate) {
+    public CosmosDbService(KafkaTemplate<String, CarEntity> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
-    
+
     /**
-     * Sends the given {@link DataCar} object to the Kafka topic "myeventhub".
-     * The method constructs a Kafka message from the provided {@link DataCar} payload
+     * Sends the given {@link CarEntity} object to the Kafka topic "myeventhub".
+     * The method constructs a Kafka message from the provided {@link CarEntity} payload
      * and sends it using the configured {@link KafkaTemplate}.
      *
-     * @param reactiveDataCar The {@link DataCar} object to be sent to Kafka.
+     * @param reactiveDataCar The {@link CarEntity} object to be sent to Kafka.
      * @throws KafkaException If an error occurs while sending the message to Kafka.
      */
     @Override
-    public void sendData(DataCar reactiveDataCar) throws KafkaException {
-        Message<DataCar> message = MessageBuilder
+    public void pushData(CarEntity reactiveDataCar) throws KafkaException {
+        Message<CarEntity> message = MessageBuilder
                 .withPayload(reactiveDataCar)
                 .setHeader(KafkaHeaders.TOPIC, "myeventhub")
                 .build();

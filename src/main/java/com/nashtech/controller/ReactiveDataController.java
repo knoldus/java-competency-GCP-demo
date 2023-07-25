@@ -34,7 +34,7 @@ public class ReactiveDataController {
      * @return ResponseEntity with a success message if data is sent successfully.
      */
     @PostMapping
-    public ResponseEntity<Object> sendDataToEventHub() {
+    public ResponseEntity<Object> pushDataToCloud() {
         dataService.fetchAndSendData();
         return new ResponseEntity<>(HttpStatus.CREATED);
 

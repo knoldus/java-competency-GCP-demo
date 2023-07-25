@@ -1,4 +1,4 @@
-package com.nashtech.model;
+package com.nashtech.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,13 +12,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class DataCar {
+public class CarEntity {
 
 
     /**
      * The unique identifier of the vehicle.
      */
-    private Integer cardId;
+    private Integer carId;
     /**
      * The brand of the vehicle.
      */
