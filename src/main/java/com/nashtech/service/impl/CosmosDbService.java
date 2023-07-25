@@ -36,7 +36,7 @@ public class CosmosDbService implements CloudDataService {
      * @throws KafkaException If an error occurs while sending the message to Kafka.
      */
     @Override
-    public void sendData(DataCar reactiveDataCar) throws KafkaException {
+    public void sendData(DataCar reactiveDataCar) {
         Message<DataCar> message = MessageBuilder
                 .withPayload(reactiveDataCar)
                 .setHeader(KafkaHeaders.TOPIC, "myeventhub")
