@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.client.WebClientException;
  */
 
 @ControllerAdvice
-public class GlobalExceptionHandler  {
+public class GlobalExceptionHandler extends RuntimeException {
 	
 	
 	/**
