@@ -22,7 +22,7 @@ public class EventHubTriggerJava {
                     connection = "connectionString",
                     consumerGroup = "$Default",
                     cardinality = Cardinality.MANY)
-            List<VehicleDetail> vehicleDetails,
+            List<Car> carDetails,
             @CosmosDBOutput(
                     name = "updatedCarDetails",
                     databaseName = "CarFactory",
@@ -30,23 +30,23 @@ public class EventHubTriggerJava {
                     connectionStringSetting = "ConnectionStringSetting",
                     createIfNotExists = true
             )
-            OutputBinding<List<VehicleDetail>> updatedVehicleDetails,
+            OutputBinding<List<Car>> updatedCarDetails,
             final ExecutionContext context
     ) {
         try {
-            List<VehicleDetail> vehicleDetailsList = new ArrayList<>();
-            vehicleDetailsList = vehicleDetails.stream()
+            List<Car> carDetailsList = new ArrayList<>();
+            carDetailsList = carDetails.stream()
                     .map(details -> {
                         context.getLogger().info("Raw Data: " + details);
-                        Double updatedMileage = VehicleUtil.updateMileage(details.getMileage());
-                        Double updatedPrice = VehicleUtil.updatePrice(details.getPrice());
+                        Double updatedMileage = CarUtil.updateMileage(details.getMileage());
+                        Double updatedPrice = CarUtil.updatePrice(details.getPrice());
                         details.setMileage(updatedMileage);
                         details.setPrice(updatedPrice);
                         context.getLogger().info("Transformed Data: " + details);
-                        details.setCardId(details.getCardId() + 1);
+                        details.setCarId(details.getCardId() + 1);
                         return details;
                     }).toList();
-            updatedVehicleDetails.setValue(vehicleDetailsList);
+            updatedCarDetails.setValue(carDetailsList);
         } catch (Exception exception) {
             context.getLogger().info(exception.getMessage());
         }

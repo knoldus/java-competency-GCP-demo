@@ -11,7 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class VehicleDetail {
-    Integer cardId;
+    Integer carId;
     String brand;
     String model;
     Long year;
