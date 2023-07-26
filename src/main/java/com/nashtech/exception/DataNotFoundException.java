@@ -13,4 +13,4 @@ public class DataNotFoundException extends RuntimeException {
         public DataNotFoundException() {
             super("Record not found");
         }
-    }
+}
