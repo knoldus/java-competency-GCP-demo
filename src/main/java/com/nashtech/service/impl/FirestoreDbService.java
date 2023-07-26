@@ -1,11 +1,13 @@
-package com.nashtech.service;
+package com.nashtech.service.impl;
 
 import com.google.cloud.spring.data.firestore.FirestoreDataException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.repository.FirestoreDbRepository;
+import com.nashtech.service.CloudDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -18,6 +20,7 @@ import java.time.Duration;
  */
 @Slf4j
 @Service
+@Profile("firestore")
 public class FirestoreDbService implements CloudDataService {
 
     /**
@@ -39,8 +42,8 @@ public class FirestoreDbService implements CloudDataService {
     @Override
     public Flux<CarBrand> getAllBrands() {
         return firestoreDbRepository.findAll()
-                .filter(carEntity -> carEntity.getBrand() != null)
-                .map(carEntity -> new CarBrand(carEntity.getBrand()))
+                .filter(gcpCarEntity -> gcpCarEntity.getBrand() != null)
+                .map(gcpCarEntity -> new CarBrand(gcpCarEntity.getBrand()))
                 .distinct()
                 .delayElements(Duration.ofMillis(DELAY_TIME))
                 .doOnNext(carBrand -> log.info("Brand: " + carBrand))

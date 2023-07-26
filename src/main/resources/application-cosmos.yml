@@ -1,0 +1,7 @@
+cosmosdb:
+  key: ${COSMOS_KEY}
+  uri: ${COSMOS_URI}
+
+spring:
+  autoconfigure:
+    exclude: com.google.cloud.spring.autoconfigure.firestore.FirestoreRepositoriesAutoConfiguration

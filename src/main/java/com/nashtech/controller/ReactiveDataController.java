@@ -18,7 +18,8 @@ import reactor.core.publisher.Flux;
 public class ReactiveDataController {
 
     /**
-     * The ReactiveDataService instance used to retrieve car information.
+     * The ReactiveDataService instance
+     * used to retrieve car information.
      */
     @Autowired
     private ReactiveDataService reactiveDataService;
@@ -53,3 +54,4 @@ public class ReactiveDataController {
     }
 
 }
+

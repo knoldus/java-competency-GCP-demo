@@ -15,10 +15,13 @@ public interface CloudDataService {
     Flux<CarBrand> getAllBrands();
 
     /**
-     * Gets vehicle details for the specified brand.
-     * @param brand The brand name for
-     *              which vehicle details are requested.
-     * @return A Flux emitting Car objects with details.
+     * Retrieves a Flux of cars with the specified brand in a reactive manner.
+     * The Flux represents a stream of data that can be subscribed to for
+     * continuous updates.
+     *
+     * @param brand The brand of cars to filter by.
+     * @return A Flux of CarEntity representing cars with the
+     * specified brand.
      */
     Flux<Car> getCarsByBrand(String brand);
 }

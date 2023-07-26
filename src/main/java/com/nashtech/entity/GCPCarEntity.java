@@ -1,15 +1,19 @@
 package com.nashtech.entity;
-
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Represents a CarEntity.
  */
 @Data
 @Document(collectionName = "vehicle")
-public class CarEntity {
+@AllArgsConstructor
+@NoArgsConstructor
+public class GCPCarEntity {
     /**
      * The unique identifier of the car.
      */
@@ -51,8 +55,5 @@ public class CarEntity {
      */
     private Double price;
 
-    /**
-     * The location of the car.
-     */
-    private String location;
+
 }

@@ -1,7 +1,8 @@
 package com.nashtech.repository;
 
 import com.google.cloud.spring.data.firestore.FirestoreReactiveRepository;
-import com.nashtech.entity.CarEntity;
+import com.nashtech.entity.GCPCarEntity;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
@@ -10,8 +11,9 @@ import reactor.core.publisher.Flux;
  * performing CRUD operations on vehicles in Firestore.
  */
 @Repository
+@Profile("firestore")
 public interface FirestoreDbRepository extends
-        FirestoreReactiveRepository<CarEntity> {
+        FirestoreReactiveRepository<GCPCarEntity> {
 
         /**
          * Retrieves a Flux of CarEntity objects
@@ -20,5 +22,5 @@ public interface FirestoreDbRepository extends
          * @return A Flux emitting CarEntity objects
          * matching the specified brand name.
          */
-        Flux<CarEntity> findByBrand(String brand);
+        Flux<GCPCarEntity> findByBrand(String brand);
 }

@@ -1,7 +1,7 @@
 package com.nashtech.service.impl;
 
-import com.nashtech.model.CarBrand;
 import com.nashtech.model.Car;
+import com.nashtech.model.CarBrand;
 import com.nashtech.service.CloudDataService;
 import com.nashtech.service.ReactiveDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,4 +41,5 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
     public Flux<Car> getCarsByBrand(final String brand) {
         return cloudDataService.getCarsByBrand(brand);
     }
+
 }
