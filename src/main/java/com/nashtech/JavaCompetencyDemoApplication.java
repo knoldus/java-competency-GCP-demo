@@ -4,6 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@EnableWebFlux
+@OpenAPIDefinition(info = @Info(title = "Reactive Cloud Application",
+        version = "1.0", description = "Reactive Cloud Application uses" +
+        " Azure and GCP CLoud platforms to consume, transform, store and " +
+        "fetch data and then display to front end using Reactive."))
 public class JavaCompetencyDemoApplication {
 /**
  * This method is the entry point for the JavaCompetencyDemoApplication.
