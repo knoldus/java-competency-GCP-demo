@@ -1,15 +1,15 @@
-package com.nashtech.model;
+package com.nashtech.entity;
 
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
 import lombok.Data;
 
 /**
- * Represents a Vehicle.
+ * Represents a CarEntity.
  */
 @Data
 @Document(collectionName = "vehicle")
-public class Vehicle {
+public class CarEntity {
     /**
      * The unique identifier of the car.
      */

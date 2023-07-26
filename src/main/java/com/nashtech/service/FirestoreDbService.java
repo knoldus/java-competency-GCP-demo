@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
+
 /**
  * FirestoreDbService is an implementation
  * of the CloudDataService interface that interacts
@@ -18,6 +20,11 @@ import reactor.core.publisher.Flux;
 @Service
 public class FirestoreDbService implements CloudDataService {
 
+    /**
+     * The duration of the interval,
+     * in milliseconds, for retrieving brand and car details.
+     */
+    private static final Integer DELAY_TIME = 100;
     /**
      * The VehicleRepository instance used to retrieve car information.
      */
@@ -32,9 +39,10 @@ public class FirestoreDbService implements CloudDataService {
     @Override
     public Flux<CarBrand> getAllBrands() {
         return firestoreDbRepository.findAll()
-                .filter(vehicle -> vehicle.getBrand() != null)
-                .map(vehicle -> new CarBrand(vehicle.getBrand()))
+                .filter(carEntity -> carEntity.getBrand() != null)
+                .map(carEntity -> new CarBrand(carEntity.getBrand()))
                 .distinct()
+                .delayElements(Duration.ofMillis(DELAY_TIME))
                 .doOnNext(carBrand -> log.info("Brand: " + carBrand))
                 .doOnComplete(() -> log.info("Data retrieved successfully"))
                 .switchIfEmpty(Flux.defer(() -> {
@@ -61,16 +69,18 @@ public class FirestoreDbService implements CloudDataService {
     @Override
     public Flux<Car> getCarsByBrand(final String brand) {
         return firestoreDbRepository.findByBrand(brand)
-                .filter(vehicle -> vehicle != null)
-                .map(vehicle -> new Car(
-                        vehicle.getCarId(),
-                        vehicle.getCarModel(),
-                        vehicle.getBrand(),
-                        vehicle.getYear(),
-                        vehicle.getColor(),
-                        vehicle.getMileage(),
-                        vehicle.getPrice()))
+                .filter(carEntity -> carEntity != null)
+                .map(carEntity -> new Car()
+                                .setCarId(carEntity.getCarId())
+                                .setCarModel(carEntity.getCarModel())
+                                .setBrand(carEntity.getBrand())
+                                .setYear(carEntity.getYear())
+                                .setColor(carEntity.getColor())
+                                .setMileage(carEntity.getMileage())
+                                .setPrice(carEntity.getPrice())
+                                .build())
                 .distinct()
+                .delayElements(Duration.ofMillis(DELAY_TIME))
                 .switchIfEmpty(Flux.defer(() -> {
                     log.info("No data found");
                     return Flux.empty();

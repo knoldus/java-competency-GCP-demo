@@ -1,7 +1,7 @@
 package com.nashtech.repository;
 
 import com.google.cloud.spring.data.firestore.FirestoreReactiveRepository;
-import com.nashtech.model.Vehicle;
+import com.nashtech.entity.CarEntity;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
@@ -11,14 +11,14 @@ import reactor.core.publisher.Flux;
  */
 @Repository
 public interface FirestoreDbRepository extends
-        FirestoreReactiveRepository<Vehicle> {
+        FirestoreReactiveRepository<CarEntity> {
 
         /**
-         * Retrieves a Flux of Vehicle objects
+         * Retrieves a Flux of CarEntity objects
          * filtered by the specified brand name.
          * @param brand The brand name of the vehicles to retrieve.
-         * @return A Flux emitting Vehicle objects
+         * @return A Flux emitting CarEntity objects
          * matching the specified brand name.
          */
-        Flux<Vehicle> findByBrand(String brand);
+        Flux<CarEntity> findByBrand(String brand);
 }

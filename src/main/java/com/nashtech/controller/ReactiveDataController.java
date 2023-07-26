@@ -12,23 +12,23 @@ import reactor.core.publisher.Flux;
 
 /**
  * This controller class handles the endpoints related to
- * vehicle information retrieval.
+ * car information retrieval.
  */
 @RestController
 public class ReactiveDataController {
 
     /**
-     * The ReactiveDataService instance used to retrieve vehicle information.
+     * The ReactiveDataService instance used to retrieve car information.
      */
     @Autowired
     private ReactiveDataService reactiveDataService;
 
     /**
-     * Retrieves a Flux of unique brand names of vehicles
+     * Retrieves a Flux of unique brand names of car
      * at regular intervals.
      *
      * @return a Flux of String representing the unique
-     * brand names of vehicles
+     * brand names of car
      */
     @GetMapping(value = "/brands", produces =
             MediaType.APPLICATION_JSON_VALUE)
@@ -37,14 +37,14 @@ public class ReactiveDataController {
     }
 
     /**
-     * Retrieves vehicle details
+     * Retrieves car details
      * for a specific brand name in a streaming fashion.
      *
-     * @param brand The brand name of the vehicles to retrieve details for.
+     * @param brand The brand name of the car to retrieve details.
      * @return A Flux of Car
      * representing the details of vehicles with the given brand name.
      */
-    @GetMapping(value = "/brands/{brand}",
+    @GetMapping(value = "/cars/{brand}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Flux<Car> getCarsByBrand(
             @PathVariable final String brand) {
