@@ -1,6 +1,7 @@
 package com.nashtech.service.impl;
 
 import com.nashtech.entity.CarEntity;
+import com.nashtech.model.Car;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class CloudDataServiceImplTests {
 
     @Mock
-    private KafkaTemplate<String, CarEntity> kafkaTemplate;
+    private KafkaTemplate<String, Car> kafkaTemplate;
 
 
     @BeforeEach
@@ -30,7 +31,7 @@ public class CloudDataServiceImplTests {
     @Test
     void testSendData() {
         // Create a sample test data
-        CarEntity testData = new CarEntity(0, "brand", "model", 2020L, "color", 0.0, 0.0);
+        Car testData = new Car(0, "brand", "model", 2020L, "color", 0.0, 0.0);
 
         // Create the service with the mocked KafkaTemplate
         CosmosDbService cloudDataService = new CosmosDbService(kafkaTemplate);

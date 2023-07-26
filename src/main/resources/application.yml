@@ -1,3 +1,6 @@
+cosmosdb:
+  key: ${COSMOS_KEY}
+  uri: ${COSMOS_URI}
 spring:
   kafka:
     bootstrap-servers: ${KAFKA_SERVER}

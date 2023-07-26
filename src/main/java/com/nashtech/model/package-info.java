@@ -1,6 +1,6 @@
 /**
- The com.nashtech.entity package contains the entity class
+ The com.nashtech.model package contains the model classes
  that represent the entities and data structures used
  in the ReactiveApplication.
  */
-package com.nashtech.entity;
+package com.nashtech.model;

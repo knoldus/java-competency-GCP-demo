@@ -1,18 +1,21 @@
 package com.nashtech.exception;
 
-
-import org.apache.kafka.common.KafkaException;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import com.azure.cosmos.CosmosException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import java.time.LocalDateTime;
+import org.apache.kafka.common.KafkaException;
 import org.springframework.web.reactive.function.client.WebClientException;
 
 /**
  * Global exception handler for the application.
  */
 
-@ControllerAdvice
+@RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends RuntimeException {
 
 	
@@ -42,5 +45,43 @@ public class GlobalExceptionHandler extends RuntimeException {
         public ResponseEntity<String> WebClientExceptionHandler(WebClientException webClientException) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An exception occurred while pulling data from mockaroo");
         }
+
+
+    /**
+     * Handles the DataNotFoundException globally.
+     * @param dataNotFoundException the DataNotFoundException object
+     * @return a ResponseEntity object with an error message
+     * and HTTP status code
+     */
+    @ExceptionHandler(value = DataNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlerDataNotFoundException (
+            final DataNotFoundException dataNotFoundException) {
+        String message = dataNotFoundException.getMessage();
+        ErrorResponse response = ErrorResponse.builder()
+                .message(message)
+                .statusCode(HttpStatus.NOT_FOUND)
+                .localDateTime(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Handles the CosmosException and generates a custom error response.
+     *
+     * @param cosmosException The CosmosException that occurred.
+     * @return A ResponseEntity with a customized error response containing the exception message,
+     * HTTP status code 408 (Request Timeout), and the current LocalDateTime.
+     */
+    @ExceptionHandler(value = CosmosException.class)
+    public ResponseEntity<ErrorResponse> handlerCosmosExceptionException(
+            final CosmosException cosmosException) {
+        String message = cosmosException.getMessage();
+        ErrorResponse response = ErrorResponse.builder()
+                .message(message)
+                .statusCode(HttpStatus.REQUEST_TIMEOUT)
+                .localDateTime(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.REQUEST_TIMEOUT);
+    }
 
 }

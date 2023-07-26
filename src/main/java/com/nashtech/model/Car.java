@@ -1,27 +1,18 @@
-package com.nashtech.entity;
+package com.nashtech.model;
 
-import com.azure.spring.data.cosmos.core.mapping.Container;
-import lombok.*;
-import org.springframework.data.annotation.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 /**
- * Represents a reactive data model for storing information about
- * cars in a Cosmos DB container.
- * This class is used for mapping car data to a container named
- * "DbContainer" in Cosmos DB.
+ * Represents a reactive data model for sending
+ * details of the Car to the CosmosDB.
  */
 @Data
-@Container(containerName = "DbContainer")
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class CarEntity {
-
-    /**
-     * The unique identifier of the car.
-     */
-    @Id
-    private String id;
+public class Car {
 
     /**
      * The card ID of the car.
@@ -57,5 +48,4 @@ public class CarEntity {
      * The price of the car.
      */
     private Double price;
-
 }
