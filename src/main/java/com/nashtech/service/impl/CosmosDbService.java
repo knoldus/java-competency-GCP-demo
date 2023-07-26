@@ -31,7 +31,7 @@ public class CosmosDbService implements CloudDataService {
     /**
      * The KafkaTemplate for sending vehicle data to Kafka topics.
      */
-    private final KafkaTemplate<String, CarEntity> kafkaTemplate;
+    private final KafkaTemplate<String, Car> kafkaTemplate;
 
 
     /**
@@ -43,11 +43,11 @@ public class CosmosDbService implements CloudDataService {
     }
 
     /**
-     * Sends the given {@link CarEntity} object to the Kafka topic "myeventhub".
-     * The method constructs a Kafka message from the provided {@link CarEntity} payload
+     * Sends the given {@link Car} object to the Kafka topic "myeventhub".
+     * The method constructs a Kafka message from the provided {@link Car} payload
      * and sends it using the configured {@link KafkaTemplate}.
      *
-     * @param reactiveDataCar The {@link CarEntity} object to be sent to Kafka.
+     * @param reactiveDataCar The {@link Car} object to be sent to Kafka.
      * @throws KafkaException If an error occurs while sending the message to Kafka.
      */
     @Override
