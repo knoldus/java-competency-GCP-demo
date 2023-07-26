@@ -20,14 +20,14 @@ public class GlobalExceptionHandler {
 
     /**
      * Handles the DataNotFoundException globally.
-     * @param resourceNotFoundException the DataNotFoundException object
+     * @param dataNotFoundException the DataNotFoundException object
      * @return a ResponseEntity object with an error message
      * and HTTP status code
      */
-    @ExceptionHandler(value = ResourceNotFoundException.class)
-    public ResponseEntity<Object> handlerResourceNotFoundException(
-            final ResourceNotFoundException resourceNotFoundException) {
-        String message = resourceNotFoundException.getMessage();
+    @ExceptionHandler(value = DataNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlerDataNotFoundException (
+            final DataNotFoundException dataNotFoundException) {
+        String message = dataNotFoundException.getMessage();
         ErrorResponse response = ErrorResponse.builder()
                 .message(message)
                 .statusCode(HttpStatus.NOT_FOUND)
@@ -41,10 +41,10 @@ public class GlobalExceptionHandler {
      *
      * @param cosmosException The CosmosException that occurred.
      * @return A ResponseEntity with a customized error response containing the exception message,
-     *         HTTP status code 408 (Request Timeout), and the current LocalDateTime.
+     * HTTP status code 408 (Request Timeout), and the current LocalDateTime.
      */
     @ExceptionHandler(value = CosmosException.class)
-    public ResponseEntity<Object> handlerCosmosExceptionException(
+    public ResponseEntity<ErrorResponse> handlerCosmosExceptionException(
             final CosmosException cosmosException) {
         String message = cosmosException.getMessage();
         ErrorResponse response = ErrorResponse.builder()

@@ -1,10 +1,11 @@
-package com.nashtech.service;
+package com.nashtech.service.impl;
 
 import com.azure.cosmos.CosmosException;
 import com.nashtech.exception.DataNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.repository.CosmosDbRepository;
+import com.nashtech.service.CloudDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,8 @@ public class CosmosDbService implements CloudDataService {
         return allCarsOfBrand
                 .doOnError(error ->
                         log.error("Request Timeout"))
-                .doOnComplete(() -> log.info("Received Data Successfully"))
+                .doOnComplete(() ->
+                        log.info("Received Data Successfully"))
                 .switchIfEmpty(Flux.error(new DataNotFoundException()));
     }
 
@@ -57,7 +59,6 @@ public class CosmosDbService implements CloudDataService {
         Flux<CarBrand> BrandsFlux =
                 cosmosDbRepository.findDistinctBrands();
         return BrandsFlux
-                .delayElements(Duration.ofMillis(500))
                 .doOnError(error ->
                         log.error("Request Timeout"))
                 .doOnComplete(() ->

@@ -14,7 +14,6 @@ import org.springframework.data.annotation.Id;
  */
 @Data
 @Container(containerName = "DbContainer")
-@Builder
 @AllArgsConstructor
 public class CarEntity {
 
@@ -27,7 +26,7 @@ public class CarEntity {
     /**
      * The card ID of the car.
      */
-    private Integer cardId;
+    private Integer carId;
 
     /**
      * The brand of the car.

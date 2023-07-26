@@ -3,6 +3,7 @@ package com.nashtech.config;
 import com.azure.cosmos.CosmosClientBuilder;
 import com.azure.spring.data.cosmos.config.AbstractCosmosConfiguration;
 import com.azure.spring.data.cosmos.config.CosmosConfig;
+import com.azure.spring.data.cosmos.repository.config.EnableReactiveCosmosRepositories;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,8 @@ import org.springframework.context.annotation.Configuration;
  * necessary Cosmos DB configurations.
  */
 @Configuration
+@EnableReactiveCosmosRepositories
+(basePackages = "com.nashtech.repository")
 public class ReactiveCosmosConfig extends AbstractCosmosConfiguration {
 
     /**

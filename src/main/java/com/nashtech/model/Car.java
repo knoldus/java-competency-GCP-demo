@@ -17,7 +17,7 @@ public class Car {
     /**
      * The card ID of the car.
      */
-    private Integer cardId;
+    private Integer carId;
 
     /**
      * The brand of the car.
