@@ -39,7 +39,7 @@ public class ReactiveDataController {
      * @return A Flux of Car representing cars with the
      * specified brand.
      */
-    @Operation(summary = "Retrieves a stream of cars with the given brand.",
+    @Operation(summary = "Retrieves cars filtered by brand.",
             description = "The data is obtained using the reactive service" +
                     " and duplicates are filtered out.")
     @GetMapping(value = "/cars/{brand}", produces =
@@ -57,7 +57,7 @@ public class ReactiveDataController {
      *
      * @return A Flux of CarBrand representing distinct car brands.
      */
-    @Operation(summary = "Retrieves a stream of distinct car brands.",
+    @Operation(summary = "Retrieves unique car brands.",
             description = "The data is obtained using the reactive" +
                     " service and duplicates are filtered out.")
     @GetMapping(value = "/brands", produces =
