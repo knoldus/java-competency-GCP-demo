@@ -6,13 +6,15 @@ import com.google.cloud.pubsub.v1.Publisher;
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubMessage;
 import com.google.pubsub.v1.TopicName;
-import com.nashtech.model.ReactiveDataCars;
+import com.nashtech.model.Car;
+import com.nashtech.model.CarBrand;
 import com.nashtech.service.CloudDataService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.util.concurrent.TimeUnit;
 import java.io.IOException;
@@ -23,7 +25,7 @@ import java.io.IOException;
  */
 @Slf4j
 @Service
-public class CloudDataServiceImpl implements CloudDataService {
+public class FirestoreDbService implements CloudDataService {
 
     /**
      * The Google Cloud Platform project ID
@@ -94,7 +96,7 @@ public class CloudDataServiceImpl implements CloudDataService {
      * @throws RuntimeException If an error occurs during the
      * publishing process.
      */
-    public Mono<Void> publishCarData(final ReactiveDataCars cars) {
+    public Mono<Void> pushData(final Car cars) {
         TopicName topicName = TopicName.of(projectId, topicId);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -111,5 +113,15 @@ public class CloudDataServiceImpl implements CloudDataService {
         } catch (Exception exception) {
             return Mono.error(exception);
         }
+    }
+
+    @Override
+    public Flux<Car> getCarsByBrand(String brand) {
+        return null;
+    }
+
+    @Override
+    public Flux<CarBrand> getAllBrands() {
+        return null;
     }
 }

@@ -1,17 +1,16 @@
 package com.nashtech.exception;
 
 /**
- * Custom exception class for representing data not found situations.
- * This exception should be thrown
- * when a requested resource or data is not found in the system.
- * It extends the RuntimeException class.
- */
+The DataNotFoundException class is a custom exception
+that is thrown when a requested resource is not found.
+*/
 public class DataNotFoundException extends RuntimeException {
 
-    /**
-     * Constructs a new DataNotFoundException with the specified error message.
-     */
-    public DataNotFoundException() {
-        super("Data Not Found Exception");
+        /**
+         Constructs a new DataNotFoundException
+         with the default error message "Resource not Found".
+         */
+        public DataNotFoundException() {
+            super("Record not found");
+        }
     }
-}

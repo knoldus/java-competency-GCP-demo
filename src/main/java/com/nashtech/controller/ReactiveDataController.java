@@ -1,45 +1,78 @@
 package com.nashtech.controller;
 
+import com.nashtech.model.Car;
+import com.nashtech.model.CarBrand;
 import com.nashtech.service.ReactiveDataService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 /**
- * Controller class to handle Vehicle related endpoints.
+ * Rest Controller class
+ * which handles reactive data access for cars.
+ * This controller provides endpoints for retrieving car data based on
+ * the brand and getting distinct car brands.
  */
 @RestController
-@RequestMapping("/vehicle")
+@RequestMapping("v1/data")
 public class ReactiveDataController {
 
     /**
-     * Service responsible for handling car data operations.
-     *
+     * The service implementation for reactive data access.
+     * This service provides methods for retrieving and processing car data
+     * in a reactive manner.
+     * It is marked as 'final' to ensure immutability after initialization.
      */
     @Autowired
     private ReactiveDataService reactiveDataService;
 
     /**
-     * Default count value for getting vehicle data
-     * if count parameter is not provided.
-     */
-    private static final String DEFAULT_DATA_COUNT = "30";
-
-    /**
-     * Get vehicle data from the VehicleService and
-     * publish it to the VehiclePublisherService.
+     * Endpoint to retrieve data from mockaroo
+     * and send vehicle data to the Event Hub.
      *
-     * @param dataCount The number of vehicle data items to retrieve.
-     * containing Flux of Vehicle data.
-     * in reading data from external source.
+     * @return ResponseEntity with a success message if data is sent successfully.
      */
-    @GetMapping("/data")
-    public void getVehicleData(@RequestParam(
-            name = "count", defaultValue =
-            DEFAULT_DATA_COUNT) final Integer dataCount) {
-        reactiveDataService.getCarData(dataCount);
+    @PostMapping
+    public ResponseEntity<Object> pushDataToCloud() {
+        reactiveDataService.fetchAndSendData();
+        return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
+
+    /**
+     * Retrieves a stream of cars with the given brand at regular
+     * intervals of 5 seconds.
+     * The data is obtained using the reactive service and duplicates
+     * are filtered out.
+     *
+     * @param brand The brand of cars to filter by.
+     * @return A Flux of Car representing cars with the
+     * specified brand.
+     */
+    @GetMapping(value = "/cars/{brand}", produces =
+            MediaType.APPLICATION_JSON_VALUE)
+    public Flux<Car> getCarsByBrand(
+            @PathVariable final String brand) {
+        return reactiveDataService.getCarsByBrand(brand);
+    }
+
+    /**
+     * Retrieves a stream of distinct car brands at regular intervals of
+     * 5 seconds.
+     * The data is obtained using the reactive service and duplicates are
+     * filtered out.
+     *
+     * @return A Flux of CarBrand representing distinct car brands.
+     */
+    @GetMapping(value = "/brands", produces =
+            MediaType.APPLICATION_JSON_VALUE)
+    public Flux<CarBrand> getAllBrands() {
+        return reactiveDataService.getAllBrands();
+    }
+
+
+
 }

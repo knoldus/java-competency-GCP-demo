@@ -11,3 +11,6 @@ spring:
       project-id: nodal-descent-389716
 
 
+cosmosdb:
+  key: ${COSMOS_KEY}
+  uri: ${COSMOS_URI}
