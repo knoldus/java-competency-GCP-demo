@@ -10,7 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class VehicleDetail {
+public class Car {
     Integer carId;
     String brand;
     String model;
