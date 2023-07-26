@@ -1,6 +1,3 @@
-cosmosdb:
-  key: ${COSMOS_KEY}
-  uri: ${COSMOS_URI}
 spring:
   kafka:
     bootstrap-servers: ${KAFKA_SERVER}
@@ -11,7 +8,14 @@ spring:
     producer:
       key-serializer: ${KEY_SERIALIZER}
       value-serializer: ${JSON_SERIALIZER}
+
 mockaroo:
   api:
     url: https://my.api.mockaroo.com
+
 apiUrl: /vehicle.json?key=45d8b3f0
+
+cosmosdb:
+  key: ${COSMOS_KEY}
+  uri: ${COSMOS_URI}
+

@@ -1,6 +1,6 @@
 package com.nashtech.service.impl;
 
-import com.nashtech.entity.CarEntity;
+import com.nashtech.entity.AzureCarEntity;
 import com.nashtech.model.Car;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,10 +40,10 @@ public class CloudDataServiceImplTests {
         cloudDataService.pushData(testData);
 
         // Verify that kafkaTemplate.send() was called exactly once with the correct arguments
-        ArgumentCaptor<Message<CarEntity>> messageCaptor = ArgumentCaptor.forClass(Message.class);
+        ArgumentCaptor<Message<AzureCarEntity>> messageCaptor = ArgumentCaptor.forClass(Message.class);
         verify(kafkaTemplate, times(1)).send(messageCaptor.capture());
 
-        Message<CarEntity> capturedMessage = messageCaptor.getValue();
+        Message<AzureCarEntity> capturedMessage = messageCaptor.getValue();
         assertEquals(testData, capturedMessage.getPayload());
         assertEquals("myeventhub", capturedMessage.getHeaders().get(KafkaHeaders.TOPIC));
     }

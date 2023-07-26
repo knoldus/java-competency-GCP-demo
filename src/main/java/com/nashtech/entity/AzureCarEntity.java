@@ -15,7 +15,7 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CarEntity {
+public class AzureCarEntity {
 
     /**
      * The unique identifier of the car.

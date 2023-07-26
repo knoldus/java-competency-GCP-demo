@@ -4,22 +4,22 @@ import com.azure.spring.data.cosmos.repository.Query;
 import com.azure.spring.data.cosmos.repository.ReactiveCosmosRepository;
 import com.nashtech.model.CarBrand;
 import com.nashtech.model.Car;
-import com.nashtech.entity.CarEntity;
+import com.nashtech.entity.AzureCarEntity;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 /**
  * Reactive data repository interface for performing CRUD operations
- * on {@link CarEntity} entities in Cosmos DB.
+ * on {@link AzureCarEntity} entities in Cosmos DB.
  * This interface extends {@link ReactiveCosmosRepository} and inherits
  * common CRUD methods for reactive data access.
  *
- * @see CarEntity
+ * @see AzureCarEntity
  * @see ReactiveCosmosRepository
  */
 @Repository
 public interface CosmosDbRepository extends ReactiveCosmosRepository
-        <CarEntity, String> {
+        <AzureCarEntity, String> {
 
     /**
      * Custom query to get the brands from CosmosDB.
