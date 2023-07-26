@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 
@@ -21,6 +18,7 @@ import reactor.core.publisher.Flux;
  * the brand and getting distinct car brands.
  */
 @RestController
+@RequestMapping("v1/data")
 public class ReactiveDataController {
 
     /**
@@ -31,6 +29,19 @@ public class ReactiveDataController {
      */
     @Autowired
     private ReactiveDataService reactiveDataService;
+
+    /**
+     * Endpoint to retrieve data from mockaroo
+     * and send vehicle data to the Event Hub.
+     *
+     * @return ResponseEntity with a success message if data is sent successfully.
+     */
+    @PostMapping
+    public ResponseEntity<Object> pushDataToCloud() {
+        reactiveDataService.fetchAndSendData();
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
+    }
 
     /**
      * Retrieves a stream of cars with the given brand at regular
@@ -63,18 +74,7 @@ public class ReactiveDataController {
         return reactiveDataService.getAllBrands();
     }
 
-    /**
-     * Endpoint to retrieve data from mockaroo
-     * and send vehicle data to the Event Hub.
-     *
-     * @return ResponseEntity with a success message if data is sent successfully.
-     */
-    @PostMapping
-    public ResponseEntity<Object> pushDataToCloud() {
-        reactiveDataService.fetchAndSendData();
-        return new ResponseEntity<>(HttpStatus.CREATED);
 
-    }
 
 }
 

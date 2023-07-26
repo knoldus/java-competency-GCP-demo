@@ -1,14 +1,25 @@
 package com.nashtech.service;
 
-import com.nashtech.entity.CarEntity;
-import org.springframework.kafka.KafkaException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import reactor.core.publisher.Flux;
-
+import reactor.core.publisher.Mono;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public interface CloudDataService {
-    void pushData(Car reactiveDataCar) throws KafkaException;
+
+    /**
+     * Publishes vehicle data to the pub/sub topic.
+     *
+     * @param carData A Flux of Vehicle objects representing
+     *                the data to be published.
+     * @return A Mono representing
+     * the completion of the publishing process.
+     * @throws IOException If an I/O error occurs during the publishing process.
+     */
+    Mono<Void> pushData(
+            Car carData) throws Exception;
 
     /**
      * Retrieves a Flux of cars with the specified brand in a reactive manner.

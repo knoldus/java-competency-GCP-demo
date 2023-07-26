@@ -1,6 +1,5 @@
 package com.nashtech.service.impl;
 
-import com.nashtech.entity.CarEntity;
 import com.nashtech.service.CloudDataService;
 import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -15,6 +14,7 @@ import com.nashtech.repository.CosmosDbRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 @Service
@@ -51,13 +51,13 @@ public class CosmosDbService implements CloudDataService {
      * @throws KafkaException If an error occurs while sending the message to Kafka.
      */
     @Override
-    public void pushData(Car reactiveDataCar) throws KafkaException {
+    public Mono<Void> pushData(Car reactiveDataCar) throws KafkaException {
         Message<Car> message = MessageBuilder
                 .withPayload(reactiveDataCar)
                 .setHeader(KafkaHeaders.TOPIC, "myeventhub")
                 .build();
         kafkaTemplate.send(message);
-
+        return null;
     }
     /**
       * Retrieves a Flux of cars with specified brand in reactive manner.

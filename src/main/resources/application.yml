@@ -11,4 +11,7 @@ spring:
     producer:
       key-serializer: ${KEY_SERIALIZER}
       value-serializer: ${JSON_SERIALIZER}
-
+mockaroo:
+  api:
+    url: https://my.api.mockaroo.com
+apiUrl: /vehicle.json?key=45d8b3f0

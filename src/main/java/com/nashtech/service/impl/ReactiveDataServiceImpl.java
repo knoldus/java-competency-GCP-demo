@@ -1,69 +1,77 @@
 package com.nashtech.service.impl;
 
-
-import com.nashtech.entity.CarEntity;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.service.CloudDataService;
 import com.nashtech.service.ReactiveDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
 import reactor.core.publisher.Flux;
 
-
-
 /**
- * Service implementation class for performing reactive data access
- * operations on cars.
- * This service interacts with the {@link CloudDataService}
- * to retrieve car data in a reactive manner.
+ * Service class for handling vehicle-related operations.
  */
-@Service
 @Slf4j
-public class ReactiveDataServiceImpl implements ReactiveDataService {
+@Service
+public class ReactiveDataServiceImpl implements
+        ReactiveDataService {
 
     /**
-     * The WebClient for making HTTP requests to the external API.
+     * WebClient instance for making HTTP requests to the external API.
      */
+    @Autowired
     private WebClient webClient;
 
+    /**
+     * URL of the external API for retrieving vehicle data.
+     */
+    @Value("${apiUrl}")
+    private String apiUrl;
 
+    /**
+     * Autowired instance of CloudDataService
+     * used for publishing vehicle data to Google Cloud Pub/Sub.
+     */
     @Autowired
     private CloudDataService cloudDataService;
 
-    /**
-     * Constructor to initialize the DataService
-     * with KafkaTemplate and WebClient.
-     */
-    public ReactiveDataServiceImpl() {
-        this.webClient = WebClient.create("https://my.api.mockaroo.com/");
-    }
 
     /**
-     * Fetches vehicle data from an external API.
-     *
-     * @return A Flux of VehicleDetails representing the fetched data.
-     * Fetches vehicle data and sends it to the Kafka topic.
-     * The data is sent with a delay of one second between
-     * each element to simulate real-time behavior.
+     * Retrieves vehicle data from an external API.
+     * @throws WebClientException If an error occurs during
+     * data retrieval from the external API.
      */
     public void fetchAndSendData() {
-        String apiUrl = "/vehicle.json?key=e60438e0";
-
         webClient.get()
                 .uri(apiUrl)
                 .retrieve()
                 .bodyToFlux(Car.class)
-                .switchIfEmpty(Flux.error(new WebClientException("Data Not Found") {
+                .switchIfEmpty(Flux.defer(() -> {
+                    log.info("No data found");
+                    return Flux.empty();
                 }))
+                .onErrorResume(throwable -> {
+                    log.error("Error occurred during data retrieval: "
+                            + throwable.getMessage());
+                    return Flux.error (
+                            new WebClientException (
+                                    "Failed to retrieve car data", throwable) { });
+                })
                 .subscribe(
-                        dataCar -> cloudDataService.pushData(dataCar)
+                        data -> {
+                            try {
+                                cloudDataService.pushData(data);
+                            } catch (Exception exception) {
+                                throw new RuntimeException(exception);
+                            }
+                        }
                 );
     }
+
     /**
      * Retrieves a Flux of cars with specified brand in reactive manner.
      * The Flux represents a stream of data that can be subscribed to for
@@ -73,9 +81,8 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
      * @return A Flux of Car representing cars with the
      * specified brand.
      */
-
     public Flux<Car> getCarsByBrand(final String brand) {
-            return cloudDataService.getCarsByBrand(brand);
+        return cloudDataService.getCarsByBrand(brand);
     }
 
     /**
@@ -90,5 +97,4 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
     public Flux<CarBrand> getAllBrands() {
         return cloudDataService.getAllBrands();
     }
-
 }

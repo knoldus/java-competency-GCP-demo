@@ -44,7 +44,7 @@ public class ReactiveDataServiceImplTests {
     }
 
     @Test
-    void testFetchAndSendData_Success() {
+    void testFetchAndSendData_Success() throws Exception {
         WebClient.ResponseSpec responseSpec = Mockito.mock(WebClient.ResponseSpec.class);
         // Create a sample test data
         Car testData = new Car(0, "brand", "model", 2020L, "color", 0.0, 0.0);

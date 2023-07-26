@@ -13,6 +13,11 @@ import reactor.core.publisher.Flux;
 public interface ReactiveDataService {
 
     /**
+     * Retrieves vehicle data from an external data source.
+     */
+    void fetchAndSendData();
+
+    /**
      * Retrieves a Flux of cars with the specified brand in a reactive manner.
      * The Flux represents a stream of data that can be subscribed to for
      * continuous updates.
@@ -31,8 +36,6 @@ public interface ReactiveDataService {
      * @return A Flux of String representing distinct car brands.
      */
     Flux<CarBrand> getAllBrands();
-
-    public void fetchAndSendData();
 }
 
 
