@@ -99,7 +99,7 @@ public class GlobalExceptionHandler {
         }
         ErrorResponse response = ErrorResponse.builder()
                 .message(exceptionMessage)
-                .statusCode(HttpStatus.REQUEST_TIMEOUT)
+                .statusCode(HttpStatus.SERVICE_UNAVAILABLE)
                 .localDateTime(LocalDateTime.now())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
