@@ -35,7 +35,7 @@ public class CosmosDbServiceTest {
         // Run the test
         final Flux<Car> result = cosmosDbService.getCarsByBrand("brand");
         StepVerifier.create(result)
-                .expectNextMatches(car -> car.getBrand().equals("brand")) // Add more checks here if needed
+                .expectNextMatches(car -> car.getBrand().equals("brand")) 
                 .verifyComplete();
         Mockito.verify(cosmosDbRepository,Mockito.times(1)).getAllCarsByBrand("brand");
     }
@@ -81,7 +81,7 @@ public class CosmosDbServiceTest {
 
         // Verify the results
         StepVerifier.create(result)
-                .expectNextSequence(expectedBrands) // Verify if the elements match the expected list
+                .expectNextSequence(expectedBrands) 
                 .verifyComplete();
     }
 
@@ -96,7 +96,7 @@ public class CosmosDbServiceTest {
 
         // Verify the results
         StepVerifier.create(result)
-                .expectError(DataNotFoundException.class) // Verify if the expected error is thrown
+                .expectError(DataNotFoundException.class) 
                 .verify();
     }
 

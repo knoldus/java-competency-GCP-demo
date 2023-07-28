@@ -1,8 +1,9 @@
 package com.nashtech.controller;
 
-import com.nashtech.model.CarBrand;
 import com.nashtech.model.Car;
+import com.nashtech.model.CarBrand;
 import com.nashtech.service.ReactiveDataService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,47 +11,59 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
+
 /**
- * This controller class handles the endpoints related to
- * car information retrieval.
+ * Rest Controller class
+ * which handles reactive data access for cars.
+ * This controller provides endpoints for retrieving car data based on
+ * the brand and getting distinct car brands.
  */
 @RestController
 public class ReactiveDataController {
 
     /**
-     * The ReactiveDataService instance
-     * used to retrieve car information.
+     * The service implementation for reactive data access.
+     * This service provides methods for retrieving and processing car data
+     * in a reactive manner.
+     * It is marked as 'final' to ensure immutability after initialization.
      */
     @Autowired
     private ReactiveDataService reactiveDataService;
 
     /**
-     * Retrieves a Flux of unique brand names of car
-     * at regular intervals.
+     * Retrieves a stream of cars with the given brand.
+     * The data is obtained using the reactive service and duplicates
+     * are filtered out.
      *
-     * @return a Flux of String representing the unique
-     * brand names of car
+     * @param brand The brand of cars to filter by.
+     * @return A Flux of Car representing cars with the
+     * specified brand.
      */
+    @Operation(summary = "Retrieves cars filtered by brand.",
+            description = "The data is obtained using the reactive service" +
+                    " and duplicates are filtered out.")
+    @GetMapping(value = "/cars/{brand}", produces =
+            MediaType.APPLICATION_JSON_VALUE)
+    public Flux<Car> getCarsByBrand(
+            @PathVariable final String brand) {
+        return reactiveDataService.getCarsByBrand(brand);
+    }
+
+    /**
+     * Retrieves a stream of distinct car brands.
+     *
+     * The data is obtained using the reactive service and duplicates are
+     * filtered out.
+     *
+     * @return A Flux of CarBrand representing distinct car brands.
+     */
+    @Operation(summary = "Retrieves unique car brands.",
+            description = "The data is obtained using the reactive" +
+                    " service and duplicates are filtered out.")
     @GetMapping(value = "/brands", produces =
             MediaType.APPLICATION_JSON_VALUE)
     public Flux<CarBrand> getAllBrands() {
         return reactiveDataService.getAllBrands();
-    }
-
-    /**
-     * Retrieves car details
-     * for a specific brand name in a streaming fashion.
-     *
-     * @param brand The brand name of the car to retrieve details.
-     * @return A Flux of Car
-     * representing the details of vehicles with the given brand name.
-     */
-    @GetMapping(value = "/cars/{brand}",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public Flux<Car> getCarsByBrand(
-            @PathVariable final String brand) {
-        return reactiveDataService
-                .getCarsByBrand(brand);
     }
 
 }
