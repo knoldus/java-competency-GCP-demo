@@ -2,6 +2,7 @@ package com.nashtech.exception;
 
 import com.azure.core.exception.ResourceNotFoundException;
 import com.azure.cosmos.CosmosException;
+import com.google.cloud.spring.data.firestore.FirestoreDataException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,10 +53,34 @@ public class GlobalExceptionHandler {
         String message = cosmosException.getMessage();
         ErrorResponse response = ErrorResponse.builder()
                 .message(message)
-                .statusCode(HttpStatus.REQUEST_TIMEOUT)
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR)
                 .localDateTime(LocalDateTime.now())
                 .build();
-        return new ResponseEntity<>(response, HttpStatus.REQUEST_TIMEOUT);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    /**
+     * Handles FirestoreDataException
+     * and creates an ApiResponse with error details.
+     *
+     * @param firestoreDataException
+     * The FirestoreDataException to handle.
+     * @return A ResponseEntity containing an ApiResponse with error details
+     * and a HTTP  status code.
+     */
+    @ExceptionHandler(FirestoreDataException.class)
+    public ResponseEntity<Object> handleFirestoreDataException(
+            final FirestoreDataException firestoreDataException) {
+        String exceptionMessage = firestoreDataException.getMessage();
+        if (Objects.isNull(firestoreDataException.getMessage())) {
+            exceptionMessage = "Something went wrong "
+                    + ", Unable to retrieve the data";
+        }
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(firestoreDataException.getMessage())
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR)
+                .localDateTime(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**

@@ -1,7 +1,5 @@
 /**
- The com.nashtech.service package contains
- interfaces that define the service layer for the
- ReactiveApplication.
+ * This service class provides methods
+ * to retrieve information related to cars.
  */
 package com.nashtech.service;
-

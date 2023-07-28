@@ -1,7 +1,6 @@
 /**
- The com.nashtech.exception package
- contains the classes responsible for handling
- the Exceptions.
+ * This package contains exception
+ * class for the application.
  */
 package com.nashtech.exception;
 

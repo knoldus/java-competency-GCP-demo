@@ -1,7 +1,6 @@
 /**
- The com.nashtech.controller package
- contains the interfaces responsible for handling
- the HTTP requests.
+ * This package contains Controller
+ * class for handling car-related API requests.
  */
 package com.nashtech.controller;
 

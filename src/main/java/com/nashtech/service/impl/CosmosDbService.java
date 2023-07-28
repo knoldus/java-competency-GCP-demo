@@ -14,12 +14,15 @@ import com.nashtech.model.CarBrand;
 import com.nashtech.repository.CosmosDbRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 
+
 @Service
 @Slf4j
+@Profile("cosmos")
 public class CosmosDbService implements CloudDataService {
     /**
      * The reactive repository for {@link Car} entities

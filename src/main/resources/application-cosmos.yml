@@ -1,0 +1,16 @@
+cosmosdb:
+  key: ${COSMOS_KEY}
+  uri: ${COSMOS_URI}
+
+spring:
+  autoconfigure:
+    exclude: com.google.cloud.spring.autoconfigure.firestore.FirestoreRepositoriesAutoConfiguration
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER}
+    properties:
+      security.protocol: ${PROTOCOL}
+      sasl.mechanism: ${MECHANISM}
+      sasl.jaas.config: ${CONFIG}
+    producer:
+      key-serializer: ${KEY_SERIALIZER}
+      value-serializer: ${JSON_SERIALIZER}

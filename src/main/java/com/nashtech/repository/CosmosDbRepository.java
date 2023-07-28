@@ -5,6 +5,7 @@ import com.azure.spring.data.cosmos.repository.ReactiveCosmosRepository;
 import com.nashtech.entity.AzureCarEntity;
 import com.nashtech.model.CarBrand;
 import com.nashtech.model.Car;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
@@ -18,6 +19,7 @@ import reactor.core.publisher.Flux;
  * @see ReactiveCosmosRepository
  */
 @Repository
+@Profile("cosmos")
 public interface CosmosDbRepository extends ReactiveCosmosRepository
         <AzureCarEntity, String> {
 

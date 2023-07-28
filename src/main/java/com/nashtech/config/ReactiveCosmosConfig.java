@@ -7,6 +7,7 @@ import com.azure.spring.data.cosmos.repository.config.EnableReactiveCosmosReposi
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 /**
  * Configuration class for setting up the connection to the Azure
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableReactiveCosmosRepositories
 (basePackages = "com.nashtech.repository")
+@Profile("cosmos")
 public class ReactiveCosmosConfig extends AbstractCosmosConfiguration {
 
     /**
@@ -40,6 +42,7 @@ public class ReactiveCosmosConfig extends AbstractCosmosConfiguration {
      * @return The CosmosClientBuilder instance.
      */
     @Bean
+    @Profile("cosmos")
     public CosmosClientBuilder appCosmosClientBuilder() {
         return new CosmosClientBuilder()
                 .key(key)
@@ -55,6 +58,7 @@ public class ReactiveCosmosConfig extends AbstractCosmosConfiguration {
      * @return The CosmosConfig instance with specified configurations.
      */
     @Bean
+    @Profile("cosmos")
     public CosmosConfig cosmosConfig() {
         return CosmosConfig.builder()
                 .enableQueryMetrics(true)

@@ -1,6 +1,5 @@
 /**
- The com.nashtech.service.impl package contains
- classes that define the service layer for the
- ReactiveApplication.
+ * This service class provides methods
+ * to retrieve information related to vehicles.
  */
 package com.nashtech.service.impl;

@@ -1,7 +1,5 @@
 /**
- The com.nashtech.model package contains the model classes
- that represent the entities and data structures used
- in the ReactiveApplication.
+ * This package contains Model class for CarEntity.
  */
 package com.nashtech.model;
 

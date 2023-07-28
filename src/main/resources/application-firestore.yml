@@ -1,0 +1,9 @@
+google:
+  application:
+    credentials: ${GOOGLE_APPLICATION_CREDENTIALS}
+  pubSub:
+    topic: vehicle
+spring:
+  cloud:
+    gcp:
+      project-id: nodal-descent-389716

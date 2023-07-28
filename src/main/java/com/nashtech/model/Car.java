@@ -2,15 +2,14 @@ package com.nashtech.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Version;
 
 /**
  * Represents a reactive data model for sending
  * details of the Car to the CosmosDB.
  */
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -29,7 +28,7 @@ public class Car {
     /**
      * The model of the car.
      */
-    private String model;
+    private String carModel;
 
     /**
      * The year of manufacture of the car.
