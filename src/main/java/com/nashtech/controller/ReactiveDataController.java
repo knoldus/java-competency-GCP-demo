@@ -3,6 +3,7 @@ package com.nashtech.controller;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.service.ReactiveDataService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,8 +48,7 @@ public class ReactiveDataController {
     }
 
     /**
-     * Retrieves a stream of cars with the given brand at regular
-     * intervals of 5 seconds.
+     * Retrieves a stream of cars with the given brand.
      * The data is obtained using the reactive service and duplicates
      * are filtered out.
      *
@@ -56,6 +56,9 @@ public class ReactiveDataController {
      * @return A Flux of Car representing cars with the
      * specified brand.
      */
+    @Operation(summary = "Retrieves cars filtered by brand.",
+            description = "The data is obtained using the reactive service" +
+                    " and duplicates are filtered out.")
     @GetMapping(value = "/cars/{brand}", produces =
             MediaType.APPLICATION_JSON_VALUE)
     public Flux<Car> getCarsByBrand(
@@ -64,13 +67,16 @@ public class ReactiveDataController {
     }
 
     /**
-     * Retrieves a stream of distinct car brands at regular intervals of
-     * 5 seconds.
+     * Retrieves a stream of distinct car brands.
+     *
      * The data is obtained using the reactive service and duplicates are
      * filtered out.
      *
      * @return A Flux of CarBrand representing distinct car brands.
      */
+    @Operation(summary = "Retrieves unique car brands.",
+            description = "The data is obtained using the reactive" +
+                    " service and duplicates are filtered out.")
     @GetMapping(value = "/brands", produces =
             MediaType.APPLICATION_JSON_VALUE)
     public Flux<CarBrand> getAllBrands() {
