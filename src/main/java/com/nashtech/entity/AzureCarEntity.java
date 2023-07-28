@@ -2,7 +2,6 @@ package com.nashtech.entity;
 
 import com.azure.spring.data.cosmos.core.mapping.Container;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
@@ -15,7 +14,7 @@ import org.springframework.data.annotation.Id;
 @Data
 @Container(containerName = "DbContainer")
 @AllArgsConstructor
-public class CarEntity {
+public class AzureCarEntity {
 
     /**
      * The unique identifier of the car.

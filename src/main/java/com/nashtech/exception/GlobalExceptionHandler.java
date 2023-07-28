@@ -7,8 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.reactive.function.client.WebClientException;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * A class that handles global exception handling for all
@@ -54,4 +57,53 @@ public class GlobalExceptionHandler {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.REQUEST_TIMEOUT);
     }
+
+    /**
+     * Exception handler for handling InterruptedExceptions
+     * that may occur during data processing.
+     *
+     * @param interruptedException The InterruptedException that was thrown.
+     * @return A ResponseEntity with an error response
+     * and HTTP status code 500 (Internal Server Error).
+     */
+    @ExceptionHandler(value = InterruptedException.class)
+    public ResponseEntity<Object> handleInterruptedDataException(
+            InterruptedException interruptedException) {
+        String exceptionMessage = interruptedException.getMessage();
+        if (Objects.isNull(interruptedException.getMessage())) {
+            exceptionMessage = "Interrupted Exception Occurred";
+        }
+        ErrorResponse response = ErrorResponse.builder()
+                .message(exceptionMessage)
+                .statusCode(HttpStatus.REQUEST_TIMEOUT)
+                .localDateTime(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.REQUEST_TIMEOUT);
+    }
+
+    /**
+     * Exception handler for handling WebClientExceptions that
+     * may occur during communication with external web services.
+     *
+     * @param webClientException The WebClientException that was thrown.
+     * @return A ResponseEntity with an error response and HTTP
+     * status code 500 (Internal Server Error).
+     */
+    @ExceptionHandler(value = WebClientException.class)
+    public ResponseEntity<Object> handleIOException(
+            WebClientException webClientException) {
+        String exceptionMessage = webClientException.getMessage();
+
+        if(Objects.isNull(webClientException.getMessage())){
+            exceptionMessage = "WebClient Exception Occurred";
+        }
+        ErrorResponse response = ErrorResponse.builder()
+                .message(exceptionMessage)
+                .statusCode(HttpStatus.SERVICE_UNAVAILABLE)
+                .localDateTime(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+
 }

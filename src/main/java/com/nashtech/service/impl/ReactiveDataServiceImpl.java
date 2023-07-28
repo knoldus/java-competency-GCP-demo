@@ -1,31 +1,66 @@
 package com.nashtech.service.impl;
 
+import com.azure.cosmos.CosmosException;
+import com.nashtech.exception.DataNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.service.CloudDataService;
 import com.nashtech.service.ReactiveDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
 import reactor.core.publisher.Flux;
 
 /**
- * Service implementation class for performing reactive data access
- * operations on cars.
- * This service interacts with the {@link CloudDataService}
- * to retrieve car data in a reactive manner.
+ * Service class for handling vehicle-related operations.
  */
-@Service
 @Slf4j
-public class ReactiveDataServiceImpl implements ReactiveDataService {
+@Service
+public class ReactiveDataServiceImpl implements
+        ReactiveDataService {
 
     /**
-     * The reactive Service for {@link Car} entities
-     * in Cosmos DB.
-     * Used for performing CRUD operations and reactive data access.
+     * WebClient instance for making HTTP requests to the external API.
+     */
+    @Autowired
+    private WebClient webClient;
+
+    /**
+     * URL of the external API for retrieving vehicle data.
+     */
+    @Value("${apiUrl}")
+    private String apiUrl;
+
+    /**
+     * Autowired instance of CloudDataService
+     * used for publishing vehicle data to Google Cloud Pub/Sub.
      */
     @Autowired
     private CloudDataService cloudDataService;
+
+
+    /**
+     * Retrieves car data from an external API.
+     * @throws WebClientException If an error occurs during
+     * data retrieval from the external API.
+     */
+    public void fetchAndSendData() {
+        webClient.get()
+                .uri(apiUrl)
+                .retrieve()
+                .bodyToFlux(Car.class)
+                .onErrorResume(WebClientException.class, error -> {
+                    log.error("Error occurred during data retrieval", error);
+                    return Flux.error(new WebClientException("Failed to retrieve car data") {
+                    });
+                })
+                .subscribe(
+                        data -> cloudDataService.pushData(data)
+                );
+    }
 
     /**
      * Retrieves a Flux of cars with specified brand in reactive manner.
@@ -37,7 +72,7 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
      * specified brand.
      */
     public Flux<Car> getCarsByBrand(final String brand) {
-            return cloudDataService.getCarsByBrand(brand);
+        return cloudDataService.getCarsByBrand(brand);
     }
 
     /**
@@ -52,5 +87,477 @@ public class ReactiveDataServiceImpl implements ReactiveDataService {
     public Flux<CarBrand> getAllBrands() {
         return cloudDataService.getAllBrands();
     }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

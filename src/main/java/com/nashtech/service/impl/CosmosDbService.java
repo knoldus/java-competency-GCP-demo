@@ -1,23 +1,26 @@
 package com.nashtech.service.impl;
 
 import com.azure.cosmos.CosmosException;
+import com.nashtech.service.CloudDataService;
+import org.springframework.kafka.KafkaException;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.stereotype.Service;
 import com.nashtech.exception.DataNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.repository.CosmosDbRepository;
-import com.nashtech.service.CloudDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.time.Duration;
 
 @Service
 @Slf4j
 public class CosmosDbService implements CloudDataService {
-
-
     /**
      * The reactive repository for {@link Car} entities
      * in Cosmos DB.
@@ -27,6 +30,42 @@ public class CosmosDbService implements CloudDataService {
     private CosmosDbRepository cosmosDbRepository;
 
     /**
+     * The KafkaTemplate for sending vehicle data to Kafka topics.
+     */
+    private final KafkaTemplate<String, Car> kafkaTemplate;
+
+
+    /**
+     * Constructor to initialize the DataService
+     * with KafkaTemplate.
+     */
+    public CosmosDbService(KafkaTemplate<String, Car> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
+
+    /**
+     * Sends the given {@link Car} object to the Kafka topic "myeventhub".
+     * The method constructs a Kafka message from the provided {@link Car} payload
+     * and sends it using the configured {@link KafkaTemplate}.
+     *
+     * @param reactiveDataCar The {@link Car} object to be sent to Kafka.
+     * @throws KafkaException If an error occurs while sending the message to Kafka.
+     */
+    @Override
+    public Mono<Void> pushData(Car reactiveDataCar)  {
+        try {
+            Message<Car> message = MessageBuilder
+                    .withPayload(reactiveDataCar)
+                    .setHeader(KafkaHeaders.TOPIC, "myeventhub")
+                    .build();
+            kafkaTemplate.send(message);
+        }
+        catch (KafkaException kafkaException){
+            throw kafkaException;
+        }
+        return Mono.empty();
+    }
+    /**
      * Retrieves a Flux of cars with specified brand in reactive manner.
      * The Flux represents a stream of data that can be subscribed to for
      * continuous updates.
@@ -35,14 +74,14 @@ public class CosmosDbService implements CloudDataService {
      * @return A Flux of Car representing cars with the
      * specified brand.
      */
-    public Flux<Car> getCarsByBrand(final String brand) {
-        Flux<Car> allCarsOfBrand =
-                cosmosDbRepository.getAllCarsByBrand(brand);
+    public Flux<Car> getCarsByBrand ( final String brand) {
+        Flux<Car> allCarsOfBrand = cosmosDbRepository.getAllCarsByBrand(brand);
         return allCarsOfBrand
-                .doOnError(error ->
-                        log.error("Request Timeout"))
-                .doOnComplete(() ->
-                        log.info("Received Data Successfully"))
+                .onErrorResume(CosmosException.class, error -> {
+                    log.error("Error while retrieving data from Cosmos DB", error);
+                    return Flux.error(new DataNotFoundException());
+                })
+                .doOnComplete(() -> log.info("Received Data Successfully"))
                 .switchIfEmpty(Flux.error(new DataNotFoundException()));
     }
 
@@ -55,12 +94,14 @@ public class CosmosDbService implements CloudDataService {
      *
      * @return A Flux of CarBrand representing distinct car brands.
      */
-    public Flux<CarBrand> getAllBrands() {
+    public Flux<CarBrand> getAllBrands () {
         Flux<CarBrand> BrandsFlux =
                 cosmosDbRepository.findDistinctBrands();
         return BrandsFlux
-                .doOnError(error ->
-                        log.error("Request Timeout"))
+                .onErrorResume(CosmosException.class, error -> {
+                    log.error("Error while retrieving data from Cosmos DB", error);
+                    return Flux.error(new DataNotFoundException());
+                })
                 .doOnComplete(() ->
                         log.info("Data processing completed."))
                 .switchIfEmpty(Flux.error(new DataNotFoundException()));
