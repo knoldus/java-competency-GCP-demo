@@ -46,8 +46,6 @@ public class FirestoreDbService implements CloudDataService {
                 .filter(gcpCarEntity -> gcpCarEntity.getBrand() != null)
                 .map(gcpCarEntity -> new CarBrand(gcpCarEntity.getBrand()))
                 .distinct()
-                .delayElements(Duration.ofMillis(DELAY_TIME))
-                .doOnNext(carBrand -> log.info("Brand: " + carBrand))
                 .doOnComplete(() -> log.info("Data retrieved successfully"))
                 .switchIfEmpty(Flux.error(new DataNotFoundException()))
                 .onErrorResume(throwable -> {
@@ -81,7 +79,6 @@ public class FirestoreDbService implements CloudDataService {
                                 .price(carEntity.getPrice())
                                 .build())
                 .distinct()
-                .delayElements(Duration.ofMillis(DELAY_TIME))
                 .switchIfEmpty(Flux.error(new DataNotFoundException()))
                 .doOnComplete(() ->
                         log.info("Received Car Details successfully"))
