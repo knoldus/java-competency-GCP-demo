@@ -51,10 +51,10 @@ public class GlobalExceptionHandler {
         String message = cosmosException.getMessage();
         ErrorResponse response = ErrorResponse.builder()
                 .message(message)
-                .statusCode(HttpStatus.REQUEST_TIMEOUT)
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR)
                 .localDateTime(LocalDateTime.now())
                 .build();
-        return new ResponseEntity<>(response, HttpStatus.REQUEST_TIMEOUT);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     /**
      * Handles FirestoreDataException
@@ -78,6 +78,6 @@ public class GlobalExceptionHandler {
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR)
                 .localDateTime(LocalDateTime.now())
                 .build();
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

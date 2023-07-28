@@ -1,10 +1,10 @@
-package com.nashtech.service.impl;
+package com.nashtech.service;
 
 import com.nashtech.exception.DataNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.repository.CosmosDbRepository;
-import com.nashtech.service.CosmosDbService;
+import com.nashtech.service.impl.CosmosDbService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
-public class CloudDataServiceTest {
+public class CosmosDbServiceTest {
 
     @Mock
     private CosmosDbRepository cosmosDbRepository;
@@ -29,7 +29,7 @@ public class CloudDataServiceTest {
     @Test
     void testGetCarsByBrand() {
         final Flux<Car> carFlux = Flux.just(
-                new Car(0, "brand", "model", 2020L, "color", 0.0, 0.0));
+                new Car(0L, "brand", "model", 2020, "color", 0.0, 0.0));
 
         Mockito.when(cosmosDbRepository.getAllCarsByBrand(ArgumentMatchers.anyString())).thenReturn(carFlux);
         // Run the test

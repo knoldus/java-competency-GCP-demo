@@ -1,6 +1,7 @@
 package com.nashtech.service.impl;
 
 import com.google.cloud.spring.data.firestore.FirestoreDataException;
+import com.nashtech.exception.DataNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.repository.FirestoreDbRepository;
@@ -48,10 +49,7 @@ public class FirestoreDbService implements CloudDataService {
                 .delayElements(Duration.ofMillis(DELAY_TIME))
                 .doOnNext(carBrand -> log.info("Brand: " + carBrand))
                 .doOnComplete(() -> log.info("Data retrieved successfully"))
-                .switchIfEmpty(Flux.defer(() -> {
-                    log.info("No data found");
-                    return Flux.empty();
-                }))
+                .switchIfEmpty(Flux.error(new DataNotFoundException()))
                 .onErrorResume(throwable -> {
                         log.error("Error occurred during data retrieval: "
                                 + throwable.getMessage());
@@ -84,10 +82,7 @@ public class FirestoreDbService implements CloudDataService {
                                 .build())
                 .distinct()
                 .delayElements(Duration.ofMillis(DELAY_TIME))
-                .switchIfEmpty(Flux.defer(() -> {
-                    log.info("No data found");
-                    return Flux.empty();
-                }))
+                .switchIfEmpty(Flux.error(new DataNotFoundException()))
                 .doOnComplete(() ->
                         log.info("Received Car Details successfully"))
                 .onErrorResume(throwable -> {
