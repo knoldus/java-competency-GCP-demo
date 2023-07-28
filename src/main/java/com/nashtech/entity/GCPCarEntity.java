@@ -23,7 +23,7 @@ public class GCPCarEntity {
     /**
      * The id of the car.
      */
-    private Long carId;
+    private Integer carId;
 
     /**
      * The model of the car.
@@ -38,7 +38,7 @@ public class GCPCarEntity {
     /**
      * The manufacturing year of the car.
      */
-    private Integer year;
+    private Long year;
 
     /**
      * The color of the car.
@@ -54,6 +54,4 @@ public class GCPCarEntity {
      * The price of the car.
      */
     private Double price;
-
-
 }

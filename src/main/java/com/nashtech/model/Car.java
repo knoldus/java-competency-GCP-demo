@@ -5,20 +5,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a reactive data model for sending
+ * details of the Car to the CosmosDB.
+ */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Car {
-    /**
-     * The id of the car.
-     */
-    private Long carId;
 
     /**
-     * The model of the car.
+     * The card ID of the car.
      */
-    private String carModel;
+    private Integer carId;
 
     /**
      * The brand of the car.
@@ -26,9 +26,14 @@ public class Car {
     private String brand;
 
     /**
-     * The manufacturing year of the car.
+     * The model of the car.
      */
-    private Integer year;
+    private String carModel;
+
+    /**
+     * The year of manufacture of the car.
+     */
+    private Long year;
 
     /**
      * The color of the car.
@@ -36,7 +41,7 @@ public class Car {
     private String color;
 
     /**
-     * The mileage of the car.
+     * The mileage of the car in kilometers.
      */
     private Double mileage;
 
@@ -44,5 +49,4 @@ public class Car {
      * The price of the car.
      */
     private Double price;
-
 }

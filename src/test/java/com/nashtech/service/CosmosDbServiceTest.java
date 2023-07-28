@@ -29,7 +29,7 @@ public class CosmosDbServiceTest {
     @Test
     void testGetCarsByBrand() {
         final Flux<Car> carFlux = Flux.just(
-                new Car(0L, "brand", "model", 2020, "color", 0.0, 0.0));
+                new Car(0, "brand", "model", 2020L, "color", 0.0, 0.0));
 
         Mockito.when(cosmosDbRepository.getAllCarsByBrand(ArgumentMatchers.anyString())).thenReturn(carFlux);
         // Run the test
