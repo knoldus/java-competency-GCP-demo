@@ -47,6 +47,8 @@ public class FirestoreDbService implements CloudDataService {
      */
     private static Publisher publisher;
 
+    private static ObjectMapper objectMapper;
+
     /**
      * Initializes the static Publisher instance for
      * vehicle data publishing to the Google Cloud Pub/Sub topic.
@@ -62,6 +64,8 @@ public class FirestoreDbService implements CloudDataService {
     public void init() throws IOException {
         TopicName topicName = TopicName.of(projectId, topicId);
         publisher = Publisher.newBuilder(topicName).build();
+        objectMapper = new ObjectMapper();
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     /**
@@ -93,13 +97,8 @@ public class FirestoreDbService implements CloudDataService {
      *             the vehicle data to be published.
      * @return A Mono<Void> representing the completion of the
      * publishing process.
-     * @throws RuntimeException If an error occurs during the
-     * publishing process.
      */
     public Mono<Void> pushData(final Car cars) {
-        TopicName topicName = TopicName.of(projectId, topicId);
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         try {
             String vehicleJson = objectMapper.writeValueAsString(cars);
             ByteString data = ByteString.copyFromUtf8(vehicleJson);
@@ -111,7 +110,7 @@ public class FirestoreDbService implements CloudDataService {
                         throw new RuntimeException(error.getMessage());
                     }).then();
         } catch (Exception exception) {
-            return Mono.error(exception);
+            return Mono.empty();
         }
     }
 

@@ -102,7 +102,7 @@ public class GlobalExceptionHandler {
                 .statusCode(HttpStatus.REQUEST_TIMEOUT)
                 .localDateTime(LocalDateTime.now())
                 .build();
-        return new ResponseEntity<>(response, HttpStatus.REQUEST_TIMEOUT);
+        return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
 

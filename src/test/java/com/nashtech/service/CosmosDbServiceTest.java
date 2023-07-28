@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
-public class CloudDataServiceTest {
+public class CosmosDbServiceTest {
 
     @Mock
     private CosmosDbRepository cosmosDbRepository;

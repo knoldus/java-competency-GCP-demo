@@ -12,14 +12,14 @@ public interface CloudDataService {
     /**
      * Publishes vehicle data to the pub/sub topic.
      *
-     * @param carData A Flux of Vehicle objects representing
+     * @param carData A Flux of Car objects representing
      *                the data to be published.
      * @return A Mono representing
      * the completion of the publishing process.
-     * @throws IOException If an I/O error occurs during the publishing process.
+     * @throws Exception If an error occurs during the publishing process.
      */
     Mono<Void> pushData(
-            Car carData) throws Exception;
+            Car carData);
 
     /**
      * Retrieves a Flux of cars with the specified brand in a reactive manner.
@@ -27,7 +27,7 @@ public interface CloudDataService {
      * continuous updates.
      *
      * @param brand The brand of cars to filter by.
-     * @return A Flux of AzureCarEntity representing cars with the
+     * @return A Flux of Car representing cars with the
      * specified brand.
      */
     Flux<Car> getCarsByBrand(String brand);
@@ -37,7 +37,7 @@ public interface CloudDataService {
      * The Flux represents a stream of data that can be subscribed to
      * for continuous updates.
      *
-     * @return A Flux of String representing distinct car brands.
+     * @return A Flux of CarBrand representing distinct car brands.
      */
     Flux<CarBrand> getAllBrands();
 }

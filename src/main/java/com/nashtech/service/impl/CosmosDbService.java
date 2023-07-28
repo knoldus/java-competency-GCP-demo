@@ -1,5 +1,6 @@
 package com.nashtech.service.impl;
 
+import com.azure.cosmos.CosmosException;
 import com.nashtech.service.CloudDataService;
 import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -51,13 +52,18 @@ public class CosmosDbService implements CloudDataService {
      * @throws KafkaException If an error occurs while sending the message to Kafka.
      */
     @Override
-    public Mono<Void> pushData(Car reactiveDataCar) throws KafkaException {
-        Message<Car> message = MessageBuilder
-                .withPayload(reactiveDataCar)
-                .setHeader(KafkaHeaders.TOPIC, "myeventhub")
-                .build();
-        kafkaTemplate.send(message);
-        return null;
+    public Mono<Void> pushData(Car reactiveDataCar)  {
+        try {
+            Message<Car> message = MessageBuilder
+                    .withPayload(reactiveDataCar)
+                    .setHeader(KafkaHeaders.TOPIC, "myeventhub")
+                    .build();
+            kafkaTemplate.send(message);
+        }
+        catch (KafkaException kafkaException){
+            throw kafkaException;
+        }
+        return Mono.empty();
     }
     /**
      * Retrieves a Flux of cars with specified brand in reactive manner.
@@ -68,13 +74,14 @@ public class CosmosDbService implements CloudDataService {
      * @return A Flux of Car representing cars with the
      * specified brand.
      */
-    public Flux<Car> getCarsByBrand ( final String brand){
+    public Flux<Car> getCarsByBrand ( final String brand) {
         Flux<Car> allCarsOfBrand = cosmosDbRepository.getAllCarsByBrand(brand);
         return allCarsOfBrand
-                .doOnError(error ->
-                        log.error("Request Timeout"))
-                .doOnComplete(() ->
-                        log.info("Received Data Successfully"))
+                .onErrorResume(CosmosException.class, error -> {
+                    log.error("Error while retrieving data from Cosmos DB", error);
+                    return Flux.error(new DataNotFoundException());
+                })
+                .doOnComplete(() -> log.info("Received Data Successfully"))
                 .switchIfEmpty(Flux.error(new DataNotFoundException()));
     }
 
@@ -91,8 +98,10 @@ public class CosmosDbService implements CloudDataService {
         Flux<CarBrand> BrandsFlux =
                 cosmosDbRepository.findDistinctBrands();
         return BrandsFlux
-                .doOnError(error ->
-                        log.error("Request Timeout"))
+                .onErrorResume(CosmosException.class, error -> {
+                    log.error("Error while retrieving data from Cosmos DB", error);
+                    return Flux.error(new DataNotFoundException());
+                })
                 .doOnComplete(() ->
                         log.info("Data processing completed."))
                 .switchIfEmpty(Flux.error(new DataNotFoundException()));
