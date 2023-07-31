@@ -1,6 +1,5 @@
 package com.nashtech.exception;
 
-import com.azure.core.exception.ResourceNotFoundException;
 import com.azure.cosmos.CosmosException;
 import com.google.cloud.spring.data.firestore.FirestoreDataException;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.reactive.function.client.WebClientException;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -29,7 +27,7 @@ public class GlobalExceptionHandler {
      * and HTTP status code
      */
     @ExceptionHandler(value = DataNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handlerDataNotFoundException (
+    public ResponseEntity<ErrorResponse> handlerDataNotFoundException(
             final DataNotFoundException dataNotFoundException) {
         String message = dataNotFoundException.getMessage();
         ErrorResponse response = ErrorResponse.builder()
@@ -44,7 +42,8 @@ public class GlobalExceptionHandler {
      * Handles the CosmosException and generates a custom error response.
      *
      * @param cosmosException The CosmosException that occurred.
-     * @return A ResponseEntity with a customized error response containing the exception message,
+     * @return A ResponseEntity with a customized error response
+     * containing the exception message,
      * HTTP status code 408 (Request Timeout), and the current LocalDateTime.
      */
     @ExceptionHandler(value = CosmosException.class)
@@ -80,7 +79,8 @@ public class GlobalExceptionHandler {
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR)
                 .localDateTime(LocalDateTime.now())
                 .build();
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponse,
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -93,7 +93,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = InterruptedException.class)
     public ResponseEntity<Object> handleInterruptedDataException(
-            InterruptedException interruptedException) {
+            final InterruptedException interruptedException) {
         String exceptionMessage = interruptedException.getMessage();
         if (Objects.isNull(interruptedException.getMessage())) {
             exceptionMessage = "Interrupted Exception Occurred";
@@ -116,10 +116,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = WebClientException.class)
     public ResponseEntity<Object> handleIOException(
-            WebClientException webClientException) {
+            final WebClientException webClientException) {
         String exceptionMessage = webClientException.getMessage();
 
-        if(Objects.isNull(webClientException.getMessage())){
+        if (Objects.isNull(webClientException.getMessage())) {
             exceptionMessage = "WebClient Exception Occurred";
         }
         ErrorResponse response = ErrorResponse.builder()

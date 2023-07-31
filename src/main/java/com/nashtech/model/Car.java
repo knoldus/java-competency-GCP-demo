@@ -28,7 +28,7 @@ public class Car {
     /**
      * The model of the car.
      */
-    private String carModel;
+    private String model;
 
     /**
      * The year of manufacture of the car.

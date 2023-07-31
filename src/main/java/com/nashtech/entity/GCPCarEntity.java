@@ -2,7 +2,6 @@ package com.nashtech.entity;
 import com.google.cloud.firestore.annotation.DocumentId;
 import com.google.cloud.spring.data.firestore.Document;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
  * Represents a CarEntity.
  */
 @Data
-@Document(collectionName = "vehicle")
+@Document(collectionName = "Car")
 @AllArgsConstructor
 @NoArgsConstructor
 public class GCPCarEntity {
@@ -28,7 +27,7 @@ public class GCPCarEntity {
     /**
      * The model of the car.
      */
-    private String carModel;
+    private String model;
 
     /**
      * The brand of the car.

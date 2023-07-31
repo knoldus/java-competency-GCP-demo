@@ -35,35 +35,29 @@ public class CosmosDbService implements CloudDataService {
     /**
      * The KafkaTemplate for sending vehicle data to Kafka topics.
      */
-    private final KafkaTemplate<String, Car> kafkaTemplate;
+    @Autowired
+    private  KafkaTemplate<String, Car> kafkaTemplate;
 
-
-    /**
-     * Constructor to initialize the DataService
-     * with KafkaTemplate.
-     */
-    public CosmosDbService(KafkaTemplate<String, Car> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
 
     /**
      * Sends the given {@link Car} object to the Kafka topic "myeventhub".
-     * The method constructs a Kafka message from the provided {@link Car} payload
+     * The method constructs a Kafka message
+     * from the provided {@link Car} payload
      * and sends it using the configured {@link KafkaTemplate}.
      *
      * @param reactiveDataCar The {@link Car} object to be sent to Kafka.
-     * @throws KafkaException If an error occurs while sending the message to Kafka.
+     * @throws KafkaException
+     * If an error occurs while sending the message to Kafka.
      */
     @Override
-    public Mono<Void> pushData(Car reactiveDataCar)  {
+    public Mono<Void> pushData(final Car reactiveDataCar)  {
         try {
             Message<Car> message = MessageBuilder
                     .withPayload(reactiveDataCar)
                     .setHeader(KafkaHeaders.TOPIC, "myeventhub")
                     .build();
             kafkaTemplate.send(message);
-        }
-        catch (KafkaException kafkaException){
+        } catch (KafkaException kafkaException) {
             throw kafkaException;
         }
         return Mono.empty();
@@ -77,11 +71,12 @@ public class CosmosDbService implements CloudDataService {
      * @return A Flux of Car representing cars with the
      * specified brand.
      */
-    public Flux<Car> getCarsByBrand ( final String brand) {
+    public Flux<Car> getCarsByBrand(final String brand) {
         Flux<Car> allCarsOfBrand = cosmosDbRepository.getAllCarsByBrand(brand);
         return allCarsOfBrand
                 .onErrorResume(CosmosException.class, error -> {
-                    log.error("Error while retrieving data from Cosmos DB", error);
+                    log.error("Error while retrieving data from Cosmos DB",
+                                    error);
                     return Flux.error(new DataNotFoundException());
                 })
                 .doOnComplete(() -> log.info("Received Data Successfully"))
@@ -97,12 +92,14 @@ public class CosmosDbService implements CloudDataService {
      *
      * @return A Flux of CarBrand representing distinct car brands.
      */
-    public Flux<CarBrand> getAllBrands () {
-        Flux<CarBrand> BrandsFlux =
+    public Flux<CarBrand> getAllBrands() {
+        Flux<CarBrand> brandFlux =
                 cosmosDbRepository.findDistinctBrands();
-        return BrandsFlux
+        return brandFlux
                 .onErrorResume(CosmosException.class, error -> {
-                    log.error("Error while retrieving data from Cosmos DB", error);
+                    log.error(
+                            "Error while retrieving data from Cosmos DB",
+                            error);
                     return Flux.error(new DataNotFoundException());
                 })
                 .doOnComplete(() ->

@@ -38,7 +38,8 @@ public class ReactiveDataController {
      * Endpoint to retrieve data from mockaroo
      * and send vehicle data to the Event Hub.
      *
-     * @return ResponseEntity with a success message if data is sent successfully.
+     * @return ResponseEntity with a success message
+     * if data is sent successfully.
      */
     @PostMapping
     public ResponseEntity<Object> pushDataToCloud() {
@@ -57,8 +58,8 @@ public class ReactiveDataController {
      * specified brand.
      */
     @Operation(summary = "Retrieves cars filtered by brand.",
-            description = "The data is obtained using the reactive service" +
-                    " and duplicates are filtered out.")
+            description = "The data is obtained using the reactive service"
+                    + " and duplicates are filtered out.")
     @GetMapping(value = "/cars/{brand}", produces =
             MediaType.APPLICATION_JSON_VALUE)
     public Flux<Car> getCarsByBrand(
@@ -75,8 +76,8 @@ public class ReactiveDataController {
      * @return A Flux of CarBrand representing distinct car brands.
      */
     @Operation(summary = "Retrieves unique car brands.",
-            description = "The data is obtained using the reactive" +
-                    " service and duplicates are filtered out.")
+            description = "The data is obtained using the reactive"
+                    + " service and duplicates are filtered out.")
     @GetMapping(value = "/brands", produces =
             MediaType.APPLICATION_JSON_VALUE)
     public Flux<CarBrand> getAllBrands() {
