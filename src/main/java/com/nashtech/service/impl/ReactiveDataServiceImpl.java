@@ -1,7 +1,5 @@
 package com.nashtech.service.impl;
 
-import com.azure.cosmos.CosmosException;
-import com.nashtech.exception.DataNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.service.CloudDataService;
@@ -53,7 +51,9 @@ public class ReactiveDataServiceImpl implements
                 .bodyToFlux(Car.class)
                 .onErrorResume(WebClientException.class, error -> {
                     log.error("Error occurred during data retrieval", error);
-                    return Flux.error(new WebClientException("Failed to retrieve car data") {
+                    return Flux.error(
+                            new WebClientException(
+                                    "Failed to retrieve car data") {
                     });
                 })
                 .subscribe(

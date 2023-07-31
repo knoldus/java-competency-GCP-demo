@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: firestore
+    active: cosmos
 apiUrl: /vehicle.json?key=45d8b3f0
 mockaroo:
   api:

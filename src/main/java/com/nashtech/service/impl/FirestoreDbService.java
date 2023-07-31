@@ -60,7 +60,8 @@ public class FirestoreDbService implements CloudDataService {
     private static Publisher publisher;
 
     /**
-     * The Jackson ObjectMapper used for serialization and deserialization of JSON data.
+     * The Jackson ObjectMapper used
+     * for serialization and deserialization of JSON data.
      */
     private static ObjectMapper objectMapper;
 
@@ -164,7 +165,7 @@ public class FirestoreDbService implements CloudDataService {
                 .filter(gcpCarEntity -> gcpCarEntity != null)
                 .map(gcpCarEntity -> Car.builder()
                         .carId(gcpCarEntity.getCarId())
-                        .carModel(gcpCarEntity.getCarModel())
+                        .model(gcpCarEntity.getModel())
                         .brand(gcpCarEntity.getBrand())
                         .year(gcpCarEntity.getYear())
                         .color(gcpCarEntity.getColor())
