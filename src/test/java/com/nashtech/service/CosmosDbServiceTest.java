@@ -21,7 +21,8 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class CosmosDbServiceTest {
+class CosmosDbServiceTest {
+
 
     @Mock
     private CosmosDbRepository cosmosDbRepository;
