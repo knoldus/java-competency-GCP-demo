@@ -1,3 +1,3 @@
 # java-competency-demo
 
-Capability on cloud services
+Capability on GCP/Azure cloud services
