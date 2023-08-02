@@ -39,8 +39,8 @@ jobs:
         uses: azure/aks-set-context@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          cluster-name: first-cluster
-          resource-group: first-group
+          cluster-name: az-nashtech-cluster
+          resource-group: myResourceGroup
 
       - name: Create image pull secret
         run: |
