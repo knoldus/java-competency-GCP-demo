@@ -6,20 +6,20 @@ import com.nashtech.model.CarBrand;
 import com.nashtech.repository.CosmosDbRepository;
 import com.nashtech.service.impl.CosmosDbService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
+import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import java.util.Arrays;
 import java.util.List;
 
-@SpringBootTest
-public class CosmosDbServiceTest {
+@ExtendWith(MockitoExtension.class)
+class CosmosDbServiceTest {
 
     @Mock
     private CosmosDbRepository cosmosDbRepository;
