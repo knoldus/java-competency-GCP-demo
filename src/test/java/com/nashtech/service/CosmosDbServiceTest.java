@@ -5,27 +5,38 @@ import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.repository.CosmosDbRepository;
 import com.nashtech.service.impl.CosmosDbService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.Message;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
 import java.util.Arrays;
 import java.util.List;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
+
+@ExtendWith(MockitoExtension.class)
 public class CosmosDbServiceTest {
 
     @Mock
     private CosmosDbRepository cosmosDbRepository;
 
+    @Mock
+    private KafkaTemplate<String, Car> kafkaTemplate;
+
     @InjectMocks
     private CosmosDbService cosmosDbService;
+
+    @BeforeEach
+    void setUp() {
+        // Initialize the mocks before each test method
+        reset(kafkaTemplate);
+    }
 
     @Test
     void testGetCarsByBrand() {
@@ -115,5 +126,32 @@ public class CosmosDbServiceTest {
                 .verify();
     }
 
+
+
+    @Test
+    void testPushData() {
+        // Arrange
+        Car car = new Car(/* Car properties */);
+
+        // Mock the behavior of kafkaTemplate.send() using doAnswer()
+        doAnswer(invocation -> {
+            Message<Car> message = invocation.getArgument(0);
+            // Perform any additional verification/assertion on the message if needed
+            return null; // Return null since the method is void
+        }).when(kafkaTemplate).send(any(Message.class));
+
+        // Act
+        Mono<Void> result = cosmosDbService.pushData(car);
+
+        // Assert
+        // Verify that kafkaTemplate.send() was called with the correct message
+        verify(kafkaTemplate, times(1)).send(any(Message.class));
+
+        // Verify that the Mono returned by the pushData method is empty
+        StepVerifier.create(result)
+                .expectSubscription()
+                .expectComplete()
+                .verify();
+    }
 }
 
