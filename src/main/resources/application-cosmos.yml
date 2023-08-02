@@ -8,9 +8,9 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_SERVER}
     properties:
-      security.protocol: ${PROTOCOL}
-      sasl.mechanism: ${MECHANISM}
-      sasl.jaas.config: ${CONFIG}
+      security.protocol: ${KAFKA_SECURITY_PROTOCOL}
+      sasl.mechanism: ${SASL_MECHANISM}
+      sasl.jaas.config: ${JASS_CONFIG}
     producer:
       key-serializer: ${KEY_SERIALIZER}
-      value-serializer: ${JSON_SERIALIZER}
+      value-serializer: ${VALUE_SERIALIZER}
