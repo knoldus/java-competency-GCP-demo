@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: testapp
+  template:
+    metadata:
+      labels:
+        app: testapp
+    spec:
+      containers:
+        - name: testapp
+          image: ghcr.io/sahilbabbar/demo_gcp_deployment/gcpdeployment:latest
+          ports:
+            - containerPort: 8080
+          env:
+          # Add environment variables here, if needed
+          resources:
+          # Set resource limits and requests, if needed
+      imagePullSecrets:
+        - name: dockerconfigjson-github-com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: testapp-service
+spec:
+  selector:
+    app: testapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
