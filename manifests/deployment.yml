@@ -29,9 +29,9 @@ spec:
             - name: JASS_CONFIG
               value: CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://mynamespace2023125.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=waqRW0PFooNb9rTAyA5uoLRiHzc9IPsyH+AEhLQX/wk=";
             - name: KEY_SERIALIZER
-              value: org.apache.kafka.common.serialization.StringSerializer
+              value: org.springframework.kafka.support.serializer.StringOrBytesSerializer
             - name: VALUE_SERIALIZER
-              value: org.apache.kafka.common.serialization.JsonSerializer
+              value: org.springframework.kafka.support.serializer.JsonSerializer
 
           ports:
             - containerPort: 8080
