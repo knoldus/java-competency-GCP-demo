@@ -3,9 +3,7 @@ package com.nashtech.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.pubsub.v1.Publisher;
 import com.google.cloud.spring.data.firestore.FirestoreDataException;
-import com.google.protobuf.ByteString;
 import com.nashtech.entity.GCPCarEntity;
-import com.nashtech.exception.DataNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.repository.FirestoreDbRepository;
@@ -18,16 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
