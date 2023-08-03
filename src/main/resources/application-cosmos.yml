@@ -3,6 +3,10 @@ cosmosdb:
   uri: ${COSMOS_URI}
 
 spring:
+  cloud:
+    gcp:
+      firestore:
+        enabled: false
   autoconfigure:
     exclude: com.google.cloud.spring.autoconfigure.firestore.FirestoreRepositoriesAutoConfiguration
   kafka:
