@@ -15,8 +15,10 @@ import org.springframework.messaging.Message;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-import java.util.Arrays;
-import java.util.List;
+
+import java.util.*;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
 
@@ -125,6 +127,34 @@ class CosmosDbServiceTest {
         StepVerifier.create(result)
                 .expectError(DataNotFoundException.class)
                 .verify();
+    }
+
+    @Test
+    void testGetAllBrands_NoDuplicateBrandsReturned() {
+        // Prepare mock data
+        CarBrand brand1 = new CarBrand("BMW");
+        CarBrand brand2 = new CarBrand("Toyota");
+        CarBrand brand3 = new CarBrand("Mercedes");
+
+        // Mock the reactiveDataService to return Flux with duplicate brands
+        Mockito.when(cosmosDbRepository.findDistinctBrands()).thenReturn(Flux.just(brand1, brand2, brand1, brand3, brand2));
+
+        // Run the test
+        final Flux<CarBrand> result = cosmosDbService.getAllBrands();
+
+        // Convert Flux to List
+        List<CarBrand> brandList = result.collectList().block();
+
+        // Verify the results
+        StepVerifier.create(result)
+                .recordWith(ArrayList::new) // Record all elements in an ArrayList
+                .expectNextCount(5) // Expecting 5 items in the Flux
+                .consumeRecordedWith(brands -> {
+                    // Convert the list to a Set to check for duplicates
+                    Set<CarBrand> uniqueBrands = new HashSet<>(brands);
+                    assertThat(uniqueBrands.size()).isEqualTo(3).isSameAs(brandList);
+                });
+
     }
 
 
