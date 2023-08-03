@@ -9,12 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 
@@ -40,8 +38,8 @@ public class ReactiveDataServiceImplTest {
     void testGetCarsByBrand() {
         // Mock the CloudDataService behavior
         String brand = "Toyota";
-        Car car1 = new Car(/* Car properties with brand Toyota */);
-        Car car2 = new Car(/* Car properties with brand Toyota */);
+        Car car1 = new Car(0, "Toyota", "model", 2020L, "color", 0.0, 0.0);
+        Car car2 = new Car(1, "Toyota", "model", 2020L, "color", 0.0, 0.0);
         Flux<Car> carFlux = Flux.just(car1, car2);
         when(cloudDataService.getCarsByBrand(brand)).thenReturn(carFlux);
 
@@ -72,15 +70,4 @@ public class ReactiveDataServiceImplTest {
                 .expectNext(brand2)
                 .verifyComplete();
     }
-
-
-
-
-
-
-
-
-
 }
-
-

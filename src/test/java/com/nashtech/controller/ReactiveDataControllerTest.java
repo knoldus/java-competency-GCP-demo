@@ -1,5 +1,6 @@
 package com.nashtech.controller;
 
+import com.nashtech.exception.DataNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.service.ReactiveDataService;
@@ -14,10 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
+
+import java.util.*;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 @ExtendWith(MockitoExtension.class)
 public class ReactiveDataControllerTest {
@@ -36,14 +39,14 @@ public class ReactiveDataControllerTest {
     @Test
     void testGetAllBrands_ReactiveDataServiceReturnsError() {
         // Setup
-        when(reactiveDataService.getAllBrands()).thenReturn(Flux.error(new Exception("message")));
+        when(reactiveDataService.getAllBrands()).thenReturn(Flux.error(new DataNotFoundException()));
 
         // Run the test
         final Flux<CarBrand> result = reactiveDataController.getAllBrands();
 
         // Verify the results
         StepVerifier.create(result)
-                .expectErrorMatches(throwable -> throwable instanceof Exception && throwable.getMessage().equals("message"))
+                .expectErrorMatches(throwable -> throwable.getMessage().equals("Record not found"))
                 .verify();
     }
 
@@ -64,14 +67,14 @@ public class ReactiveDataControllerTest {
     @Test
     void testGetCarsByBrand_ReactiveDataServiceReturnsError() {
         // Setup
-        when(reactiveDataService.getCarsByBrand("brand")).thenReturn(Flux.error(new Exception("message")));
+        when(reactiveDataService.getCarsByBrand("brand")).thenReturn(Flux.error(new DataNotFoundException()));
 
         // Run the test
         final Flux<Car> result = reactiveDataController.getCarsByBrand("brand");
 
         // Verify the results
         StepVerifier.create(result)
-                .expectErrorMatches(throwable -> throwable instanceof Exception && throwable.getMessage().equals("message"))
+                .expectErrorMatches(throwable -> throwable.getMessage().equals("Record not found"))
                 .verify();
     }
 
@@ -99,24 +102,54 @@ public class ReactiveDataControllerTest {
 
     @Test
     void testGetCarsByBrand() {
-        String brand = "Toyota";
-        when(reactiveDataService.getCarsByBrand(brand)).thenReturn(Flux.just(new Car(), new Car()));
+        final Flux<Car> carFlux = Flux.just(
+                new Car(0, "Toyota", "model", 2020L, "color", 0.0, 0.0));
+        when(reactiveDataService.getCarsByBrand("Toyota")).thenReturn(carFlux);
 
-        Flux<Car> carsFlux = reactiveDataController.getCarsByBrand(brand);
+        Flux<Car> carsFlux = reactiveDataController.getCarsByBrand("Toyota");
 
         StepVerifier.create(carsFlux)
-                .expectNextCount(2)
+                .expectNextMatches(car -> car.getBrand().equals("Toyota"))
                 .verifyComplete();
     }
 
     @Test
     void testGetAllBrands() {
-        when(reactiveDataService.getAllBrands()).thenReturn(Flux.just(new CarBrand("Toyota"), new CarBrand("BMW")));
+        when(reactiveDataService.getAllBrands()).thenReturn(Flux.just(new CarBrand("BMW")));
 
         Flux<CarBrand> brandsFlux = reactiveDataController.getAllBrands();
 
         StepVerifier.create(brandsFlux)
-                .expectNextCount(2)
+                .expectNextMatches(carBrand -> carBrand.getBrand().equals("BMW"))
                 .verifyComplete();
     }
+
+    @Test
+    void testGetAllBrands_NoDuplicateBrandsReturned() {
+        // Prepare mock data
+        CarBrand brand1 = new CarBrand("BMW");
+        CarBrand brand2 = new CarBrand("Toyota");
+        CarBrand brand3 = new CarBrand("Mercedes");
+
+        // Mock the reactiveDataService to return Flux with duplicate brands
+        when(reactiveDataService.getAllBrands()).thenReturn(Flux.just(brand1, brand2, brand1, brand3, brand2));
+
+        // Run the test
+        final Flux<CarBrand> result = reactiveDataController.getAllBrands();
+
+        // Convert Flux to List
+        List<CarBrand> brandList = result.collectList().block();
+
+        // Verify the results
+        StepVerifier.create(result)
+                .recordWith(ArrayList::new) // Record all elements in an ArrayList
+                .expectNextCount(5) // Expecting 5 items in the Flux
+                .consumeRecordedWith(brands -> {
+                    // Convert the list to a Set to check for duplicates
+                    Set<CarBrand> uniqueBrands = new HashSet<>(brands);
+                    assertThat(uniqueBrands.size()).isEqualTo(3).isSameAs(brandList);
+                });
+
+    }
+
 }
