@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: ghcr.io/deepak1067/myapp
-  AKS_CLUSTER: first-cluster
+  IMAGE_NAME: ghcr.io/vimal-knoldus/az-nashtech-demo-app
+  AKS_CLUSTER: az-nashtech-cluster
   AKS_NAMESPACE: default
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
           sudo sh get-docker.sh
 
       - name: Log in to GitHub Artifact Registry
-        run: echo "${{ secrets.TOKEN_GITHUB }}" | docker login ghcr.io -u deepak1067 --password-stdin
+        run: echo "${{ secrets.TOKEN_GITHUB }}" | docker login ghcr.io -u vimal-knoldus --password-stdin
 
       - name: Build and push Docker image
         run: |
@@ -44,7 +44,7 @@ jobs:
 
       - name: Create image pull secret
         run: |
-          kubectl create secret docker-registry ghcr-secret-new --docker-server=ghcr.io --docker-username=deepak1067 --docker-password="${{ secrets.TOKEN_GITHUB }}" --namespace=${{ env.AKS_NAMESPACE }}
+          kubectl create secret docker-registry az-ghcr-pull-secret --docker-server=ghcr.io --docker-username=vimal-knoldus --docker-password="${{ secrets.TOKEN_GITHUB }}" --namespace=${{ env.AKS_NAMESPACE }}
 
       - name: List Manifests Directory
         run: ls manifests
