@@ -15,6 +15,23 @@ spec:
       containers:
         - name: java-competency-demo
           image: ghcr.io/vimal-knoldus/az-nashtech-demo-app:${{ github.sha }}
+          env:
+            - name: COSMOS_KEY
+              value: uyZNCODa8FDmBd3lMDFCw0ADJtR9D5HDBbNKpSz0rktVmN4khFIXmwyxnEbYY10nKaQZZzoGawO1ACDbmVKvuw==
+            - name: COSMOS_URI
+              value: https://azure-car-factory-db.documents.azure.com:443/
+            - name: KAFKA_SERVER
+              value: myNamespace2023125.servicebus.windows.net:9093
+            - name: KAFKA_SECURITY_PROTOCOL
+              value: SASL_SSL
+            - name: SASL_MECHANISM
+              value: PLAIN
+            - name: JASS_CONFIG
+              value: CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://mynamespace2023125.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=waqRW0PFooNb9rTAyA5uoLRiHzc9IPsyH+AEhLQX/wk=";
+            - name: KEY_SERIALIZER
+              value: org.apache.kafka.common.serialization.StringSerializer
+            - name: VALUE_SERIALIZER
+              value: org.apache.kafka.common.serialization.JsonSerializer
 
           ports:
             - containerPort: 8080
