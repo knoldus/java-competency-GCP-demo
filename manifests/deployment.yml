@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: java-competency-demo
-          image: ghcr.io/deepak1067/myapp:${{ github.sha }}
+          image: ghcr.io/vimal-knoldus/az-nashtech-demo-app:${{ github.sha }}
 
           ports:
             - containerPort: 8080
