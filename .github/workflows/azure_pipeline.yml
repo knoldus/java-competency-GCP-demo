@@ -40,7 +40,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           cluster-name: az-nashtech-cluster
-          resource-group: myResourceGroup
+          resource-group: MyResourceGrp
 
       - name: Create image pull secret
         run: |
