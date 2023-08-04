@@ -41,13 +41,15 @@ mvn spring-boot:run -Dspring.profile.active=cosmos
 ## Application Structure
 
 ### High-level diagram
-![HLD.png](..%2F..%2FPictures%2FHLD.png)
+![HLD](https://github.com/knoldus/java-competency-demo/assets/102946997/faea27bb-b756-44cf-af2d-36958b148f1a)
 
 ### Sequence diagram
-![sequencediagram.png](..%2F..%2FPictures%2Fsequencediagram.png)
+
+![sequencediagram](https://github.com/knoldus/java-competency-demo/assets/102946997/f6c1e24b-fabf-463f-b43e-d58f50eba22b)
 
 ### Class diagram
-![classDiagram.png](..%2F..%2FPictures%2FclassDiagram.png)
+![classDiagram](https://github.com/knoldus/java-competency-demo/assets/102946997/9c0b7a96-e07e-4885-89da-7cb46b2f1c30)
+
 
 ## Configuration
 
