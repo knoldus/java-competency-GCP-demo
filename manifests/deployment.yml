@@ -17,22 +17,22 @@ spec:
           image: ghcr.io/vimal-knoldus/az-nashtech-demo-app:${{ github.sha }}
           env:
             - name: COSMOS_KEY
-              value: uyZNCODa8FDmBd3lMDFCw0ADJtR9D5HDBbNKpSz0rktVmN4khFIXmwyxnEbYY10nKaQZZzoGawO1ACDbmVKvuw==
+              value: ${{ secrets.COSMOS_KEY }}
             - name: COSMOS_URI
-              value: https://azure-car-factory-db.documents.azure.com:443/
+              value: ${{ vars.COSMOS_URI }}
             - name: KAFKA_SERVER
-              value: myNamespace2023125.servicebus.windows.net:9093
+              value: ${{ vars.KAFKA_SERVER }}
             - name: KAFKA_SECURITY_PROTOCOL
-              value: SASL_SSL
+              value: ${{ vars.KAFKA_SECURITY_PROTOCOL }}
             - name: SASL_MECHANISM
-              value: PLAIN
+              value: ${{ SASL_MECHANISM }}
             - name: JASS_CONFIG
-              value: CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://mynamespace2023125.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=waqRW0PFooNb9rTAyA5uoLRiHzc9IPsyH+AEhLQX/wk=";
+              value: ${{ secrets.JASS_CONFIG }}
             - name: KEY_SERIALIZER
-              value: org.springframework.kafka.support.serializer.StringOrBytesSerializer
+              value: ${{ vars.KEY_SERIALIZER }}
             - name: VALUE_SERIALIZER
-              value: org.springframework.kafka.support.serializer.JsonSerializer
+              value: ${{ vars.VALUE_SERIALIZER }}
           ports:
             - containerPort: 8080
       imagePullSecrets:
-        - name: ghcr-az-secret-4
+        - name: ghcr-az-secret-5
