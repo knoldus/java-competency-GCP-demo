@@ -19,20 +19,20 @@ spec:
             - name: COSMOS_KEY
               value: ${{ secrets.COSMOS_KEY }}
             - name: COSMOS_URI
-              value: ${{ vars.COSMOS_URI }}
+              value: ${{ secrets.COSMOS_URI }}
             - name: KAFKA_SERVER
-              value: ${{ vars.KAFKA_SERVER }}
+              value: ${{ secrets.KAFKA_SERVER }}
             - name: KAFKA_SECURITY_PROTOCOL
-              value: ${{ vars.KAFKA_SECURITY_PROTOCOL }}
+              value: ${{ secrets.KAFKA_SECURITY_PROTOCOL }}
             - name: SASL_MECHANISM
-              value: ${{ SASL_MECHANISM }}
+              value: ${{ secrets.SASL_MECHANISM }}
             - name: JASS_CONFIG
               value: ${{ secrets.JASS_CONFIG }}
             - name: KEY_SERIALIZER
-              value: ${{ vars.KEY_SERIALIZER }}
+              value: ${{ secrets.KEY_SERIALIZER }}
             - name: VALUE_SERIALIZER
-              value: ${{ vars.VALUE_SERIALIZER }}
+              value: ${{ secrets.VALUE_SERIALIZER }}
           ports:
             - containerPort: 8080
       imagePullSecrets:
-        - name: ghcr-az-secret-5
+        - name: ghcr-az-secret-6
