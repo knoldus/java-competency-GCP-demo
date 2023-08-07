@@ -31,7 +31,6 @@ public class CorsConfig implements WebFluxConfigurer {
                         "x-requested-with", "accept")
                 .allowedMethods("GET", "POST",
                         "PUT", "DELETE")
-                .allowCredentials(true)
                 .maxAge(MAX_AGE);
     }
 }
