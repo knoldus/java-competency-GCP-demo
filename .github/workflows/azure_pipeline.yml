@@ -10,6 +10,14 @@ env:
   IMAGE_NAME: ghcr.io/vimal-knoldus/az-nashtech-demo-app
   AKS_CLUSTER: az-nashtech-cluster
   AKS_NAMESPACE: default
+  COSMOS_KEY: ${{ secrets.COSMOS_KEY }}
+  COSMOS_URI: ${{ secrets.COSMOS_URI }}
+  KAFKA_SERVER: ${{ secrets.KAFKA_SERVER }}
+  KAFKA_SECURITY_PROTOCOL: ${{ secrets.KAFKA_SECURITY_PROTOCOL }}
+  SASL_MECHANISM: ${{ secrets.SASL_MECHANISM }}
+  JASS_CONFIG: ${{ secrets.JASS_CONFIG }}
+  KEY_SERIALIZER: ${{ secrets.KEY_SERIALIZER }}
+  VALUE_SERIALIZER: ${{ secrets.VALUE_SERIALIZER }}
 
 jobs:
   build-and-push-image:
