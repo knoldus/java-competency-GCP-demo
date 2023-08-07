@@ -34,6 +34,12 @@ public class ReactiveCosmosConfig extends AbstractCosmosConfiguration {
     private String key;
 
     /**
+     * The name of the Cosmos DB instance.
+     */
+    @Value("${cosmosdb.name}")
+    private String dbName;
+
+    /**
      * Creates a {@link CosmosClientBuilder} bean with the configured
      * URI and access key.
      * The CosmosClientBuilder is used to create instances of {
@@ -70,11 +76,11 @@ public class ReactiveCosmosConfig extends AbstractCosmosConfiguration {
      * DB connection.
      * This method is overridden from the AbstractCosmosConfiguration.
      *
-     * @return The name of the database ("CarFactory" in this case).
+     * @return The name of the database.
      */
     @Override
     protected String getDatabaseName() {
-        return "az-nashtech-db";
+        return dbName;
     }
 
 }
