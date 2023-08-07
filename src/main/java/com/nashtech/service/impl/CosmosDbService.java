@@ -1,7 +1,9 @@
 package com.nashtech.service.impl;
 
 import com.azure.cosmos.CosmosException;
+import com.azure.spring.data.cosmos.exception.CosmosAccessException;
 import com.nashtech.service.CloudDataService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -38,6 +40,9 @@ public class CosmosDbService implements CloudDataService {
     @Autowired
     private  KafkaTemplate<String, Car> kafkaTemplate;
 
+    @Value("${eventhub.name}")
+    private String eventHubName;
+
 
     /**
      * Sends the given {@link Car} object to the Kafka topic "myeventhub".
@@ -54,7 +59,7 @@ public class CosmosDbService implements CloudDataService {
         try {
             Message<Car> message = MessageBuilder
                     .withPayload(reactiveDataCar)
-                    .setHeader(KafkaHeaders.TOPIC, "myeventhub")
+                    .setHeader(KafkaHeaders.TOPIC, eventHubName)
                     .build();
             kafkaTemplate.send(message);
         } catch (KafkaException kafkaException) {
@@ -74,13 +79,13 @@ public class CosmosDbService implements CloudDataService {
     public Flux<Car> getCarsByBrand(final String brand) {
         Flux<Car> allCarsOfBrand = cosmosDbRepository.getAllCarsByBrand(brand);
         return allCarsOfBrand
-                .onErrorResume(CosmosException.class, error -> {
-                    log.error("Error while retrieving data from Cosmos DB",
-                                    error);
-                    return Flux.error(new DataNotFoundException());
-                })
                 .doOnComplete(() -> log.info("Received Data Successfully"))
-                .switchIfEmpty(Flux.error(new DataNotFoundException()));
+                .switchIfEmpty(Flux.error(new DataNotFoundException()))
+                .onErrorResume(CosmosAccessException.class, error -> {
+                    log.error("Error while retrieving data from Cosmos DB: " + error.getMessage());
+                    return Flux.error(new CosmosAccessException("Failed to retrieve Cars by Brand", error));
+                });
+
     }
 
     /**
@@ -96,14 +101,11 @@ public class CosmosDbService implements CloudDataService {
         Flux<CarBrand> brandFlux =
                 cosmosDbRepository.findDistinctBrands();
         return brandFlux
-                .onErrorResume(CosmosException.class, error -> {
-                    log.error(
-                            "Error while retrieving data from Cosmos DB",
-                            error);
-                    return Flux.error(new DataNotFoundException());
-                })
-                .doOnComplete(() ->
-                        log.info("Data processing completed."))
-                .switchIfEmpty(Flux.error(new DataNotFoundException()));
+                .doOnComplete(() -> log.info("Received Brands Successfully"))
+                .switchIfEmpty(Flux.error(new DataNotFoundException()))
+                .onErrorResume(CosmosAccessException.class, error -> {
+                    log.error("Error while retrieving data from Cosmos DB: " + error.getMessage());
+                    return Flux.error(new CosmosAccessException("Failed to retrieve All brands", error));
+                });
     }
 }

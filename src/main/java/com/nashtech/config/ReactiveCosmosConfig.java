@@ -74,7 +74,7 @@ public class ReactiveCosmosConfig extends AbstractCosmosConfiguration {
      */
     @Override
     protected String getDatabaseName() {
-        return "CarFactory";
+        return "az-nashtech-db";
     }
 
 }
