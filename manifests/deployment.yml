@@ -27,7 +27,7 @@ spec:
             - name: SASL_MECHANISM
               value: PLAIN
             - name: JASS_CONFIG
-              value: CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://az-nashtech-eventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=2ho0FzKSt6nrPt0dLdS9AWzdsYIqcKeIr+AEhDA4CEA="
+              value: org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://az-nashtech-eventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=2ho0FzKSt6nrPt0dLdS9AWzdsYIqcKeIr+AEhDA4CEA="
             - name: KEY_SERIALIZER
               value: org.apache.kafka.common.serialization.StringSerializer
             - name: VALUE_SERIALIZER
@@ -35,4 +35,4 @@ spec:
           ports:
             - containerPort: 8080
       imagePullSecrets:
-        - name: ghcr-az-secret-10
+        - name: ghcr-az-secret-11
