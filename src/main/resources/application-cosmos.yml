@@ -1,6 +1,16 @@
 cosmosdb:
   key: ${COSMOS_KEY}
   uri: ${COSMOS_URI}
+  name: az-nashtech-db
+  container-name: az-car-collection
+
+eventhub:
+  name: eventhub
+
+apiUrl: /vehicle.json?key=e60438e0
+mockaroo:
+  api:
+    url: https://my.api.mockaroo.com
 
 spring:
   cloud:

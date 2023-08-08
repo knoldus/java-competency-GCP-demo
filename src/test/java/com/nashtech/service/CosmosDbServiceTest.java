@@ -1,5 +1,6 @@
 package com.nashtech.service;
 
+import com.azure.spring.data.cosmos.exception.CosmosAccessException;
 import com.nashtech.exception.DataNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
@@ -58,14 +59,15 @@ class CosmosDbServiceTest {
     @Test
     void testGetCarsByBrand_ReactiveDataRepositoryReturnsError() {
         // Setup
-        Mockito.when(cosmosDbRepository.getAllCarsByBrand("brand")).thenReturn(Flux.error(new DataNotFoundException()));
+        Mockito.when(cosmosDbRepository.getAllCarsByBrand("brand")).thenReturn(Flux.error(
+                new CosmosAccessException("Failed to retrieve Cars by Brand")));
 
         // Run the test
         final Flux<Car> result = cosmosDbService.getCarsByBrand("brand");
 
         // Assert the error
         StepVerifier.create(result)
-                .expectError(DataNotFoundException.class)
+                .expectError(CosmosAccessException.class)
                 .verify();
     }
 
@@ -103,7 +105,7 @@ class CosmosDbServiceTest {
     @Test
     void testGetAllBrands_ReactiveDataRepositoryReturnsError() {
         // Setup
-        final Flux<CarBrand> BrandsFlux = Flux.error(new DataNotFoundException());
+        final Flux<CarBrand> BrandsFlux = Flux.error(new CosmosAccessException("Failed to retrieve All brands"));
         Mockito.when(cosmosDbRepository.findDistinctBrands()).thenReturn(BrandsFlux);
 
         // Run the test
@@ -111,7 +113,7 @@ class CosmosDbServiceTest {
 
         // Verify the results
         StepVerifier.create(result)
-                .expectError(DataNotFoundException.class) 
+                .expectError(CosmosAccessException.class)
                 .verify();
     }
 
@@ -162,7 +164,7 @@ class CosmosDbServiceTest {
     @Test
     void testPushData() {
         // Arrange
-        Car car = new Car(/* Car properties */);
+        Car car = new Car(0, "brand", "model", 2020L, "color", 0.0, 0.0);
 
         // Mock the behavior of kafkaTemplate.send() using doAnswer()
         doAnswer(invocation -> {

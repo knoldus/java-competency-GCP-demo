@@ -12,7 +12,7 @@ import org.springframework.data.annotation.Id;
  * "DbContainer" in Cosmos DB.
  */
 @Data
-@Container(containerName = "DbContainer")
+@Container(containerName = "${cosmosdb.container-name}")
 @AllArgsConstructor
 public class AzureCarEntity {
 
