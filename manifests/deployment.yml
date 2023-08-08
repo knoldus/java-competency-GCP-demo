@@ -29,10 +29,10 @@ spec:
             - name: JASS_CONFIG
               value: CONFIG=org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://az-nashtech-eventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=2ho0FzKSt6nrPt0dLdS9AWzdsYIqcKeIr+AEhDA4CEA="
             - name: KEY_SERIALIZER
-              value: org.springframework.kafka.support.serializer.StringOrBytesSerializer
+              value: org.apache.kafka.common.serialization.StringSerializer
             - name: VALUE_SERIALIZER
               value: org.springframework.kafka.support.serializer.JsonSerializer
           ports:
             - containerPort: 8080
       imagePullSecrets:
-        - name: ghcr-az-secret-9
+        - name: ghcr-az-secret-10
