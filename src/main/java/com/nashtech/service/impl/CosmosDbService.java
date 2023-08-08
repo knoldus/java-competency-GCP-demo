@@ -1,6 +1,5 @@
 package com.nashtech.service.impl;
 
-import com.azure.cosmos.CosmosException;
 import com.azure.spring.data.cosmos.exception.CosmosAccessException;
 import com.nashtech.service.CloudDataService;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,12 +39,15 @@ public class CosmosDbService implements CloudDataService {
     @Autowired
     private  KafkaTemplate<String, Car> kafkaTemplate;
 
+    /**
+     * Event hub topic name.
+     */
     @Value("${eventhub.name}")
     private String eventHubName;
 
 
     /**
-     * Sends the given {@link Car} object to the Kafka topic "myeventhub".
+     * Sends the given {@link Car} object to the Kafka topic
      * The method constructs a Kafka message
      * from the provided {@link Car} payload
      * and sends it using the configured {@link KafkaTemplate}.
@@ -82,8 +84,12 @@ public class CosmosDbService implements CloudDataService {
                 .doOnComplete(() -> log.info("Received Data Successfully"))
                 .switchIfEmpty(Flux.error(new DataNotFoundException()))
                 .onErrorResume(CosmosAccessException.class, error -> {
-                    log.error("Error while retrieving data from Cosmos DB: " + error.getMessage());
-                    return Flux.error(new CosmosAccessException("Failed to retrieve Cars by Brand", error));
+                    log.error("Error while retrieving data: {}",
+                            error.getMessage());
+                    return Flux.error(
+                            new CosmosAccessException("Failed to retrieve data",
+                                    error)
+                    );
                 });
 
     }
@@ -104,8 +110,12 @@ public class CosmosDbService implements CloudDataService {
                 .doOnComplete(() -> log.info("Received Brands Successfully"))
                 .switchIfEmpty(Flux.error(new DataNotFoundException()))
                 .onErrorResume(CosmosAccessException.class, error -> {
-                    log.error("Error while retrieving data from Cosmos DB: " + error.getMessage());
-                    return Flux.error(new CosmosAccessException("Failed to retrieve All brands", error));
+                    log.error("Error while retrieving data: {}",
+                            error.getMessage());
+                    return Flux.error(
+                            new CosmosAccessException("Failed to retrieve data",
+                                    error)
+                    );
                 });
     }
 }
