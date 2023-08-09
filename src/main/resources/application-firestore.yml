@@ -6,4 +6,9 @@ google:
 spring:
   cloud:
     gcp:
-      project-id: nodal-descent-389716
+      project-id: white-dynamo-394708
+
+apiUrl: /vehicle.json?key=45d8b3f0
+mockaroo:
+  api:
+    url: https://my.api.mockaroo.com
