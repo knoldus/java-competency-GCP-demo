@@ -1,22 +1,22 @@
-$resourceGroupName="myResourceGrp"
+$resourceGroupName="az-nashtech-resource-group"
 $randomIdentifier = Get-Random
 $location = "East US"
-$ehubName="myEventHub"
-$namespaceName="myNamespace2023125"
-$functionAppName = "AzureFunction202314"
-$storageAccountName = "storageaccount232009"
-$accountName = "reactive-database-twenty-$randomIdentifier"
-$databaseName = "sql-db-twenty-six"
+$ehubName="EventHub"
+$namespaceName="az-nashtech-eventhub"
+$functionAppName = "CarFactoryAzFunction"
+$storageAccountName = "nashtechstorageaccount"
+$accountName = "az-nashtech-reactive-database"
+$databaseName = "az-nashtech-db"
 $functionPlan = "functionAppName-plans"
 $skuPlan = "B1"
-$apiKind = "Sql"
+$apiKind = "SQL"
 New-AzResourceGroup –Name $resourceGroupName –Location $location
 New-AzEventHubNamespace -ResourceGroupName $resourceGroupName -Name $namespaceName -Location $location
-New-AzEventHub -ResourceGroupName $resourceGroupName -NamespaceName $namespaceName  -PartitionCount 4 -EventHubName $ehubName
+New-AzEventHub -ResourceGroupName $resourceGroupName -NamespaceName $namespaceName  -PartitionCount 4 -EventHubName $ehubName
 New-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName -Location $location -SkuName Standard_LRS
 New-AzFunctionAppPlan -Name $functionPlan -ResourceGroupName $resourceGroupName -Location $location -Sku $skuPlan -WorkerType Linux
 New-AzFunctionApp -Name $functionAppName -StorageAccountName $storageAccountName -PlanName $functionPlan -ResourceGroupName $resourceGroupName -Runtime Java -RuntimeVersion 17 -OSType Linux -FunctionsVersion 4
-New-AzCosmosDBAccount -ResourceGroupName $resourceGroupName -Name $accountName -Location $location -ApiKind $apiKind  -DefaultConsistencyLevel "Session"
+New-AzCosmosDBAccount -ResourceGroupName $resourceGroupName -Name $accountName -Location $location -ApiKind $apiKind  -DefaultConsistencyLevel "Session"
 $database = New-AzCosmosDBSqlDatabase -AccountName $accountName -ResourceGroupName $resourceGroupName -Name $databaseName
 $account = Get-AzCosmosDBAccount -ResourceGroupName $resourceGroupName -Name $accountName
 $connectionString = $account.DocumentEndpoint + ";AccountKey=" + (Get-AzCosmosDBAccountKey -ResourceGroupName $resourceGroupName -Name $accountName).PrimaryMasterKey
