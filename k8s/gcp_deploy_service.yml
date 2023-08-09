@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: testapp
-          image: ghcr.io/sahilbabbar/demo_gcp_deployment/gcpdeployment:latest
+          image: ghcr.io/sahilbabbar12/demo_gcp_deployment/gcpdeployment:latest
           ports:
             - containerPort: 8080
           env:
