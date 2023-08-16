@@ -85,6 +85,13 @@ public class ReactiveDataController {
         return reactiveDataService.getAllBrands();
     }
 
+    /**
+     * Retrieves a stream of distinct car brands.
+     * The data is obtained using the reactive service and duplicates are
+     * filtered out.
+     *
+     * @return A Flux of CarBrand representing distinct car brands.
+     */
     @GetMapping(value = "/brands-sse")
     public Flux<ServerSentEvent<CarBrand>> getAllBrands1() {
         return reactiveDataService.getAllBrands()
