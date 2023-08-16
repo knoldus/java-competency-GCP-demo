@@ -42,10 +42,6 @@ jobs:
           cluster-name: az-nashtech-cluster
           resource-group: az-nashtech-resource-group
 
-      - name: Create image pull secret
-        run: |
-          kubectl create secret docker-registry ghcr-az-secret-15 --docker-server=ghcr.io --docker-username=vimal-knoldus --docker-password="${{ secrets.TOKEN_GITHUB }}" --namespace=${{ env.AKS_NAMESPACE }}
-
       - name: List Manifests Directory
         run: ls manifests
 

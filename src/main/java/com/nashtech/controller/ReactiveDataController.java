@@ -4,10 +4,12 @@ import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.service.ReactiveDataService;
 import io.swagger.v3.oas.annotations.Operation;
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,7 +63,7 @@ public class ReactiveDataController {
             description = "The data is obtained using the reactive service"
                     + " and duplicates are filtered out.")
     @GetMapping(value = "/cars/{brand}", produces =
-            MediaType.APPLICATION_JSON_VALUE)
+            MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Car> getCarsByBrand(
             @PathVariable final String brand) {
         return reactiveDataService.getCarsByBrand(brand);
@@ -69,7 +71,6 @@ public class ReactiveDataController {
 
     /**
      * Retrieves a stream of distinct car brands.
-     *
      * The data is obtained using the reactive service and duplicates are
      * filtered out.
      *
@@ -84,6 +85,15 @@ public class ReactiveDataController {
         return reactiveDataService.getAllBrands();
     }
 
+    @GetMapping(value = "/brands-sse")
+    public Flux<ServerSentEvent<CarBrand>> getAllBrands1() {
+        return reactiveDataService.getAllBrands()
+                .map(brand -> ServerSentEvent.<CarBrand>builder()
+                        .id(String.valueOf(RandomUtils.nextInt()))
+                        .data(brand)
+                        .event("car-brand-data")
+                        .build());
+    }
 
 
 }

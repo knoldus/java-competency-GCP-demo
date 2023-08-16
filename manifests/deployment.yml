@@ -13,9 +13,6 @@ spec:
         app: java-competency-demo
     spec:
       containers:
-        - command:
-            - kube-apiserver
-            - --cors-allowed-origins=["http://*"]
         - name: java-competency-demo
           image: ghcr.io/vimal-knoldus/az-nashtech-demo-app:${{ github.sha }}
           env:
