@@ -17,7 +17,7 @@ spec:
           image: ghcr.io/vimal-knoldus/az-nashtech-demo-app:${{ github.sha }}
           env:
             - name: COSMOS_KEY
-              value: 7mQozwMJrkKPE0uLS9bM0osGUDRmfMdneTyNxDAKaaiDFbdjkmQ2gYDDfR9xIX2O7L4K7uWSBTroACDb47WXaw==
+              value: xRn6SPk9k0ikRWibOzsrKLul9XHBIU9RdVENhWAxgjorAWiWsmKtlIQOXcv3Dw3ryyFl0V7rrT7BACDbS9Ubzg==
             - name: COSMOS_URI
               value: https://az-nashtech-reactive-database.documents.azure.com:443/
             - name: KAFKA_SERVER
@@ -27,7 +27,7 @@ spec:
             - name: SASL_MECHANISM
               value: PLAIN
             - name: JASS_CONFIG
-              value: org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://az-nashtech-eventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=2ho0FzKSt6nrPt0dLdS9AWzdsYIqcKeIr+AEhDA4CEA=";
+              value: org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://az-nashtech-eventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=K6T7DoduEzgApAedp5aBGXVmfQCLOKt3n+AEhEduFv8=";
             - name: KEY_SERIALIZER
               value: org.apache.kafka.common.serialization.StringSerializer
             - name: VALUE_SERIALIZER
@@ -35,4 +35,4 @@ spec:
           ports:
             - containerPort: 8080
       imagePullSecrets:
-        - name: ghcr-az-secret-12
+        - name: ghcr-az-secret-13
