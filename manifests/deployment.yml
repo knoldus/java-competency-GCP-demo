@@ -35,4 +35,4 @@ spec:
           ports:
             - containerPort: 8080
       imagePullSecrets:
-        - name: ghcr-az-secret-13
+        - name: ghcr-az-secret-14
