@@ -17,7 +17,7 @@ spec:
           image: ghcr.io/vimal-knoldus/az-nashtech-demo-app:${{ github.sha }}
           env:
             - name: COSMOS_KEY
-              value: xRn6SPk9k0ikRWibOzsrKLul9XHBIU9RdVENhWAxgjorAWiWsmKtlIQOXcv3Dw3ryyFl0V7rrT7BACDbS9Ubzg==
+              value: ${{ env.IMAGE_NAME }}
             - name: COSMOS_URI
               value: https://az-nashtech-reactive-database.documents.azure.com:443/
             - name: KAFKA_SERVER
