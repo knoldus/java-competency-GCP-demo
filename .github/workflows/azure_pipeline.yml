@@ -10,7 +10,6 @@ env:
   IMAGE_NAME: ghcr.io/vimal-knoldus/az-nashtech-demo-app
   AKS_CLUSTER: az-nashtech-cluster
   AKS_NAMESPACE: default
-  COSMOS_KEY: xRn6SPk9k0ikRWibOzsrKLul9XHBIU9RdVENhWAxgjorAWiWsmKtlIQOXcv3Dw3ryyFl0V7rrT7BACDbS9Ubzg==
 
 jobs:
   build-and-push-image:
