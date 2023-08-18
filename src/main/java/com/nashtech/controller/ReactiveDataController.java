@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
+import java.time.LocalTime;
+
 /**
  * Rest Controller class
  * which handles reactive data access for cars.
@@ -99,6 +102,23 @@ public class ReactiveDataController {
                         .id(String.valueOf(RandomUtils.nextInt()))
                         .data(brand)
                         .event("car-brand-data")
+                        .build());
+    }
+
+    /**
+     * Retrieves a stream of distinct car brands.
+     * The data is obtained using the reactive service and duplicates are
+     * filtered out.
+     *
+     * @return A Flux of CarBrand representing distinct car brands.
+     */
+    @GetMapping("/stream-sse")
+    public Flux<ServerSentEvent<String>> streamEvents() {
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(sequence -> ServerSentEvent.<String> builder()
+                        .id(String.valueOf(sequence))
+                        .event("periodic-event")
+                        .data("SSE - " + LocalTime.now().toString())
                         .build());
     }
 
