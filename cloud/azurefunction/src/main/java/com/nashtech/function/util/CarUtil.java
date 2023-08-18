@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 public class CarUtil {
 
+    private static String apiKey;
+
     /**
      * Converts the given mileage value from miles to kilometers per mile.
      *
@@ -28,7 +30,7 @@ public class CarUtil {
     public static Double updatePrice(final Double price) {
         Double priceInRupees=0.0;
         try {
-            String apiUrl = "https://api.freecurrencyapi.com/v1/latest?apikey=fca_live_lJoEE2SbTTY0Vyo2vAEjfBIZLDGequaveJQDvoej&currencies=INR";
+            String apiUrl = "https://api.freecurrencyapi.com/v1/latest?apikey="+apiKey+"&currencies=INR";
 
             URL url = new URL(apiUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
