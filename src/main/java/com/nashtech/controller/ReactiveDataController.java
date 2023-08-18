@@ -115,10 +115,10 @@ public class ReactiveDataController {
     @GetMapping("/stream-sse")
     public Flux<ServerSentEvent<String>> streamEvents() {
         return Flux.interval(Duration.ofSeconds(1))
-                .map(sequence -> ServerSentEvent.<String> builder()
+                .map(sequence -> ServerSentEvent.<String>builder()
                         .id(String.valueOf(sequence))
-                        .event("periodic-event")
                         .data("SSE - " + LocalTime.now().toString())
+                        .event("periodic-event")
                         .build());
     }
 
