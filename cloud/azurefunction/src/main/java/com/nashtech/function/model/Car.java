@@ -1,4 +1,4 @@
-package com.knoldus.function.model;
+package com.nashtech.function.model;
 
 
 import lombok.AllArgsConstructor;

@@ -1,9 +1,9 @@
-package com.knoldus.function.trigger;
+package com.nashtech.function.trigger;
 
-import com.knoldus.function.util.VehicleUtil;
-import com.knoldus.function.model.VehicleDetail;
 import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
+import com.nashtech.function.util.CarUtil;
+import com.nashtech.function.model.Car;
 import java.util.*;
 
 /**
@@ -17,16 +17,16 @@ public class EventHubTriggerJava {
      */
     @FunctionName("EventHubTriggerJava")
     public void run(
-            @EventHubTrigger(name = "message",
-                    eventHubName = "myeventhub",
+            @EventHubTrigger(name = "carDetails",
+                    eventHubName = "eventhub",
                     connection = "connectionString",
                     consumerGroup = "$Default",
                     cardinality = Cardinality.MANY)
             List<Car> carDetails,
             @CosmosDBOutput(
                     name = "updatedCarDetails",
-                    databaseName = "CarFactory",
-                    collectionName = "DbContainer",
+                    databaseName = "az-nashtech-db",
+                    collectionName = "az-car-collection",
                     connectionStringSetting = "ConnectionStringSetting",
                     createIfNotExists = true
             )
@@ -43,14 +43,12 @@ public class EventHubTriggerJava {
                         details.setMileage(updatedMileage);
                         details.setPrice(updatedPrice);
                         context.getLogger().info("Transformed Car Data: " + details);
-                        details.setCarId(details.getCardId() + 1);
+                        details.setCarId(details.getCarId());
                         return details;
                     }).toList();
             updatedCarDetails.setValue(carDetailsList);
         } catch (Exception exception) {
             context.getLogger().info(exception.getMessage());
         }
-        }
-
-
+    }
 }
