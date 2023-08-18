@@ -4,11 +4,15 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import static java.rmi.server.LogStream.log;
 
+
+@Slf4j
 public class CarUtil {
 
-    private static String apiKey;
+    private static String apiUrl = System.getenv("API_URL");
 
     /**
      * Converts the given mileage value from miles to kilometers per mile.
@@ -30,7 +34,7 @@ public class CarUtil {
     public static Double updatePrice(final Double price) {
         Double priceInRupees=0.0;
         try {
-            String apiUrl = "https://api.freecurrencyapi.com/v1/latest?apikey="+apiKey+"&currencies=INR";
+
 
             URL url = new URL(apiUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -55,7 +59,7 @@ public class CarUtil {
                 priceInRupees = price*inrValue;
 
             } else {
-                System.out.println("HTTP Request failed with response code: " + responseCode);
+                log("HTTP Request failed with response code: " + responseCode);
             }
         } catch (Exception exception) {
             exception.printStackTrace();
