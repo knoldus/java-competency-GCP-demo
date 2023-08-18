@@ -10,6 +10,7 @@ $databaseName = "az-nashtech-db"
 $functionPlan = "functionAppName-plans"
 $skuPlan = "B1"
 $apiKind = "SQL"
+$clusterName = "az-nashtech-cluster"
 New-AzResourceGroup –Name $resourceGroupName –Location $location
 New-AzEventHubNamespace -ResourceGroupName $resourceGroupName -Name $namespaceName -Location $location
 New-AzEventHub -ResourceGroupName $resourceGroupName -NamespaceName $namespaceName  -PartitionCount 4 -EventHubName $ehubName
@@ -27,3 +28,4 @@ $key = (Get-AzCosmosDBAccountKey -Name $accountName -ResourceGroupName $resource
 Write-Host $key
 Update-AzFunctionAppSetting -Name $functionAppName -ResourceGroupName $resourceGroupName -AppSetting @{CosmosDB_Endpoint = $endpoint; CosmosDB_Key = $key}
 New-AzApplicationInsights -ResourceGroupName $resourceGroupName -Name $functionAppName -location $location
+New-AzAksCluster -ResourceGroupName $resourceGroupName -Name $clusterName -NodeCount 1 -GenerateSshKey 
