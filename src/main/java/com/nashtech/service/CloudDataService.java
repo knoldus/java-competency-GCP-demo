@@ -47,5 +47,5 @@ public interface CloudDataService {
      *
      * @return A Flux of CarBrand representing distinct car brands.
      */
-    Flux<ServerSentEvent<CarBrand>> getAllBrands1();
+    Flux<ServerSentEvent<String>> getAllBrands1();
 }

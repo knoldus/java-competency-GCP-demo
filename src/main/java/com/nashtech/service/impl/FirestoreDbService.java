@@ -194,7 +194,7 @@ public class FirestoreDbService implements CloudDataService {
      *
      */
     @Override
-    public  Flux<ServerSentEvent<CarBrand>> getAllBrands1() {
+    public  Flux<ServerSentEvent<String>> getAllBrands1() {
         return null;
     }
 }

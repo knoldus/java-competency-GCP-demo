@@ -99,7 +99,7 @@ public class ReactiveDataServiceImpl implements
      *
      * @return A Flux of CarBrand representing distinct car brands.
      */
-    public Flux<ServerSentEvent<CarBrand>> getAllBrands1() {
+    public Flux<ServerSentEvent<String>> getAllBrands1() {
         return cloudDataService.getAllBrands1();
     }
 

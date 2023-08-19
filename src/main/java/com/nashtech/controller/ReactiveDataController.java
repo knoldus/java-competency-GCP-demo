@@ -95,7 +95,7 @@ public class ReactiveDataController {
      * @return A Flux of CarBrand representing distinct car brands.
      */
     @GetMapping(value = "/brands-sse")
-    public Flux<ServerSentEvent<CarBrand>> getAllBrands1() {
+    public Flux<ServerSentEvent<String>> getAllBrands1() {
         return reactiveDataService.getAllBrands1();
     }
 
