@@ -2,6 +2,7 @@ package com.nashtech.service;
 
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
+import org.springframework.http.codec.ServerSentEvent;
 import reactor.core.publisher.Flux;
 
 /**
@@ -36,5 +37,14 @@ public interface ReactiveDataService {
      * @return A Flux of CarBrand representing distinct car brands.
      */
     Flux<CarBrand> getAllBrands();
+
+    /**
+     * Retrieves a Flux of distinct car brands in a reactive manner.
+     * The Flux represents a stream of data that can be subscribed to
+     * for continuous updates.
+     *
+     * @return A Flux of CarBrand representing distinct car brands.
+     */
+    Flux<ServerSentEvent<CarBrand>> getAllBrands1();
 }
 

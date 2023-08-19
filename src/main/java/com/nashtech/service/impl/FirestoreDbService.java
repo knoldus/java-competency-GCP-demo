@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -185,5 +186,15 @@ public class FirestoreDbService implements CloudDataService {
                                     throwable));
                 });
 
+    }
+
+    /**
+     * Retrieves all CarBrands from Firestore database.
+     * @return A Flux of CarBrand objects.
+     *
+     */
+    @Override
+    public  Flux<ServerSentEvent<CarBrand>> getAllBrands1() {
+        return null;
     }
 }

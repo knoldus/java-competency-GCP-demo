@@ -4,7 +4,6 @@ import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.service.ReactiveDataService;
 import io.swagger.v3.oas.annotations.Operation;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -97,12 +96,7 @@ public class ReactiveDataController {
      */
     @GetMapping(value = "/brands-sse")
     public Flux<ServerSentEvent<CarBrand>> getAllBrands1() {
-        return reactiveDataService.getAllBrands()
-                .map(brand -> ServerSentEvent.<CarBrand>builder()
-                        .id(String.valueOf(RandomUtils.nextInt()))
-                        .data(brand)
-                        .event("car-brand-data")
-                        .build());
+        return reactiveDataService.getAllBrands1();
     }
 
     /**
