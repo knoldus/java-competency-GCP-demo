@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Profile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 
 
 @Service
@@ -132,6 +133,7 @@ public class CosmosDbService implements CloudDataService {
      */
     public Flux<ServerSentEvent<CarBrand>> getAllBrands1() {
         return cosmosDbRepository.findDistinctBrands()
+                .delayElements(Duration.ofSeconds(5))
                 .map(brand -> ServerSentEvent.<CarBrand>builder()
                         .id(String.valueOf(RandomUtils.nextInt()))
                         .data(brand)
