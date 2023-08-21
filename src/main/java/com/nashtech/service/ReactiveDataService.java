@@ -36,5 +36,11 @@ public interface ReactiveDataService {
      * @return A Flux of CarBrand representing distinct car brands.
      */
     Flux<CarBrand> getAllBrands();
+
+    void postData(Car car);
+
+    void updateData(Integer carId, Car car);
+
+    void deleteData(Integer carId);
 }
 

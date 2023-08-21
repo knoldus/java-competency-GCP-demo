@@ -38,4 +38,8 @@ public interface CloudDataService {
      * @return A Flux of CarBrand representing distinct car brands.
      */
     Flux<CarBrand> getAllBrands();
+
+    Mono<Void> updateData(Integer carId, Car car);
+
+    void deleteData(Integer carId);
 }

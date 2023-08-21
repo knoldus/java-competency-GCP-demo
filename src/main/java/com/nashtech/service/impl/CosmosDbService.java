@@ -1,5 +1,6 @@
 package com.nashtech.service.impl;
 
+import com.azure.cosmos.models.PartitionKey;
 import com.azure.spring.data.cosmos.exception.CosmosAccessException;
 import com.nashtech.service.CloudDataService;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +21,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 
-
 @Service
 @Slf4j
 @Profile("cosmos")
@@ -37,7 +37,7 @@ public class CosmosDbService implements CloudDataService {
      * The KafkaTemplate for sending vehicle data to Kafka topics.
      */
     @Autowired
-    private  KafkaTemplate<String, Car> kafkaTemplate;
+    private KafkaTemplate<String, Car> kafkaTemplate;
 
     /**
      * Event hub topic name.
@@ -53,11 +53,10 @@ public class CosmosDbService implements CloudDataService {
      * and sends it using the configured {@link KafkaTemplate}.
      *
      * @param reactiveDataCar The {@link Car} object to be sent to Kafka.
-     * @throws KafkaException
-     * If an error occurs while sending the message to Kafka.
+     * @throws KafkaException If an error occurs while sending the message to Kafka.
      */
     @Override
-    public Mono<Void> pushData(final Car reactiveDataCar)  {
+    public Mono<Void> pushData(final Car reactiveDataCar) {
         try {
             Message<Car> message = MessageBuilder
                     .withPayload(reactiveDataCar)
@@ -69,6 +68,7 @@ public class CosmosDbService implements CloudDataService {
         }
         return Mono.empty();
     }
+
     /**
      * Retrieves a Flux of cars with specified brand in reactive manner.
      * The Flux represents a stream of data that can be subscribed to for
@@ -78,6 +78,7 @@ public class CosmosDbService implements CloudDataService {
      * @return A Flux of Car representing cars with the
      * specified brand.
      */
+    @Override
     public Flux<Car> getCarsByBrand(final String brand) {
         Flux<Car> allCarsOfBrand = cosmosDbRepository.getAllCarsByBrand(brand);
         return allCarsOfBrand
@@ -103,6 +104,7 @@ public class CosmosDbService implements CloudDataService {
      *
      * @return A Flux of CarBrand representing distinct car brands.
      */
+    @Override
     public Flux<CarBrand> getAllBrands() {
         Flux<CarBrand> brandFlux =
                 cosmosDbRepository.findDistinctBrands();
@@ -116,6 +118,32 @@ public class CosmosDbService implements CloudDataService {
                             new CosmosAccessException("Failed to retrieve data",
                                     error)
                     );
+                });
+    }
+
+    @Override
+    public Mono<Void> updateData(Integer carId, Car car) {
+        return cosmosDbRepository.getById(carId)
+                .flatMap(existingItem -> {
+                    existingItem.setBrand(car.getBrand());
+//                    return cosmosDbRepository.save(Mono.just(existingItem));
+                    return null;
+                });
+    }
+
+    public void deleteData(Integer carId) {
+        cosmosDbRepository.getById(carId)
+                .flatMap(existingCar -> {
+                    return cosmosDbRepository.deleteById(existingCar.getId(),
+                                    new PartitionKey(existingCar.getCarId()))
+                            .doOnSuccess(deletedItem ->
+                                    log.info("Deleted Successfully"))
+                            .doOnError(CosmosAccessException.class, error -> {
+                                log.error("Error while deleting data: {}",
+                                        error.getMessage());
+                                throw new CosmosAccessException("Record not deleted",
+                                        error);
+                            });
                 });
     }
 }

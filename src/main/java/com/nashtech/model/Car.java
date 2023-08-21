@@ -1,15 +1,16 @@
 package com.nashtech.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.azure.spring.data.cosmos.core.mapping.PartitionKey;
+import com.google.cloud.spring.data.firestore.Document;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.stereotype.Service;
 
 /**
  * Represents a reactive data model for sending
  * details of the Car to the CosmosDB.
  */
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -18,6 +19,7 @@ public class Car {
     /**
      * The card ID of the car.
      */
+    @Id
     private Integer carId;
 
     /**

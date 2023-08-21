@@ -152,6 +152,16 @@ public class FirestoreDbService implements CloudDataService {
                 });
     }
 
+    @Override
+    public Mono<Void> updateData(Integer carId, Car car) {
+        return null;
+    }
+
+    @Override
+    public void deleteData(Integer carId) {
+
+    }
+
     /**
      * Retrieves all Car objects by a given brand from Firestore database.
      *

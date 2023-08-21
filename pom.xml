@@ -17,17 +17,14 @@
 		<java.version>19</java.version>
 		<azure.version>2.3.5</azure.version>
 		<spring-cloud-gcp.version>4.5.1</spring-cloud-gcp.version>
-		<spring-cloud-azure.version>4.9.0</spring-cloud-azure.version>
+		<spring-cloud-azure.version>5.1.0</spring-cloud-azure.version>
 		<sonar.organization>java-competency-demo</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.projectKey>com.nashtech.java-competency-demo</sonar.projectKey>
 		<sonar.login>7c1f6c0cdb5f298f1bb3f516c7882bcc9dc3d529</sonar.login>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>spring-cloud-gcp-starter-data-firestore</artifactId>
@@ -37,6 +34,10 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
 			<version>2.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.microsoft.azure</groupId>

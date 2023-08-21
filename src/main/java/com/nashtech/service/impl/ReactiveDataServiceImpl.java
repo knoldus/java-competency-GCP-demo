@@ -1,5 +1,6 @@
 package com.nashtech.service.impl;
 
+import com.nashtech.entity.AzureCarEntity;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.service.CloudDataService;
@@ -89,4 +90,18 @@ public class ReactiveDataServiceImpl implements
         return cloudDataService.getAllBrands();
     }
 
+    @Override
+    public void postData(Car car) {
+        cloudDataService.pushData(car);
+    }
+
+    @Override
+    public void updateData(Integer carId, Car car) {
+        cloudDataService.updateData(carId, car);
+    }
+
+    @Override
+    public void deleteData(Integer carId) {
+        cloudDataService.deleteData(carId);
+    }
 }

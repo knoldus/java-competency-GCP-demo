@@ -8,6 +8,7 @@ import com.nashtech.model.Car;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * Reactive data repository interface for performing CRUD operations
@@ -39,4 +40,23 @@ public interface CosmosDbRepository extends ReactiveCosmosRepository
      */
     @Query(value = "SELECT * FROM c WHERE c.brand = @brand")
     Flux<Car> getAllCarsByBrand(String brand);
+
+    /**
+     * Custom query to get the details from CosmosDB.
+     * document from database which
+     * @return the Car with
+     * @param carId for the specific carId.
+     */
+    @Query(value = "SELECT * FROM c WHERE c.carId = @carId")
+    Mono<Car> getCarById(Integer carId);
+
+    /**
+     * Custom query to get the details from CosmosDB.
+     * document from database which
+     * @return the AzureCarEntity with
+     * @param carId for the specific carId.
+     */
+    @Query(value = "SELECT * FROM c WHERE c.carId = @carId")
+    Mono<AzureCarEntity> getById(Integer carId);
+
 }

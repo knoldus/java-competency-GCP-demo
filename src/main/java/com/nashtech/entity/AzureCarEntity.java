@@ -1,8 +1,10 @@
 package com.nashtech.entity;
 
 import com.azure.spring.data.cosmos.core.mapping.Container;
+import com.azure.spring.data.cosmos.core.mapping.PartitionKey;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 /**
@@ -14,6 +16,7 @@ import org.springframework.data.annotation.Id;
 @Data
 @Container(containerName = "az-car-collection")
 @AllArgsConstructor
+@NoArgsConstructor
 public class AzureCarEntity {
 
     /**
@@ -25,6 +28,7 @@ public class AzureCarEntity {
     /**
      * The card ID of the car.
      */
+    @PartitionKey
     private Integer carId;
 
     /**

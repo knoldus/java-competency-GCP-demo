@@ -8,11 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 /**
@@ -84,6 +80,23 @@ public class ReactiveDataController {
         return reactiveDataService.getAllBrands();
     }
 
+    @PostMapping(value = "/")
+    public ResponseEntity<Object> postCarDetails(@RequestBody Car car) {
+        reactiveDataService.postData(car);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping(value = "/car/{carId}")
+    public ResponseEntity<Object> updateData(@PathVariable Integer carId, @RequestBody Car car) {
+        reactiveDataService.updateData(carId, car);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/car/{carId}")
+    public ResponseEntity<Object> deleteData(@PathVariable Integer carId) {
+        reactiveDataService.deleteData(carId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 }
