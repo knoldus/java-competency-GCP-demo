@@ -4,14 +4,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.json.JSONObject;
-import static java.rmi.server.LogStream.log;
-
-
-@Slf4j
 public class CarUtil {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(CarUtil.class);
     private static String apiUrl = System.getenv("API_URL");
 
     /**
@@ -42,15 +39,16 @@ public class CarUtil {
 
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String inputLine;
+
                 StringBuilder response = new StringBuilder();
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
+                try(BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
-                in.close();
-
                 String jsonResponse = response.toString();
 
                 JSONObject json = new JSONObject(jsonResponse);
@@ -59,7 +57,7 @@ public class CarUtil {
                 priceInRupees = price*inrValue;
 
             } else {
-                log("HTTP Request failed with response code: " + responseCode);
+                LOGGER.info("HTTP Request failed with response code: " + responseCode);
             }
         } catch (Exception exception) {
             exception.printStackTrace();
