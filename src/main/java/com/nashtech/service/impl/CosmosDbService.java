@@ -132,12 +132,13 @@ public class CosmosDbService implements CloudDataService {
      * @return A Flux of CarBrand representing distinct car brands.
      */
     public Flux<ServerSentEvent<String>> getAllBrands1() {
-        return cosmosDbRepository.findDistinctBrands()
+        return (Flux<ServerSentEvent<String>>) cosmosDbRepository.findDistinctBrands()
                 .delayElements(Duration.ofSeconds(2))
                 .map(brand -> ServerSentEvent.<String>builder()
                         .id(String.valueOf(RandomUtils.nextInt()))
                         .data(brand.getBrand())
                         .event("car-brand-data")
-                        .build());
+                        .build())
+                .subscribe();
     }
 }
