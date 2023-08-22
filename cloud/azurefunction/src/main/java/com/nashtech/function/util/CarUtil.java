@@ -31,8 +31,6 @@ public class CarUtil {
     public static Double updatePrice(final Double price) {
         Double priceInRupees=0.0;
         try {
-
-
             URL url = new URL(apiUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
