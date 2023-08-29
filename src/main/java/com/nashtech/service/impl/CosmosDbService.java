@@ -22,6 +22,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
+import java.util.Map;
 
 
 @Service
@@ -122,23 +123,9 @@ public class CosmosDbService implements CloudDataService {
                 });
     }
 
-    /**
-     * Retrieves a Flux of distinct car brands in a reactive manner.
-     * The Flux represents a stream of data that can be subscribed to for
-     * continuous updates.
-     * This method also prints the distinct brands to the console for
-     * demonstration purposes.
-     *
-     * @return A Flux of CarBrand representing distinct car brands.
-     */
-    public Flux<ServerSentEvent<String>> getAllBrands1() {
-        return (Flux<ServerSentEvent<String>>) cosmosDbRepository.findDistinctBrands()
-                .delayElements(Duration.ofSeconds(2))
-                .map(brand -> ServerSentEvent.<String>builder()
-                        .id(String.valueOf(RandomUtils.nextInt()))
-                        .data(brand.getBrand())
-                        .event("car-brand-data")
-                        .build())
-                .subscribe();
+    @Override
+    public Flux<ServerSentEvent<Map<String, String>>> getAllBrandsSse() {
+        return null;
     }
+
 }

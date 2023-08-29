@@ -2,6 +2,8 @@ package com.nashtech.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.pubsub.v1.Publisher;
 import com.google.cloud.spring.data.firestore.FirestoreDataException;
 import com.google.protobuf.ByteString;
@@ -21,7 +23,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+import java.time.Duration;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.io.IOException;
 
@@ -46,6 +53,13 @@ public class FirestoreDbService implements CloudDataService {
      */
     @Value("${spring.cloud.gcp.project-id}")
     private String projectId;
+
+
+    private Firestore firestore;
+
+    public FirestoreDbService(Firestore firestore) {
+        this.firestore = firestore;
+    }
 
     /**
      * The ID of the Pub/Sub topic to
@@ -193,8 +207,47 @@ public class FirestoreDbService implements CloudDataService {
      * @return A Flux of CarBrand objects.
      *
      */
-    @Override
-    public  Flux<ServerSentEvent<String>> getAllBrands1() {
-        return null;
+    public Flux<ServerSentEvent<Map<String, String>>> getAllBrandsSse() {
+        Set<String> emittedBrands = Collections.synchronizedSet(new HashSet<>());
+        Duration sampleInterval = Duration.ofMillis(1500); // Adjust as needed
+
+        return Flux.<ServerSentEvent<Map<String, String>>>create(emitter -> {
+            firestore.collection("Car")
+                    .addSnapshotListener((snapshots, e) -> {
+                        if (e != null) {
+                            log.error("Error in Firestore snapshot listener", e);
+                            emitter.error(e);
+                            return;
+                        }
+
+                        for (QueryDocumentSnapshot doc : snapshots) {
+                            Map<String, Object> data = doc.getData();
+                            String brand = (String) data.get("brand");
+
+                            synchronized (emittedBrands) {
+                                if (!emittedBrands.contains(brand)) {
+                                    emittedBrands.add(brand);
+
+                                    processAndEmitEvent(emitter, brand)
+                                            .subscribeOn(Schedulers.parallel())
+                                            .subscribe();
+                                }
+                            }
+                        }
+                    });
+        }).concatWith(Flux.never());
     }
+
+    private Mono<Void> processAndEmitEvent(FluxSink<ServerSentEvent<Map<String, String>>> emitter, String brand) {
+        return Mono.fromRunnable(() -> {
+            Map<String, String> eventData = new HashMap<>();
+            eventData.put("brand", brand);
+
+            ServerSentEvent<Map<String, String>> event = ServerSentEvent.<Map<String, String>>builder()
+                    .data(eventData)
+                    .build();
+
+            emitter.next(event);
+        });
+}
 }

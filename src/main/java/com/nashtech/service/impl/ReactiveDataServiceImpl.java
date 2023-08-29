@@ -13,6 +13,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
 import reactor.core.publisher.Flux;
 
+import java.util.Map;
+
 /**
  * Service class for handling car-related operations.
  */
@@ -90,17 +92,10 @@ public class ReactiveDataServiceImpl implements
         return cloudDataService.getAllBrands();
     }
 
-    /**
-     * Retrieves a Flux of distinct car brands in a reactive manner.
-     * The Flux represents a stream of data that can be subscribed to for
-     * continuous updates.
-     * This method also prints the distinct brands to the console for
-     * demonstration purposes.
-     *
-     * @return A Flux of CarBrand representing distinct car brands.
-     */
-    public Flux<ServerSentEvent<String>> getAllBrands1() {
-        return cloudDataService.getAllBrands1();
+    @Override
+    public Flux<ServerSentEvent<Map<String, String>>> getAllBrandsSse() {
+        return cloudDataService.getAllBrandsSse();
     }
+
 
 }
