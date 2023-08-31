@@ -209,7 +209,6 @@ public class FirestoreDbService implements CloudDataService {
      */
     public Flux<ServerSentEvent<Map<String, String>>> getAllBrandsSse() {
         Set<String> emittedBrands = Collections.synchronizedSet(new HashSet<>());
-        Duration sampleInterval = Duration.ofMillis(1500); // Adjust as needed
 
         return Flux.<ServerSentEvent<Map<String, String>>>create(emitter -> {
             firestore.collection("Car")
