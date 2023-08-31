@@ -18,6 +18,7 @@ import reactor.core.publisher.Flux;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.Map;
 
 /**
  * Rest Controller class
@@ -87,32 +88,23 @@ public class ReactiveDataController {
         return reactiveDataService.getAllBrands();
     }
 
-    /**
-     * Retrieves a stream of distinct car brands.
-     * The data is obtained using the reactive service and duplicates are
-     * filtered out.
-     *
-     * @return A Flux of CarBrand representing distinct car brands.
-     */
-    @GetMapping(value = "/brands-sse")
-    public Flux<ServerSentEvent<String>> getAllBrands1() {
-        return reactiveDataService.getAllBrands1();
-    }
 
     /**
      * Retrieves a stream of distinct car brands.
+     *
      * The data is obtained using the reactive service and duplicates are
      * filtered out.
      *
      * @return A Flux of CarBrand representing distinct car brands.
      */
-    @GetMapping("/stream-sse")
-    public Flux<ServerSentEvent<String>> streamEvents() {
-        return Flux.interval(Duration.ofSeconds(1))
-                .map(sequence -> ServerSentEvent.<String>builder()
-                        .id(String.valueOf(sequence))
-                        .data("SSE - " + LocalTime.now().toString())
-                        .event("periodic-event")
+    @Operation(summary = "Retrieves unique car brands.",
+            description = "The data is obtained using the reactive"
+                    + " service and duplicates are filtered out.")
+    @GetMapping(value = "/brands-sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ServerSentEvent<Map<String, String>>> getAllBrandsSSE() {
+        return reactiveDataService.getAllBrandsSse()
+                .map(eventData -> ServerSentEvent.<Map<String, String>>builder()
+                        .data(eventData.data())
                         .build());
     }
 

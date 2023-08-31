@@ -6,6 +6,8 @@ import org.springframework.http.codec.ServerSentEvent;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 public interface CloudDataService {
 
     /**
@@ -47,5 +49,8 @@ public interface CloudDataService {
      *
      * @return A Flux of CarBrand representing distinct car brands.
      */
-    Flux<ServerSentEvent<String>> getAllBrands1();
+    Flux<ServerSentEvent<Map<String, String>>> getAllBrandsSse();
+
+
+
 }

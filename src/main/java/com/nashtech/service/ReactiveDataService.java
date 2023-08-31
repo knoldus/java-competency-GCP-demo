@@ -5,6 +5,8 @@ import com.nashtech.model.CarBrand;
 import org.springframework.http.codec.ServerSentEvent;
 import reactor.core.publisher.Flux;
 
+import java.util.Map;
+
 /**
  * Interface representing a service for performing reactive data access
  * operations on cars.
@@ -45,6 +47,6 @@ public interface ReactiveDataService {
      *
      * @return A Flux of CarBrand representing distinct car brands.
      */
-    Flux<ServerSentEvent<String>> getAllBrands1();
+    Flux<ServerSentEvent<Map<String, String>>> getAllBrandsSse();
 }
 
