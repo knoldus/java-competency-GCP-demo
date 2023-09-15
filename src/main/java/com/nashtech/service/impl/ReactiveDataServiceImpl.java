@@ -92,6 +92,12 @@ public class ReactiveDataServiceImpl implements
         return cloudDataService.getAllBrands();
     }
 
+    /**
+     * Retrieves a ServerSentEvent of car brands in a reactive manner.
+     * @return A Flux of type ServerSentEvent.
+     * of AllCarBrand representing all car brands.
+     */
+
     @Override
     public Flux<ServerSentEvent<Map<String, String>>> getAllBrandsSse() {
         return cloudDataService.getAllBrandsSse();

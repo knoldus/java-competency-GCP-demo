@@ -27,10 +27,13 @@ import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service implementation class for
@@ -54,11 +57,18 @@ public class FirestoreDbService implements CloudDataService {
     @Value("${spring.cloud.gcp.project-id}")
     private String projectId;
 
+    /**
+     * The Firestore instance.
+     * used for publishing data to firestore.
+     */
+    private final Firestore firestore;
 
-    private Firestore firestore;
-
-    public FirestoreDbService(Firestore firestore) {
-        this.firestore = firestore;
+    /**
+     * The FirestoreDbService constructor.
+     * @param firestoreInstance firestore instance.
+     */
+    public FirestoreDbService(final Firestore firestoreInstance) {
+        this.firestore = firestoreInstance;
     }
 
     /**
@@ -205,17 +215,18 @@ public class FirestoreDbService implements CloudDataService {
     /**
      * Retrieves all CarBrands from Firestore database.
      * @return A Flux of CarBrand objects.
-     *
      */
     public Flux<ServerSentEvent<Map<String, String>>> getAllBrandsSse() {
-        Set<String> emittedBrands = Collections.synchronizedSet(new HashSet<>());
+        Set<String> emittedBrands = Collections
+                .synchronizedSet(new HashSet<>());
 
         return Flux.<ServerSentEvent<Map<String, String>>>create(emitter -> {
             firestore.collection("Car")
-                    .addSnapshotListener((snapshots, e) -> {
-                        if (e != null) {
-                            log.error("Error in Firestore snapshot listener", e);
-                            emitter.error(e);
+                    .addSnapshotListener((snapshots, exception) -> {
+                        if (exception != null) {
+                            log.error("Error in Firestore snapshot listener",
+                                    exception);
+                            emitter.error(exception);
                             return;
                         }
 
@@ -237,16 +248,18 @@ public class FirestoreDbService implements CloudDataService {
         }).concatWith(Flux.never());
     }
 
-    private Mono<Void> processAndEmitEvent(FluxSink<ServerSentEvent<Map<String, String>>> emitter, String brand) {
+    private Mono<Void> processAndEmitEvent(
+            final FluxSink<ServerSentEvent<Map<String, String>>> emitter,
+            final String brand) {
         return Mono.fromRunnable(() -> {
             Map<String, String> eventData = new HashMap<>();
             eventData.put("brand", brand);
 
-            ServerSentEvent<Map<String, String>> event = ServerSentEvent.<Map<String, String>>builder()
+            ServerSentEvent<Map<String, String>> event = ServerSentEvent
+                    .<Map<String, String>>builder()
                     .data(eventData)
                     .build();
-
             emitter.next(event);
         });
-}
+    }
 }
