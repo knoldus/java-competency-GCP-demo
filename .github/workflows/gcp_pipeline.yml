@@ -8,7 +8,7 @@ on:
 env:
   IMAGE_NAME: ghcr.io/sahilbabbar12/demo_gcp_deployment/gcpdeployment:latest
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  GKE_CLUSTER: gcp-cicd-cluster
+  GKE_CLUSTER: ${{ secrets.GCP_CLUSTER_NAME }}
   GKE_ZONE: us-central1-c
 
 jobs:
