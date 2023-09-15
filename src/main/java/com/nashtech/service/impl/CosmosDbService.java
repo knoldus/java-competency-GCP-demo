@@ -1,9 +1,15 @@
 package com.nashtech.service.impl;
 
 import com.azure.spring.data.cosmos.exception.CosmosAccessException;
+import com.nashtech.exception.DataNotFoundException;
+import com.nashtech.model.Car;
+import com.nashtech.model.CarBrand;
+import com.nashtech.repository.CosmosDbRepository;
 import com.nashtech.service.CloudDataService;
-import org.apache.commons.lang3.RandomUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -11,19 +17,9 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
-import com.nashtech.exception.DataNotFoundException;
-import com.nashtech.model.Car;
-import com.nashtech.model.CarBrand;
-import com.nashtech.repository.CosmosDbRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.time.Duration;
 import java.util.Map;
-
 
 @Service
 @Slf4j
@@ -123,6 +119,15 @@ public class CosmosDbService implements CloudDataService {
                 });
     }
 
+    /**
+     * Retrieves a Flux of car brands in a reactive manner.
+     * The Flux represents a stream of data that can be subscribed to for
+     * continuous updates.
+     * This method also prints the distinct brands to the console for
+     * demonstration purposes.
+     *
+     * @return null.
+     */
     @Override
     public Flux<ServerSentEvent<Map<String, String>>> getAllBrandsSse() {
         return null;

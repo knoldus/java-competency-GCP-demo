@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
-import java.time.Duration;
-import java.time.LocalTime;
 import java.util.Map;
 
 /**
@@ -90,23 +88,22 @@ public class ReactiveDataController {
 
 
     /**
-     * Retrieves a stream of distinct car brands.
+     * Retrieves a stream of cars with the given brand.
+     * The data is obtained using the reactive service and duplicates
+     * are filtered out.
      *
-     * The data is obtained using the reactive service and duplicates are
-     * filtered out.
-     *
-     * @return A Flux of CarBrand representing distinct car brands.
+     * @return A Flux of Car representing cars with the
+     * specified brand.
      */
     @Operation(summary = "Retrieves unique car brands.",
             description = "The data is obtained using the reactive"
                     + " service and duplicates are filtered out.")
-    @GetMapping(value = "/brands-sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/brands-sse",
+            produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<Map<String, String>>> getAllBrandsSSE() {
         return reactiveDataService.getAllBrandsSse()
                 .map(eventData -> ServerSentEvent.<Map<String, String>>builder()
                         .data(eventData.data())
                         .build());
     }
-
-
 }
