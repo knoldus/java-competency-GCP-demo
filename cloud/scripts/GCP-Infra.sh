@@ -9,9 +9,10 @@ DB_REGION="us-east1"
 DB_TYPE="firestore-native"
 
 # Enable required APIs
-gcloud services enable container.googleapis.com pubsub.googleapis.com cloudfunctions.googleapis.com firestore.googleapis.com cloudbuild.googleapis.com eventarc.googleapis.com run.googleapis.com
+gcloud services enable container.googleapis.com pubsub.googleapis.com cloudfunctions.googleapis.com firestore.googleapis.com cloudbuild.googleapis.com eventarc.googleapis.com run.googleapis.com artifactregistry.googleapis.com
 # Create a GKE cluster
 gcloud container clusters create $CLUSTER_NAME --num-nodes=2 --region=$REGION --scopes "https://www.googleapis.com/auth/cloud-platform"
+gcloud container clusters get-credentials $CLUSTER_NAME --zone $REGION --project $PROJECT_ID
 # Create a Pub/Sub topic
 gcloud pubsub topics create $TOPIC_NAME --project=$PROJECT_ID
 #Create Firestore DB
