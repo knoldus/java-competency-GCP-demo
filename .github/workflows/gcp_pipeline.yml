@@ -84,6 +84,9 @@ jobs:
           export_default_credentials: true
         env:
           GCLOUD_ZONE: ${{env.GKE_ZONE}}
+      - name: Configure GKE Cluster Credentials
+        run: |
+            gcloud container clusters get-credentials ${{env.GKE_CLUSTER}} --zone=${{env.GKE_ZONE}}
       - name: Apply Kubernetes Configuration
         uses: ameydev/gke-kubectl-action@master
         env:
