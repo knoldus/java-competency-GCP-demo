@@ -7,7 +7,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  IMAGE_NAME: us-central1-docker.pkg.dev/$PROJECT_ID/gcp-demo-app/gcp-deployment
+  IMAGE_NAME: us-central1-docker.pkg.dev/${{env.PROJECT_ID}}/gcp-demo-app/gcp-deployment
   GKE_CLUSTER: ${{ secrets.GCP_CLUSTER_NAME }}
   GKE_ZONE: us-central1
   GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
@@ -60,6 +60,7 @@ jobs:
       - name: Build and push Docker image to Artifact Registry
         run: |
           gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
+          echo $IMAGE_NAME
           docker build --tag $IMAGE_NAME .
           docker push $IMAGE_NAME          
 
