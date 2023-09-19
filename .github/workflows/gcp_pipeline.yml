@@ -75,5 +75,7 @@ jobs:
           sed -i "s,VAL_TOPIC_ID,${{env.PUB_SUB_TOPIC_ID}}," k8s/gcp_deploy_service.yml
       - name: Apply Kubernetes Configuration
         uses: ameydev/gke-kubectl-action@master
+        env:
+          APPLICATION_CREDENTIALS: ${{env.GCLOUD_AUTH}}
         with:
           args: apply -f k8s/
