@@ -89,7 +89,7 @@ jobs:
               gcloud auth configure-docker us-central1-docker.pkg.dev
       - name: Get GKE Cluster Credentials
         run: |
-              gcloud container clusters get-credentials ${{env.GKE_CLUSTER}} --region us-central1
+              gcloud container clusters get-credentials ${{env.GKE_CLUSTER}} --region us-central1-c
       - name: Apply Kubernetes Configuration
         uses: ameydev/gke-kubectl-action@master
         env:
