@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: gcp-demo-app
-          image: us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/gcp-demo-app/gcp-deployment
+          image: us-central1-docker.pkg.dev/$PROJECT_ID/gcp-demo-app/gcp-deployment
           ports:
             - containerPort: 8080
           envFrom:
@@ -42,6 +42,5 @@ metadata:
   name: java-competency-configmap
 data:
   # Configuration values can be set as key-value properties
-  GCP_PROJECT_ID: ${{ env.PROJECT_ID }}
-  PUB_SUB_TOPIC_ID: ${{ env.TOPIC_ID }}
-  
+  GCP_PROJECT_ID: $PROJECT_ID
+  PUB_SUB_TOPIC_ID: $TOPIC_ID
