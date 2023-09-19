@@ -1,36 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: testapp
+  name: gcp-demo-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: testapp
+      app: gcp-demo-app
   template:
     metadata:
       labels:
-        app: testapp
+        app: gcp-demo-app
     spec:
       containers:
-        - name: testapp
-          image: ghcr.io/sahilbabbar12/demo_gcp_deployment/gcpdeployment:latest
+        - name: gcp-demo-app
+          image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/gcp-demo-app/gcp-deployment
           ports:
             - containerPort: 8080
-          env:
-          # Add environment variables here, if needed
-          resources:
-          # Set resource limits and requests, if needed
-      imagePullSecrets:
-        - name: dockerconfigjson-github-com
+          imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: testapp-service
+  name: gcp-demo-app-service
 spec:
   selector:
-    app: testapp
+    app: gcp-demo-app
   ports:
     - protocol: TCP
       port: 80
