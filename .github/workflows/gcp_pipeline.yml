@@ -70,8 +70,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: kubectl - Google Cloud GKE cluster.
-        uses: ameydev/gke-kubectl-action@master
-        run:
+        run: |
           sed -i "s,VAL_PROJECT_ID,${{env.PROJECT_ID}}," gcp_deploy_service.yaml
           sed -i "s,VAL_TOPIC_ID,${{env.PUB_SUB_TOPIC_ID}}," gcp_deploy_service.yaml
         with:
