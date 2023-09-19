@@ -3,6 +3,7 @@
 # Set your GCP project ID and other variables
 PROJECT_ID="sustained-digit-399111"
 CLUSTER_NAME="cluster-gcp-deployment"
+CLUSTER_REGION="us-central1-c"
 REGION="us-central1"
 TOPIC_NAME="Vehicle"
 DB_REGION="us-east1"
@@ -16,10 +17,10 @@ gcloud services enable container.googleapis.com pubsub.googleapis.com cloudfunct
 gcloud artifacts repositories create $ARTIFACTORY_NAME --repository-format=$ARTIFACTORY_FORMAT --location=$REGION
 
 # Create a GKE cluster
-gcloud container clusters create $CLUSTER_NAME --num-nodes=2 --region=$REGION --scopes "https://www.googleapis.com/auth/cloud-platform"
+gcloud container clusters create $CLUSTER_NAME --num-nodes=2 --region=$CLUSTER_REGION --scopes "https://www.googleapis.com/auth/cloud-platform"
 
 # Get Cluster Credentials
-gcloud container clusters get-credentials $CLUSTER_NAME --zone $REGION --project $PROJECT_ID
+gcloud container clusters get-credentials $CLUSTER_NAME --zone $CLUSTER_REGION --project $PROJECT_ID
 
 # Create a Pub/Sub topic
 gcloud pubsub topics create $TOPIC_NAME --project=$PROJECT_ID
