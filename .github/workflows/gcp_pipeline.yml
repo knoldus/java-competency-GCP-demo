@@ -73,27 +73,10 @@ jobs:
         run: |
           sed -i "s,VAL_PROJECT_ID,${{env.PROJECT_ID}}," k8s/gcp_deploy_service.yml
           sed -i "s,VAL_TOPIC_ID,${{env.PUB_SUB_TOPIC_ID}}," k8s/gcp_deploy_service.yml
-#      - name: Set GKE Zone
-#        run: echo "GKE_ZONE=${{env.GKE_ZONE}}" >> $GITHUB_ENV
-#      - name: Set up Google Cloud SDK
-#        uses: google-github-actions/setup-gcloud@v1
-#        with:
-#          version: '>= 446.0.1'
-#          project_id: ${{env.PROJECT_ID}}
-#          service_account_key: ${{env.GCLOUD_AUTH}}
-#          export_default_credentials: true
-#        env:
-#          GCLOUD_ZONE: ${{env.GKE_ZONE}}
-#      - name: Configure GKE Cluster Credentials
-#        run: |
-#            gcloud auth activate-service-account --key-file=${{secrets.GCLOUD_AUTH}}
-#            gcloud config set project ${{ env.PROJECT_ID }}
-#            gcloud container clusters get-credentials ${{env.GKE_CLUSTER}} --zone=${{env.GKE_ZONE}}
       - name: Apply Kubernetes Configuration
         uses: ameydev/gke-kubectl-action@master
         env:
           APPLICATION_CREDENTIALS: ${{env.GCLOUD_AUTH}}
-#          GKE_ZONE: ${{ env.GKE_ZONE }}
-#          INPUT_ARGS: apply -f k8s/ --location=us-central1
+          region: ${{env.GKE_ZONE}}
         with:
           args: apply -f k8s/
