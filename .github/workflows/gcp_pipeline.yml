@@ -2,8 +2,7 @@ name: Deploy to GKE
 
 on:
   push:
-    branches:
-      - feature/Fix-deployment
+    branches: [feature/Fix-deployment]
 
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   IMAGE_NAME: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/gcp-demo-app/gcp-deployment
