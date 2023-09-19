@@ -91,9 +91,9 @@ jobs:
 #            gcloud container clusters get-credentials ${{env.GKE_CLUSTER}} --zone=${{env.GKE_ZONE}}
       - name: Apply Kubernetes Configuration
         uses: ameydev/gke-kubectl-action@master
-        env:
-          APPLICATION_CREDENTIALS: ${{env.GCLOUD_AUTH}}
-          GKE_ZONE: ${{ env.GKE_ZONE }}
-          INPUT_ARGS: apply -f k8s/ --location=us-central1
+#        env:
+#          APPLICATION_CREDENTIALS: ${{env.GCLOUD_AUTH}}
+#          GKE_ZONE: ${{ env.GKE_ZONE }}
+#          INPUT_ARGS: apply -f k8s/ --location=us-central1
         with:
           args: apply -f k8s/
