@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: gcp-demo-app
-          image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/gcp-demo-app/gcp-deployment
+          image: us-central1-docker.pkg.dev/sustained-digit-399111/gcp-demo-app/gcp-deployment
           ports:
             - containerPort: 8080
           imagePullPolicy: Always
