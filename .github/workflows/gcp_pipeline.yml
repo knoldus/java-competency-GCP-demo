@@ -86,6 +86,8 @@ jobs:
           GCLOUD_ZONE: ${{env.GKE_ZONE}}
       - name: Configure GKE Cluster Credentials
         run: |
+            gcloud auth activate-service-account --key-file=${{secrets.GCLOUD_AUTH}}
+            gcloud config set project ${{ env.PROJECT_ID }}
             gcloud container clusters get-credentials ${{env.GKE_CLUSTER}} --zone=${{env.GKE_ZONE}}
       - name: Apply Kubernetes Configuration
         uses: ameydev/gke-kubectl-action@master
