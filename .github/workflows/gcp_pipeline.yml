@@ -71,8 +71,8 @@ jobs:
       - uses: actions/checkout@master
       - name: Modify YAML File
         run: |
-          sed -i "s,VAL_PROJECT_ID,${{env.PROJECT_ID}}," gcp_deploy_service.yaml
-          sed -i "s,VAL_TOPIC_ID,${{env.PUB_SUB_TOPIC_ID}}," gcp_deploy_service.yaml
+          sed -i "s,VAL_PROJECT_ID,${{env.PROJECT_ID}}," k8s/gcp_deploy_service.yml
+          sed -i "s,VAL_TOPIC_ID,${{env.PUB_SUB_TOPIC_ID}}," k8s/gcp_deploy_service.yml
       - name: Apply Kubernetes Configuration
         uses: ameydev/gke-kubectl-action@master
         with:
