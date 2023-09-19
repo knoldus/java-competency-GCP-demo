@@ -14,9 +14,12 @@ spec:
     spec:
       containers:
         - name: gcp-demo-app
-          image: us-central1-docker.pkg.dev/sustained-digit-399111/gcp-demo-app/gcp-deployment
+          image: us-central1-docker.pkg.dev/$PROJECT_ID/gcp-demo-app/gcp-deployment
           ports:
             - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: java-competency-configmap
           imagePullPolicy: Always
 ---
 apiVersion: v1
@@ -39,5 +42,5 @@ metadata:
   name: java-competency-configmap
 data:
   # Configuration values can be set as key-value properties
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  PUB_SUB_TOPIC_ID: ${{ secrets.PUB_SUB_TOPIC_ID }}
+  GCP_PROJECT_ID: $PROJECT_ID
+  PUB_SUB_TOPIC_ID: $TOPIC_ID
