@@ -69,9 +69,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: kubectl - Google Cloud GKE cluster.
+      - name: Modify YAML File
         run: |
           sed -i "s,VAL_PROJECT_ID,${{env.PROJECT_ID}}," gcp_deploy_service.yaml
           sed -i "s,VAL_TOPIC_ID,${{env.PUB_SUB_TOPIC_ID}}," gcp_deploy_service.yaml
+      - name: Apply Kubernetes Configuration
+        uses: ameydev/gke-kubectl-action@master
         with:
           args: apply -f k8s/
