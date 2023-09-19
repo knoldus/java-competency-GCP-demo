@@ -48,12 +48,12 @@ jobs:
         with:
           version: '>= 446.0.1'
           project_id: ${{env.PROJECT_ID}}
-          service_account_key: $GCLOUD_AUTH
+          service_account_key: ${{env.GCLOUD_AUTH}}
           export_default_credentials: true
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v1'
         with:
-            credentials_json: $GCLOUD_AUTH
+            credentials_json: ${{env.GCLOUD_AUTH}}
       - name: Configure Docker for Google Cloud Artifact Registry
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
@@ -71,10 +71,10 @@ jobs:
       - name: kubectl - Google Cloud GKE cluster.
         uses: ameydev/gke-kubectl-action@master
         env:
-          TOPIC_ID: $PUB_SUB_TOPIC_ID
-          PROJECT_ID: $PROJECT_ID
-          APPLICATION_CREDENTIALS: $GCLOUD_AUTH
-          CLUSTER_NAME: $GKE_CLUSTER
+          TOPIC_ID: ${{env.PUB_SUB_TOPIC_ID}}
+          PROJECT_ID: ${{env.PROJECT_ID}}
+          APPLICATION_CREDENTIALS: ${{env.GCLOUD_AUTH}}
+          CLUSTER_NAME: ${{env.GKE_CLUSTER}}
           ZONE_NAME: us-central1-c
         with:
           args: apply -f k8s/
