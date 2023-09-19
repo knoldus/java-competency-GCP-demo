@@ -44,3 +44,4 @@ data:
   # Configuration values can be set as key-value properties
   GCP_PROJECT_ID: ${{ env.PROJECT_ID }}
   PUB_SUB_TOPIC_ID: ${{ env.TOPIC_ID }}
+  
