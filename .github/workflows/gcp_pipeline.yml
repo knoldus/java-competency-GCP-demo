@@ -71,11 +71,8 @@ jobs:
       - uses: actions/checkout@master
       - name: kubectl - Google Cloud GKE cluster.
         uses: ameydev/gke-kubectl-action@master
-        env:
-          TOPIC_ID: ${{env.PUB_SUB_TOPIC_ID}}
-          PROJECT_ID: ${{env.PROJECT_ID}}
-          APPLICATION_CREDENTIALS: ${{env.GCLOUD_AUTH}}
-          CLUSTER_NAME: ${{env.GKE_CLUSTER}}
-          ZONE_NAME: us-central1-c
+        run:
+          sed -i "s,VAL_PROJECT_ID,${{env.PROJECT_ID}}," gcp_deploy_service.yaml
+          sed -i "s,VAL_TOPIC_ID,${{env.PUB_SUB_TOPIC_ID}}," gcp_deploy_service.yaml
         with:
           args: apply -f k8s/
