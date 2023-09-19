@@ -62,38 +62,33 @@ jobs:
           gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
           echo $IMAGE_NAME
           docker build --tag $IMAGE_NAME .
-          docker push $IMAGE_NAME          
+          docker push $IMAGE_NAME        
+          
 
   deploy-to-gke:
+    name: Deploy to GKE
     needs: build-docker-image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Modify YAML File
-        run: |
-          sed -i "s,VAL_PROJECT_ID,${{env.PROJECT_ID}}," k8s/gcp_deploy_service.yml
-          sed -i "s,VAL_TOPIC_ID,${{env.PUB_SUB_TOPIC_ID}}," k8s/gcp_deploy_service.yml
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: 'k8s/feature/Fix-deployment' # Replace with the branch or tag you want to deploy from
+          path: 'k8s' # Specify the path to your Kubernetes manifest files
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
-            version: '>= 446.0.1'
-            project_id: ${{env.PROJECT_ID}}
-            service_account_key: ${{env.GCLOUD_AUTH}}
-            export_default_credentials: true
+          version: '>= 446.0.1'
+          project_id: ${{ env.PROJECT_ID }}
+          service_account_key: ${{ env.GCLOUD_AUTH }}
+          export_default_credentials: true
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v1'
         with:
-              credentials_json: ${{env.GCLOUD_AUTH}}
-      - name: Configure Docker for Google Cloud Artifact Registry
+          credentials_json: ${{ env.GCLOUD_AUTH }}
+      - name: Configure kubectl
         run: |
-              gcloud auth configure-docker us-central1-docker.pkg.dev
-      - name: Get GKE Cluster Credentials
+          gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --zone ${{ env.GKE_ZONE }}
+      - name: Deploy to GKE
         run: |
-              gcloud container clusters get-credentials ${{env.GKE_CLUSTER}} --region us-central1-c
-      - name: Apply Kubernetes Configuration
-        uses: ameydev/gke-kubectl-action@master
-        env:
-          APPLICATION_CREDENTIALS: ${{env.GCLOUD_AUTH}}
-          region: ${{env.GKE_ZONE}}
-        with:
-          args: apply -f k8s/
+          kubectl apply -f k8s/gcp_deploy-service.yml # Replace with the actual path to your Kubernetes deployment file
