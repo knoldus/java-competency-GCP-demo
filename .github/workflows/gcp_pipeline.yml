@@ -75,6 +75,11 @@ jobs:
           sed -i "s,VAL_TOPIC_ID,${{env.PUB_SUB_TOPIC_ID}}," k8s/gcp_deploy_service.yml
       - name: Set GKE Zone
         run: echo "GKE_ZONE=${{env.GKE_ZONE}}" >> $GITHUB_ENV
+      - name: Configure gcloud CLI
+        run: |
+            gcloud auth activate-service-account --key-file=${{env.GCLOUD_AUTH}}
+            gcloud config set project ${{env.PROJECT_ID}}
+            gcloud container clusters get-credentials ${{env.GKE_CLUSTER}} --zone ${{env.GKE_ZONE}}
       - name: Apply Kubernetes Configuration
         uses: ameydev/gke-kubectl-action@master
         env:
