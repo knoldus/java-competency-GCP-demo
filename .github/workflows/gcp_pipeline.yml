@@ -47,7 +47,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
         with:
           version: '>= 446.0.1'
-          project_id: $PROJECT_ID
+          project_id: ${{env.PROJECT_ID}}
           service_account_key: $GCLOUD_AUTH
           export_default_credentials: true
       - name: Authenticate to Google Cloud
