@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set your GCP project ID and other variables
-PROJECT_ID="sustained-digit-399111"
+PROJECT_ID="gcp-demo-project-399609"
 CLUSTER_NAME="cluster-gcp-deployment"
 CLUSTER_REGION="us-central1-c"
 REGION="us-central1"
