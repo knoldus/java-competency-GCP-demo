@@ -72,7 +72,8 @@ jobs:
       - uses: actions/checkout@master
       - name: Modify YAML
         run: |
-          sed -i 's#image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/gcp-demo-app/gcp-deployment#image: us-central1-docker.pkg.dev/sustained-digit-399111/gcp-demo-app/gcp-deployment#g' k8s/gcp_deploy_service.yml
+#          sed -i 's#image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/gcp-demo-app/gcp-deployment#image: us-central1-docker.pkg.dev/sustained-digit-399111/gcp-demo-app/gcp-deployment#g' k8s/gcp_deploy_service.yml
+           sed -i "s,VAL_PROJECT_ID,${{ secrets.GCP_PROJECT_ID }}," gcp_deploy_service.yml
       - name: kubectl - Google Cloud GKE cluster.
         uses: ameydev/gke-kubectl-action@master
         env:
