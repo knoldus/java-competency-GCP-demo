@@ -42,5 +42,5 @@ metadata:
   name: java-competency-configmap
 data:
   # Configuration values can be set as key-value properties
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  PUB_SUB_TOPIC_ID: ${{ secrets.PUB_SUB_TOPIC_ID }}
+  GCP_PROJECT_ID: gcp_project_id
+  PUB_SUB_TOPIC_ID: pub_sub_topic_id
