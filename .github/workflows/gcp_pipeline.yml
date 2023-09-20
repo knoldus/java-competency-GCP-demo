@@ -73,8 +73,8 @@ jobs:
       - name: Modify YAML
         run: |
           sed -i "s#image: us-central1-docker.pkg.dev/project-id/gcp-demo-app/gcp-deployment#image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/gcp-demo-app/gcp-deployment#g" k8s/gcp_deploy_service.yml
-          sed -i "s#GCP_PROJECT_ID: gcp_project_id#GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}/#g" k8s/gcp_deploy_service.yml
-          sed -i "s#PUB_SUB_TOPIC_ID: pub_sub_topic_id#PUB_SUB_TOPIC_ID: ${{ secrets.PUB_SUB_TOPIC_ID }}/#g" k8s/gcp_deploy_service.yml
+          sed -i "s#GCP_PROJECT_ID: gcp_project_id#GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}#g" k8s/gcp_deploy_service.yml
+          sed -i "s#PUB_SUB_TOPIC_ID: pub_sub_topic_id#PUB_SUB_TOPIC_ID: ${{ secrets.PUB_SUB_TOPIC_ID }}#g" k8s/gcp_deploy_service.yml
       - name: kubectl - Google Cloud GKE cluster.
         uses: ameydev/gke-kubectl-action@master
         env:
