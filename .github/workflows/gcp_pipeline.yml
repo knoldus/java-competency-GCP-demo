@@ -73,5 +73,9 @@ jobs:
       - uses: actions/checkout@master
       - name: kubectl - Google Cloud GKE cluster.
         uses: ameydev/gke-kubectl-action@master
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_AUTH }}
+          ZONE_NAME: us-central1-c
         with:
           args: apply -f k8s/
