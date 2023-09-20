@@ -14,10 +14,7 @@ spec:
     spec:
       containers:
         - name: gcp-demo-app
-          env:
-            - name: PROJECT_ID
-              value: VAL_PROJECT_ID
-          image: us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/gcp-demo-app/gcp-deployment
+          image: us-central1-docker.pkg.dev/project-id/gcp-demo-app/gcp-deployment
           ports:
             - containerPort: 8080
           envFrom:
