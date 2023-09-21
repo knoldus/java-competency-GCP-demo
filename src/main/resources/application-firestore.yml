@@ -3,6 +3,10 @@ google:
     credentials: ${GOOGLE_APPLICATION_CREDENTIALS}
   pubSub:
     topic: vehicle
+  elastic:
+    indexName: car-details
+    host: 35.201.207.148
+    port: 9200
 spring:
   cloud:
     gcp:
