@@ -39,7 +39,7 @@ public class FirestoreDbServiceTest {
 
     @Test
     void testPushData() throws Exception {
-        Car testCar = new Car(22, "Toyota", "Camry", 2023L, "red", 2223.0, 22253.12);
+        Car testCar = new Car(22, "Toyota", "Camry", 2023L, "red", 2223.0, 22253.12, 1, 1.2);
 
         Mono<Void> result = firestoreDbService.pushData(testCar);
 

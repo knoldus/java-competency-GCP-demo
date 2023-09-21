@@ -7,7 +7,7 @@ cosmosdb:
 eventhub:
   name: eventhub
 
-apiUrl: /vehicle.json?key=e60438e0
+apiUrl: /model_random.json?key=dcbc8750
 mockaroo:
   api:
     url: https://my.api.mockaroo.com
