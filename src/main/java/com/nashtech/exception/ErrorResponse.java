@@ -31,7 +31,7 @@ public class ErrorResponse {
     /**
      * Represents a date and time without time zone information.
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime localDateTime;
 
 }

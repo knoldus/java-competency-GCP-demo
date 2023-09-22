@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.pubsub.v1.Publisher;
 import com.google.cloud.spring.data.firestore.FirestoreDataException;
 import com.nashtech.entity.GCPCarEntity;
+import com.nashtech.exception.DataNotFoundException;
 import com.nashtech.model.Car;
 import com.nashtech.model.CarBrand;
 import com.nashtech.repository.FirestoreDbRepository;
@@ -102,7 +103,7 @@ public class FirestoreDbServiceTest {
 
         // Verify the results
         StepVerifier.create(result)
-                .expectError(FirestoreDataException.class)
+                .expectError(DataNotFoundException.class)
                 .verify();
     }
 
@@ -155,7 +156,7 @@ public class FirestoreDbServiceTest {
 
         // Verify the results
         StepVerifier.create(result)
-                .expectError(FirestoreDataException.class)
+                .expectError(DataNotFoundException.class)
                 .verify();
     }
 
