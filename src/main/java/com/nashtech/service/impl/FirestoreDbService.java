@@ -171,7 +171,9 @@ public class FirestoreDbService implements CloudDataService {
                     log.error(
                             "Error while retrieving data from DB",
                             error);
-                    return Flux.error(new FirestoreDataException("Failed to retrieve car brands."));
+                    return Flux.error(new FirestoreDataException(
+                            "Failed to retrieve car brands.")
+                    );
                 })
                 .doOnComplete(() -> log.info("Data processing completed."))
                 .switchIfEmpty(Flux.error(new DataNotFoundException()));
@@ -203,7 +205,8 @@ public class FirestoreDbService implements CloudDataService {
                     log.error(
                             "Error while retrieving data from DB",
                             error);
-                    return Flux.error(new FirestoreDataException("Failed to retrieve car details."));
+                    return Flux.error(new FirestoreDataException(
+                            "Failed to retrieve car details."));
                 })
                 .doOnComplete(() -> log.info("Fetched Car Details."))
                 .switchIfEmpty(Flux.error(new DataNotFoundException()));
