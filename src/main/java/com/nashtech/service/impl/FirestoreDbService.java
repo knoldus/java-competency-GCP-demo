@@ -161,20 +161,20 @@ public class FirestoreDbService implements CloudDataService {
      */
     @Override
     public Flux<CarBrand> getAllBrands() {
-        return firestoreDbRepository.findAll()
+        log.info("Hitting DB");
+        Flux<CarBrand> distinctBrands = firestoreDbRepository.findAll()
                 .filter(gcpCarEntity -> gcpCarEntity.getBrand() != null)
                 .map(gcpCarEntity -> new CarBrand(gcpCarEntity.getBrand()))
-                .distinct()
-                .doOnComplete(() -> log.info("Data retrieved successfully"))
-                .switchIfEmpty(Flux.error(new DataNotFoundException()))
-                .onErrorResume(throwable -> {
-                    log.error("Error occurred during data retrieval: "
-                            + throwable.getMessage());
-                    return Flux.error(
-                            new FirestoreDataException(
-                                    "Failed to retrieve car brands.",
-                                    throwable));
-                });
+                .distinct();
+        return distinctBrands
+                .onErrorResume(FirestoreDataException.class, error -> {
+                    log.error(
+                            "Error while retrieving data from DB",
+                            error);
+                    return Flux.error(new FirestoreDataException("Failed to retrieve car brands."));
+                })
+                .doOnComplete(() -> log.info("Data processing completed."))
+                .switchIfEmpty(Flux.error(new DataNotFoundException()));
     }
 
     /**
@@ -186,7 +186,7 @@ public class FirestoreDbService implements CloudDataService {
      */
     @Override
     public Flux<Car> getCarsByBrand(final String brand) {
-        return firestoreDbRepository.findByBrand(brand)
+        Flux<Car> carDetails = firestoreDbRepository.findByBrand(brand)
                 .filter(gcpCarEntity -> gcpCarEntity != null)
                 .map(gcpCarEntity -> Car.builder()
                         .carId(gcpCarEntity.getCarId())
@@ -197,18 +197,16 @@ public class FirestoreDbService implements CloudDataService {
                         .mileage(gcpCarEntity.getMileage())
                         .price(gcpCarEntity.getPrice())
                         .build())
-                .distinct()
-                .switchIfEmpty(Flux.error(new DataNotFoundException()))
-                .doOnComplete(() ->
-                        log.info("Received Car Details successfully"))
-                .onErrorResume(throwable -> {
-                    log.error("Error occurred during data retrieval: "
-                            + throwable.getMessage());
-                    return Flux.error(
-                            new FirestoreDataException(
-                                    "Failed to retrieve car Information.",
-                                    throwable));
-                });
+                .distinct();
+        return carDetails
+                .onErrorResume(FirestoreDataException.class, error -> {
+                    log.error(
+                            "Error while retrieving data from DB",
+                            error);
+                    return Flux.error(new FirestoreDataException("Failed to retrieve car details."));
+                })
+                .doOnComplete(() -> log.info("Fetched Car Details."))
+                .switchIfEmpty(Flux.error(new DataNotFoundException()));
 
     }
 

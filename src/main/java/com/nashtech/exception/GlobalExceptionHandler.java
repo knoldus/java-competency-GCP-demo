@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
                     + ", Unable to retrieve the data";
         }
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .message(firestoreDataException.getMessage())
+                .message(exceptionMessage)
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR)
                 .localDateTime(LocalDateTime.now())
                 .build();
