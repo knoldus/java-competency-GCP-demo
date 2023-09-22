@@ -44,8 +44,8 @@ public class ReactiveDataServiceImplTest {
     void testGetCarsByBrand() {
         // Mock the CloudDataService behavior
         String brand = "Toyota";
-        Car car1 = new Car(0, "Toyota", "model", 2020L, "color", 0.0, 0.0);
-        Car car2 = new Car(1, "Toyota", "model", 2020L, "color", 0.0, 0.0);
+        Car car1 = new Car(0, "Toyota", "model", 2020L, "color", 0.0, 0.0, 0, 0.0);
+        Car car2 = new Car(1, "Toyota", "model", 2020L, "color", 0.0, 0.0, 0, 0.0);
         Flux<Car> carFlux = Flux.just(car1, car2);
         when(cloudDataService.getCarsByBrand(brand)).thenReturn(carFlux);
 

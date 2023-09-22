@@ -18,5 +18,6 @@ public class Car {
     String color;
     Double mileage;
     Double price;
-
+    Integer quantity;
+    Double tax;
 }

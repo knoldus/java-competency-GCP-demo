@@ -8,7 +8,7 @@ spring:
     gcp:
       project-id: ${GCP_PROJECT_ID}
 
-apiUrl: /vehicle.json?key=45d8b3f0
+apiUrl: /model_random.json?key=dcbc8750
 mockaroo:
   api:
     url: https://my.api.mockaroo.com

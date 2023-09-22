@@ -53,4 +53,14 @@ public class GCPCarEntity {
      * The price of the car.
      */
     private Double price;
+
+    /**
+     * The quantity of the car in stock.
+     */
+    private Integer quantity;
+
+    /**
+     * The tax on the car.
+     */
+    private Double tax;
 }

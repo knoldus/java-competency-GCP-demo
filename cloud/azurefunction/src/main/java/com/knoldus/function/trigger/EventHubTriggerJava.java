@@ -1,5 +1,8 @@
 package com.knoldus.function.trigger;
 
+
+import com.knoldus.function.model.Car;
+import com.knoldus.function.util.CarUtil;
 import com.knoldus.function.util.VehicleUtil;
 import com.knoldus.function.model.VehicleDetail;
 import com.microsoft.azure.functions.annotation.*;
@@ -43,7 +46,7 @@ public class EventHubTriggerJava {
                         details.setMileage(updatedMileage);
                         details.setPrice(updatedPrice);
                         context.getLogger().info("Transformed Car Data: " + details);
-                        details.setCarId(details.getCardId() + 1);
+                        details.setCarId(details.getCarId() + 1);
                         return details;
                     }).toList();
             updatedCarDetails.setValue(carDetailsList);

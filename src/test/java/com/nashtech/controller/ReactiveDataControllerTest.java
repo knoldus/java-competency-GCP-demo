@@ -103,7 +103,7 @@ public class ReactiveDataControllerTest {
     @Test
     void testGetCarsByBrand() {
         final Flux<Car> carFlux = Flux.just(
-                new Car(0, "Toyota", "model", 2020L, "color", 0.0, 0.0));
+                new Car(0, "Toyota", "model", 2020L, "color", 0.0, 0.0, 0,0.0));
         when(reactiveDataService.getCarsByBrand("Toyota")).thenReturn(carFlux);
 
         Flux<Car> carsFlux = reactiveDataController.getCarsByBrand("Toyota");

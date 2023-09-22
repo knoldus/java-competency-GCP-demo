@@ -45,7 +45,7 @@ class CosmosDbServiceTest {
     @Test
     void testGetCarsByBrand() {
         final Flux<Car> carFlux = Flux.just(
-                new Car(0, "brand", "model", 2020L, "color", 0.0, 0.0));
+                new Car(0, "brand", "model", 2020L, "color", 0.0, 0.0, 0, 0.0));
 
         Mockito.when(cosmosDbRepository.getAllCarsByBrand(ArgumentMatchers.anyString())).thenReturn(carFlux);
         // Run the test
@@ -164,7 +164,7 @@ class CosmosDbServiceTest {
     @Test
     void testPushData() {
         // Arrange
-        Car car = new Car(0, "brand", "model", 2020L, "color", 0.0, 0.0);
+        Car car = new Car(0, "brand", "model", 2020L, "color", 0.0, 0.0, 0, 0.0);
 
         // Mock the behavior of kafkaTemplate.send() using doAnswer()
         doAnswer(invocation -> {
