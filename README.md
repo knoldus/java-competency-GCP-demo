@@ -89,27 +89,15 @@ If you don't have the JSON key for your Google Cloud service account, you can ge
   
   ## GCP Infrastructure setup
 
-   1. Execute GCP deployment script given in java-competency-demo/cloud/scripts/gcppowershellscript.ps
+   1. Update GCP Project Id, GCP service account key path and Execute GCP deployment script given in java-competency-demo/cloud/scripts/GCP-Infra.sh
 
    2. Update secrets on github repository. Following secrets are to be added in the secrets and variables. 
       Make sure you keep the key same as given in the gcp_pipeline.yml :
            GCP_PROJECT_ID   : <google_cloud_project_id>
-           GCP_USERNAME     : <git_username>
-           GCP_PASSWORD     : <git_token>
            CLOUD_AUTH       : <base-64 encoded service account key>
            GCP_CLUSTER_NAME : <cluster_name>
 
-   3. Run the following kubectl command in the google cloud cli
-
-      kubectl create secret docker-registry dockerconfigjson-github-com \
-       --docker-server=https://ghcr.io \
-       --docker-username=<GITHUB_USERNAME> \
-       --docker-password=<GITHUB_TOKEN> \
-       --namespace=default
-
-      This secret is used for authenticating with a Docker registry at ghcr.io (GitHub Container Registry) using a Docker configuration JSON that includes the GitHub username and token (password).
-
-   4. Deploy the cloud function (repo link provided): https://github.com/SahilBabbar12/googlecloudfunction.git
+   3. Deploy the cloud function (repo link provided): https://github.com/SahilBabbar12/googlecloudfunction.git
        1. Clone the repository on your local.
        2. Clean and install the application.
        3. Navigate to the project in the terminal.
