@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Set your GCP project ID and other variables
-PROJECT_ID="gcp-demo-project-399609"
+SERVICE_ACCOUNT_KEY="path of service-account-key"
+PROJECT_ID="Project-Id"
 CLUSTER_NAME="cluster-gcp-deployment"
 CLUSTER_REGION="us-central1-c"
 REGION="us-central1"
@@ -10,6 +11,13 @@ DB_REGION="us-east1"
 DB_TYPE="firestore-native"
 ARTIFACTORY_NAME="gcp-demo-app"
 ARTIFACTORY_FORMAT="docker"
+
+# Authenticate with Google Cloud using application default credentials
+gcloud auth activate-service-account --key-file=$SERVICE_ACCOUNT_KEY
+
+# Set new Project Id
+gcloud config set project $PROJECT_ID
+
 # Enable required APIs
 gcloud services enable container.googleapis.com pubsub.googleapis.com cloudfunctions.googleapis.com firestore.googleapis.com cloudbuild.googleapis.com eventarc.googleapis.com run.googleapis.com artifactregistry.googleapis.com
 

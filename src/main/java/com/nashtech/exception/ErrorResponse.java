@@ -1,5 +1,6 @@
 package com.nashtech.exception;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Builder;
@@ -30,6 +31,7 @@ public class ErrorResponse {
     /**
      * Represents a date and time without time zone information.
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime localDateTime;
 
 }
