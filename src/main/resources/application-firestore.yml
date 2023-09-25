@@ -2,7 +2,10 @@ google:
   application:
     credentials: ${GOOGLE_APPLICATION_CREDENTIALS}
   pubSub:
-    topic: vehicle
+    topic: java-competency
+    subscriptionId: java-competency-sub
+    projectId: oval-crawler-398007
+    credentials: oval-crawler-398007-576558a953e4.json
   elastic:
     indexName: car-details
     host: 35.201.207.148

@@ -1,8 +1,7 @@
 package com.nashtech.entity;
 
-import com.azure.spring.data.cosmos.core.mapping.GeneratedValue;
-import com.google.cloud.firestore.annotation.DocumentId;
 import lombok.Data;
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -16,6 +15,7 @@ public class GCPElasticCarEntity {
     private String id;
 
     @Field(type = FieldType.Integer, name = "carId")
+    @Unique
     private Integer carId;
 
     @Field(type = FieldType.Text, name = "model")
