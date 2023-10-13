@@ -68,6 +68,7 @@ public class CosmosDbService implements CloudDataService {
                     .build();
             kafkaTemplate.send(message);
         } catch (KafkaException kafkaException) {
+            log.error(kafkaException.getMessage());
             throw kafkaException;
         }
         return Mono.empty();
@@ -132,7 +133,8 @@ public class CosmosDbService implements CloudDataService {
      * @return A Flux of CarBrand representing distinct car brands.
      */
     public Flux<ServerSentEvent<String>> getAllBrands1() {
-        return (Flux<ServerSentEvent<String>>) cosmosDbRepository.findDistinctBrands()
+        return (Flux<ServerSentEvent<String>>) cosmosDbRepository
+                .findDistinctBrands()
                 .delayElements(Duration.ofSeconds(2))
                 .map(brand -> ServerSentEvent.<String>builder()
                         .id(String.valueOf(RandomUtils.nextInt()))
